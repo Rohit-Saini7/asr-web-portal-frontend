@@ -41,7 +41,7 @@ const Navbar = () => {
       </NavDropdown>
       <NavDropdown>
         <UserIcon />
-        User
+        Profile
         <DownArrowIcon />
       </NavDropdown>
     </Container>
@@ -55,7 +55,7 @@ const Container = styled.nav`
   width: 100%;
   max-width: 1500px;
   margin: auto;
-  background-color: var(--container-bg-color);
+  background: var(--container-bg-color);
   border-radius: 10px;
   margin-top: 20px;
   border: 1px solid var(--container-bg-color);
@@ -65,7 +65,7 @@ const Container = styled.nav`
   font-size: 1.25rem;
   user-select: none;
   color: var(--font-color);
-  box-shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
+  box-shadow: var(--shadow);
   svg {
     height: 20px;
     width: 20px;
@@ -85,7 +85,7 @@ const NavItem = styled.div`
   &:hover {
     border: 1px solid var(--font-color);
     color: var(--hover-font-color);
-    box-shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
+    box-shadow: var(--shadow);
   }
   &:active {
     translate: 0 2px;
@@ -102,10 +102,10 @@ const SearchBar = styled.div`
   padding: 5px 20px;
   border-radius: 20px;
   &:hover {
-    background-color: var(--background-color);
+    background: var(--background);
     border: 1px solid var(--font-color);
     color: var(--hover-font-color);
-    box-shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
+    box-shadow: var(--shadow);
   }
   &:active {
     translate: 0 2px;
