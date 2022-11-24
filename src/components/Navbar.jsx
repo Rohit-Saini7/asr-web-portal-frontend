@@ -10,41 +10,45 @@ import {
   UserGroupIcon,
   UserIcon,
 } from './Icons';
+import ThemeSwitch from './ThemeSwitch';
 
 const Navbar = () => {
   return (
-    <Container>
-      <NavItem>
-        <HomeIcon />
-        Home
-      </NavItem>
-      <NavItem>
-        <PreviewIcon />
-        Preview/Download
-      </NavItem>
-      <NavItem>
-        <UserGroupIcon />
-        Associates
-      </NavItem>
-      <NavItem>
-        <ExportIcon />
-        Export Project
-      </NavItem>
-      <SearchBar>
-        <SearchIcon />
-        Search
-      </SearchBar>
-      <NavDropdown>
-        <LinkIcon />
-        Quick Links
-        <DownArrowIcon />
-      </NavDropdown>
-      <NavDropdown>
-        <UserIcon />
-        Profile
-        <DownArrowIcon />
-      </NavDropdown>
-    </Container>
+    <React.Fragment>
+      <Container>
+        <NavItem>
+          <HomeIcon />
+          Home
+        </NavItem>
+        <NavItem>
+          <PreviewIcon />
+          Preview/Download
+        </NavItem>
+        <NavItem>
+          <UserGroupIcon />
+          Associates
+        </NavItem>
+        <NavItem>
+          <ExportIcon />
+          Export Project
+        </NavItem>
+        <SearchBar>
+          <SearchIcon />
+          Search
+        </SearchBar>
+        <NavDropdown>
+          <LinkIcon />
+          Quick Links
+          <DownArrowIcon />
+        </NavDropdown>
+        <NavDropdown>
+          <UserIcon />
+          Profile
+          <DownArrowIcon />
+        </NavDropdown>
+        <ThemeSwitch />
+      </Container>
+    </React.Fragment>
   );
 };
 
@@ -66,6 +70,7 @@ const Container = styled.nav`
   user-select: none;
   color: var(--font-color);
   box-shadow: var(--shadow);
+  position: relative;
   svg {
     height: 20px;
     width: 20px;
@@ -79,13 +84,13 @@ const NavItem = styled.div`
   cursor: pointer;
   padding: 5px 20px;
   border-radius: 20px;
-  transition: 0.2s ease-in;
+  transition: 0.1s ease;
   border: 1px solid transparent;
 
   &:hover {
     border: 1px solid var(--font-color);
     color: var(--hover-font-color);
-    box-shadow: var(--shadow);
+    translate: 0 -2px;
   }
   &:active {
     translate: 0 2px;
@@ -97,7 +102,7 @@ const SearchBar = styled.div`
   align-items: center;
   gap: 5px;
   cursor: pointer;
-  transition: 0.2s ease-in;
+  transition: 0.1s ease;
   border: 1px solid transparent;
   padding: 5px 20px;
   border-radius: 20px;
@@ -105,7 +110,7 @@ const SearchBar = styled.div`
     background: var(--background);
     border: 1px solid var(--font-color);
     color: var(--hover-font-color);
-    box-shadow: var(--shadow);
+    translate: 0 -2px;
   }
   &:active {
     translate: 0 2px;

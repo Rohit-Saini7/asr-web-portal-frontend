@@ -5,14 +5,6 @@
 }
 
 :root {
-  --background-color: #242424;
-  --font-color: rgba(255, 255, 255, 0.7);
-  --container-bg-color: rgba(255, 255, 255, 0.1);
-  --hover-font-color: rgb(255, 255, 255);
-  --signin-color: #45f3ff;
-  --signin-bg-color: #28292d;
-  --shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
-
   font-size: 16px;
   font-weight: 400;
   color-scheme: light dark;
@@ -29,14 +21,22 @@ body {
   overflow: hidden;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background-color: #ffffff;
-    --font-color: rgba(0, 0, 0, 0.7);
-    --container-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
-    --hover-font-color: rgb(0, 0, 0);
-    --signin-color: #b73ff2;
-    --signin-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
-    --shadow: -11px 11px 22px #bababa, 11px -11px 22px #ffffff;
-  }
+.dark {
+  --background-color: #242424;
+  --font-color: rgba(255, 255, 255, 0.7);
+  --container-bg-color: rgba(255, 255, 255, 0.1);
+  --hover-font-color: rgb(255, 255, 255);
+  --signin-color: #45f3ff;
+  --signin-bg-color: #28292d;
+  --shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
+}
+
+.light {
+  --background-color: #ffffff;
+  --font-color: rgba(0, 0, 0, 0.7);
+  --container-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
+  --hover-font-color: rgb(0, 0, 0);
+  --signin-color: #5ae09e;
+  --signin-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
+  --shadow: -11px 11px 22px #bababa, 11px -11px 22px #ffffff;
 }
