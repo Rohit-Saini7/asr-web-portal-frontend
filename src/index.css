@@ -5,7 +5,6 @@
 }
 
 :root {
-
   font-size: 16px;
   font-weight: 400;
   color-scheme: light dark;
@@ -33,6 +32,8 @@ body {
   --shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
   --signin-bg-color: #28292d;
   --signin-color: #45f3ff;
+  --table-header-color: rgba(69, 243, 255, 0.7);
+  --table-body-color: rgba(255, 255, 255, 0.1);
 }
 
 .light {
@@ -46,5 +47,6 @@ body {
   --shadow: -11px 11px 22px #bababa, 11px -11px 22px #ffffff;
   --signin-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
   --signin-color: #5ae09e;
-
+  --table-header-color: rgba(90, 224, 158, 0.7);
+  --table-body-color: rgba(0, 0, 0, 0.1);
 }
