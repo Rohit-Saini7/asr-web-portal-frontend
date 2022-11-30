@@ -5,6 +5,7 @@
 }
 
 :root {
+
   font-size: 16px;
   font-weight: 400;
   color-scheme: light dark;
@@ -45,4 +46,5 @@ body {
   --shadow: -11px 11px 22px #bababa, 11px -11px 22px #ffffff;
   --signin-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
   --signin-color: #5ae09e;
+
 }

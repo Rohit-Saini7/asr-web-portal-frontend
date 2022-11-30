@@ -106,6 +106,7 @@ const SearchBar = styled.div`
   border: 1px solid transparent;
   padding: 5px 20px;
   border-radius: 20px;
+  
   &:hover {
     background: var(--background);
     border: 1px solid var(--font-color);

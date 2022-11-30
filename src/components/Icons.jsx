@@ -11,6 +11,7 @@ export {
   PreviewIcon,
   SearchIcon,
   UploadIcon,
+
   UserIcon,
   UserGroupIcon,
 };
