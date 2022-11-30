@@ -29,7 +29,7 @@ const ThemeSwitch = () => {
         type='checkbox'
         id='dark'
         onClick={handleThemeChange}
-        checked={checked}
+        defaultChecked={checked}
       />
       <Slider />
     </Label>

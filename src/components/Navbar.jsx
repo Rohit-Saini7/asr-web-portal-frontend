@@ -24,18 +24,18 @@ const Navbar = () => {
           <PreviewIcon />
           Preview/Download
         </NavItem>
-        <NavItem>
+        {/* <NavItem>
           <UserGroupIcon />
           Associates
-        </NavItem>
+        </NavItem> */}
         <NavItem>
           <ExportIcon />
           Export Project
         </NavItem>
-        <SearchBar>
+        {/* <SearchBar>
           <SearchIcon />
           Search
-        </SearchBar>
+        </SearchBar> */}
         <NavDropdown>
           <LinkIcon />
           Quick Links
@@ -57,7 +57,7 @@ export default Navbar;
 const Container = styled.nav`
   display: flex;
   width: 100%;
-  max-width: 1500px;
+  max-width: 1350px;
   margin: auto;
   background: var(--container-bg-color);
   border-radius: 10px;

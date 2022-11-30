@@ -23,20 +23,26 @@ body {
 
 .dark {
   --background-color: #242424;
-  --font-color: rgba(255, 255, 255, 0.7);
   --container-bg-color: rgba(255, 255, 255, 0.1);
+  --error-color: #f8254b;
+  --font-color: rgba(255, 255, 255, 0.7);
   --hover-font-color: rgb(255, 255, 255);
-  --signin-color: #45f3ff;
-  --signin-bg-color: #28292d;
+  --instructions-color: rgb(0, 128, 0, 0.4);
+  --label-color: #8f8f8f;
   --shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
+  --signin-bg-color: #28292d;
+  --signin-color: #45f3ff;
 }
 
 .light {
-  --background-color: #ffffff;
-  --font-color: rgba(0, 0, 0, 0.7);
+  --background-color: #fafafa;
   --container-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
+  --error-color: #f8254b;
+  --font-color: rgba(0, 0, 0, 0.7);
   --hover-font-color: rgb(0, 0, 0);
-  --signin-color: #5ae09e;
-  --signin-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
+  --instructions-color: rgb(0, 128, 0, 0.4);
+  --label-color: #8f8f8f;
   --shadow: -11px 11px 22px #bababa, 11px -11px 22px #ffffff;
+  --signin-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
+  --signin-color: #5ae09e;
 }

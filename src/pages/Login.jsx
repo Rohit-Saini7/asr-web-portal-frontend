@@ -124,7 +124,7 @@ const InputLabel = styled.span`
   left: 0;
   padding: 20px 0px 10px;
   font-size: 1rem;
-  color: #8f8f8f;
+  color: var(--label-color);
   pointer-events: none;
   letter-spacing: 0.1rem;
   transition: 0.5s;
@@ -166,7 +166,7 @@ const SubmitButton = styled.button`
   border: none;
   outline: none;
   background: var(--signin-color);
-  color: var(--background);
+  color: var(--background-color);
   padding: 11px 25px;
   width: 100%;
   margin-top: 10px;
@@ -176,6 +176,9 @@ const SubmitButton = styled.button`
   cursor: pointer;
   transition: 0.2s;
   box-shadow: var(--shadow);
+  &:hover {
+    translate: 0 -2px;
+  }
   &:active {
     translate: 0 2px;
   }
