@@ -69,15 +69,13 @@ const SubHeadnig = styled.p`
 const RightSection = styled.section`
   height: 70%;
   width: 30%;
-  background-color: #28292d;
+  background: var(--signin-bg-color);
   position: relative;
   border-radius: 10px;
   padding: 50px 40px;
   display: flex;
   flex-direction: column;
-  box-shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
-  /* background-color: var(--container-bg-color); */
-  /* border: 1px solid var(--container-bg-color); */
+  box-shadow: var(--shadow);
 `;
 
 const InputWrapper = styled.div`
@@ -90,7 +88,7 @@ const InputWrapper = styled.div`
     bottom: 0;
     width: 100%;
     height: 2px;
-    background-color: var(--signin-color);
+    background: var(--signin-color);
     border-radius: 4px;
     transition: 0.5s;
     pointer-events: none;
@@ -104,7 +102,7 @@ const InputField = styled.input`
   background: transparent;
   border: none;
   outline: none;
-  color: #23242a;
+  color: var(--signin-bg-color);
   font-size: 1rem;
   letter-spacing: 0.1rem;
   z-index: 10;
@@ -126,7 +124,7 @@ const InputLabel = styled.span`
   left: 0;
   padding: 20px 0px 10px;
   font-size: 1rem;
-  color: #8f8f8f;
+  color: var(--label-color);
   pointer-events: none;
   letter-spacing: 0.1rem;
   transition: 0.5s;
@@ -167,7 +165,7 @@ const CreateAccount = styled.a`
 const SubmitButton = styled.button`
   border: none;
   outline: none;
-  background-color: var(--signin-color);
+  background: var(--signin-color);
   color: var(--background-color);
   padding: 11px 25px;
   width: 100%;
@@ -177,7 +175,10 @@ const SubmitButton = styled.button`
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
-  box-shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
+  box-shadow: var(--shadow);
+  &:hover {
+    translate: 0 -2px;
+  }
   &:active {
     translate: 0 2px;
   }
@@ -185,7 +186,7 @@ const SubmitButton = styled.button`
 
 const GoogleButton = styled(SubmitButton)`
   color: var(--signin-color);
-  background-color: transparent;
+  background: transparent;
   border: 1px solid var(--signin-color);
   margin-top: 20px;
 `;
