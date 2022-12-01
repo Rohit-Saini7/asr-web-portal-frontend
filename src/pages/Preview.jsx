@@ -1,127 +1,110 @@
 import React from 'react';
 import styled from 'styled-components';
+import { DownloadIcon, PreviewIcon } from '../components/Icons';
+import { DummyData } from './DummyDataForPreview';
 
 const Preview = () => {
+  const handleClick = (e) => {
+    e.target.classList.toggle('active');
+    setTimeout(() => {
+      e.target.classList.toggle('active');
+    }, 200);
+  };
   return (
     <Container>
       <Heading>Preview/Download</Heading>
-
       <TableHeaderWrapper>
-        <table cellpadding='0' cellspacing='0' border='0'>
+        <table cellPadding='0' cellSpacing='0' border='0'>
           <thead>
             <tr>
-              <th rowspan='2' colspan='1'>
+              <th rowSpan='2' colSpan='1'>
                 Sr. No.
               </th>
-              <th rowspan='1' colspan='2'>
+              <th rowSpan='1' colSpan='2'>
                 Name
               </th>
-              <th rowspan='1' colspan='2'>
+              <th rowSpan='1' colSpan='2'>
                 Language
               </th>
-              <th rowspan='2' colspan='1'>
+              <th rowSpan='2' colSpan='2'>
                 Creation Time
               </th>
-              <th rowspan='1' colspan='2'>
-                Transcript
-              </th>
-              <th rowspan='1' colspan='2'>
-                Translation
+              <th rowSpan='1' colSpan='2'>
+                Preview/Download
               </th>
             </tr>
             <tr>
-              <th rowspan='2' colspan='1'>
+              <th rowSpan='2' colSpan='1'>
                 Media
               </th>
-              <th rowspan='2' colspan='1'>
+              <th rowSpan='2' colSpan='1'>
                 Document
               </th>
-              <th rowspan='1' colspan='1'>
+              <th rowSpan='1' colSpan='1'>
                 Source
               </th>
-              <th rowspan='1' colspan='1'>
+              <th rowSpan='1' colSpan='1'>
                 Target
               </th>
-              <th rowspan='1' colspan='1'>
-                Preview
+              <th rowSpan='1' colSpan='1'>
+                Transcript
               </th>
-              <th rowspan='1' colspan='1'>
-                Download
-              </th>
-              <th rowspan='1' colspan='1'>
-                Preview
-              </th>
-              <th rowspan='1' colspan='1'>
-                Download
+              <th rowSpan='1' colSpan='1'>
+                Translation
               </th>
             </tr>
           </thead>
         </table>
       </TableHeaderWrapper>
       <TableBodyWrapper>
-        <table cellpadding='0' cellspacing='0' border='0'>
+        <table cellPadding='0' cellSpacing='0' border='0'>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>video.mp4</td>
-              <td>doc1</td>
-              <td>English</td>
-              <td>Hindi</td>
-              <td>00:00</td>
-              <td>Preview</td>
-              <td>Download</td>
-              <td>Preview</td>
-              <td>Download</td>
-            </tr>
-
-            <tr>
-              <td>2</td>
-              <td>video2.mp4</td>
-              <td>doc2</td>
-              <td>English</td>
-              <td>Hindi</td>
-              <td>00:01</td>
-              <td>Preview</td>
-              <td>Download</td>
-              <td>Preview</td>
-              <td>Download</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>video3.mp4</td>
-              <td>doc3</td>
-              <td>English</td>
-              <td>Hindi</td>
-              <td>00:03</td>
-              <td>Preview</td>
-              <td>Download</td>
-              <td>Preview</td>
-              <td>Download</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>video4.mp4</td>
-              <td>doc4</td>
-              <td>English</td>
-              <td>Hindi</td>
-              <td>00:04</td>
-              <td>Preview</td>
-              <td>Download</td>
-              <td>Preview</td>
-              <td>Download</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>video5.mp4</td>
-              <td>doc5</td>
-              <td>English</td>
-              <td>Hindi</td>
-              <td>00:05</td>
-              <td>Preview</td>
-              <td>Download</td>
-              <td>Preview</td>
-              <td>Download</td>
-            </tr>
+            {DummyData.map(
+              (
+                {
+                  serialNumber,
+                  mediaName,
+                  documentName,
+                  sourceLanguage,
+                  targetLanguage,
+                  creationTime,
+                },
+                index
+              ) => (
+                <tr key={index}>
+                  <td>{serialNumber}</td>
+                  <td>{mediaName}</td>
+                  <td>{documentName}</td>
+                  <td>{sourceLanguage}</td>
+                  <td>{targetLanguage}</td>
+                  <td colSpan='2'>{creationTime}</td>
+                  <td>
+                    <ButtonGroup className='button-group' id='thirdDimension'>
+                      <Button className='button' onClick={handleClick}>
+                        <PreviewIcon />
+                        <i></i>
+                      </Button>
+                      <Button className='button' onClick={handleClick}>
+                        <DownloadIcon />
+                        <i></i>
+                      </Button>
+                    </ButtonGroup>
+                  </td>
+                  <td>
+                    <ButtonGroup className='button-group' id='thirdDimension'>
+                      <Button className='button' onClick={handleClick}>
+                        <PreviewIcon />
+                        <i></i>
+                      </Button>
+                      <Button className='button' onClick={handleClick}>
+                        <DownloadIcon />
+                        <i></i>
+                      </Button>
+                    </ButtonGroup>
+                  </td>
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </TableBodyWrapper>
@@ -159,7 +142,7 @@ const TableHeaderWrapper = styled.div`
 
     & > thead > tr > th {
       padding: 10px;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 1rem;
       text-transform: uppercase;
     }
@@ -180,10 +163,93 @@ const TableBodyWrapper = styled.div`
       background: var(--table-body-color);
     }
     & > tbody > tr > td {
-      padding: 15px;
+      padding: 5px 15px;
       vertical-align: middle;
-      font-weight: 300;
       font-size: 1rem;
+      font-weight: 500;
     }
+  }
+`;
+
+const ButtonGroup = styled.div`
+  margin: 0 auto;
+  width: fit-content;
+  max-height: 40px;
+  overflow: hidden;
+  border-radius: 10px;
+`;
+
+const Button = styled.div`
+  background: var(--container-bg-color);
+  border: none;
+  width: 40px;
+  height: 40px;
+  padding: 6px;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0;
+  position: relative;
+  transition: 0.01s;
+
+  & > svg {
+    text-align: center;
+    margin: 6px;
+    display: block;
+  }
+  &:hover {
+    background: var(--table-header-color);
+  }
+
+  &.active {
+    font-size: 16px;
+    text-shadow: 0 0 10px #fff;
+    background: var(--table-header-color);
+    height: 33px;
+    vertical-align: bottom;
+  }
+
+  &.active svg {
+    text-shadow: 0 0 10px #fff;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+
+  &.active:before {
+    content: '';
+    position: absolute;
+    z-index: 11;
+    left: 0px;
+    top: 0px;
+    border-top: 33px solid var(--signin-color);
+    border-right: 8px solid transparent;
+  }
+  &.active:after {
+    content: '';
+    position: absolute;
+    z-index: 11;
+    right: 0px;
+    top: 0px;
+    border-top: 33px solid var(--signin-color);
+    border-left: 8px solid transparent;
+  }
+
+  &.active i:before {
+    content: '';
+    position: absolute;
+    z-index: 11;
+    left: 0px;
+    top: -6px;
+    border-bottom: 6px solid var(--signin-color);
+    border-right: 8px solid transparent;
+  }
+
+  &.active i:after {
+    content: '';
+    position: absolute;
+    z-index: 11;
+    right: 0px;
+    top: -6px;
+    border-bottom: 6px solid var(--signin-color);
+    border-left: 8px solid transparent;
   }
 `;

@@ -1,13 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
 import {
   DownArrowIcon,
-  ExportIcon,
+  // ExportIcon,
   HomeIcon,
   LinkIcon,
   PreviewIcon,
-  SearchIcon,
-  UserGroupIcon,
+  // SearchIcon,
+  // UserGroupIcon,
   UserIcon,
 } from './Icons';
 import ThemeSwitch from './ThemeSwitch';
@@ -16,11 +18,11 @@ const Navbar = () => {
   return (
     <React.Fragment>
       <Container>
-        <NavItem>
+        <NavItem to='/'>
           <HomeIcon />
           Home
         </NavItem>
-        <NavItem>
+        <NavItem to='/preview'>
           <PreviewIcon />
           Preview/Download
         </NavItem>
@@ -28,10 +30,10 @@ const Navbar = () => {
           <UserGroupIcon />
           Associates
         </NavItem> */}
-        <NavItem>
+        {/* <NavItem>
           <ExportIcon />
           Export Project
-        </NavItem>
+        </NavItem> */}
         {/* <SearchBar>
           <SearchIcon />
           Search
@@ -64,7 +66,7 @@ const Container = styled.nav`
   margin-top: 20px;
   border: 1px solid var(--container-bg-color);
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
   padding: 1.5rem;
   font-size: 1.25rem;
   user-select: none;
@@ -77,7 +79,9 @@ const Container = styled.nav`
   }
 `;
 
-const NavItem = styled.div`
+const NavItem = styled(Link)`
+  text-decoration: none;
+  color: var(--font-color);
   display: flex;
   align-items: center;
   gap: 5px;
@@ -106,7 +110,7 @@ const SearchBar = styled.div`
   border: 1px solid transparent;
   padding: 5px 20px;
   border-radius: 20px;
-  
+
   &:hover {
     background: var(--background);
     border: 1px solid var(--font-color);

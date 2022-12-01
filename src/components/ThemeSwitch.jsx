@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 const ThemeSwitch = () => {
-  const [checked, setChecked] = useState(true);
+  const checkboxRef = useRef();
   useEffect(() => {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.documentElement.className = 'dark';
-      setChecked(true);
+      checkboxRef.current.checked = true;
     } else {
       document.documentElement.className = 'light';
-      setChecked(false);
+      checkboxRef.current.checked = false;
     }
   }, []);
 
@@ -17,10 +17,10 @@ const ThemeSwitch = () => {
     let currentTheme = document.documentElement.className;
     if (currentTheme === 'dark') {
       document.documentElement.className = 'light';
-      setChecked(false);
+      checkboxRef.current.checked = false;
     } else {
       document.documentElement.className = 'dark';
-      setChecked(true);
+      checkboxRef.current.checked = true;
     }
   };
   return (
@@ -29,7 +29,7 @@ const ThemeSwitch = () => {
         type='checkbox'
         id='dark'
         onClick={handleThemeChange}
-        defaultChecked={checked}
+        ref={checkboxRef}
       />
       <Slider />
     </Label>
