@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import CustomDropdown from '../components/CustomDropdown';
 import { UploadIcon } from '../components/Icons';
 
@@ -16,20 +17,65 @@ const Home = () => {
       document.getElementById('file-name').innerHTML = e.target.files[0].name;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       !!fileRef.current.files[0] &&
       !!docNameRef.current.value &&
       !!sourceLangRef.current.value &&
       !!targetLangRef.current.value
     ) {
-      const data = {
-        file: fileRef.current.files[0],
-        docName: docNameRef.current.value,
-        sourceLanguage: sourceLangRef.current.value,
-        targetLanguage: targetLangRef.current.value,
-      };
-      console.table(data);
+      // const data = {
+      //   file: fileRef.current.files[0],
+      //   docName: docNameRef.current.value,
+      //   sourceLanguage: sourceLangRef.current.value,
+      //   targetLanguage: targetLangRef.current.value,
+      // };
+      // console.table(data);
+      const formData = new FormData();
+      formData.append('file', fileRef.current.files[0]);
+
+      try {
+        console.log('inside try');
+        await axios({
+          method: 'post',
+          url: 'https://udaaniitb.aicte-india.org:8000/asr/transcript',
+          withCredentials: false,
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'access-control-allow-origin': '*',
+          },
+          proxy: {
+            host: '104.236.174.88',
+            port: 3128,
+          },
+          onUploadProgress: (p) => {
+            console.log(parseFloat(p.progress * 100));
+          },
+        })
+          .then(function (response) {
+            console.log('inside 1st function');
+            console.log(JSON.stringify(response.data));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+      // let requestOptions = {
+      //   method: 'POST',
+      //   body: formData,
+      //   redirect: 'follow',
+      // };
+
+      // fetch(
+      //   'https://udaaniitb.aicte-india.org:8000/asr/transcript',
+      //   requestOptions
+      // )
+      //   .then((response) => response.text())
+      //   .then((result) => console.log(result))
+      //   .catch((error) => console.log('error', error));
       //TODO: start file uploading with a visual indicator.
       //TODO: on success upload => show SUCCESS modal.
       //TODO: on !success upload => show ERROR modal.
