@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Preview from './pages/Preview';
 
 export default function App() {
   return (
@@ -15,6 +16,9 @@ export default function App() {
         </Route>
         <Route exact path='/'>
           <Home />
+        </Route>
+        <Route exact path='/preview'>
+          <Preview />
         </Route>
       </Switch>
     </Router>

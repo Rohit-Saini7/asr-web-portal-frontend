@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { DownArrowIcon } from './Icons';
 
@@ -8,31 +8,47 @@ const CustomDropdown = ({
   inputClass,
   wrapperClass,
   label,
-  setLabel,
-  title,
+  langRef,
 }) => {
+  const dropdownRef = useRef();
+  useEffect(() => {
+    const onBodyClick = (event) => {
+      if (dropdownRef.current && dropdownRef.current.contains(event.target)) {
+        return;
+      }
+      let dropdown = document.querySelector('.' + wrapperClass);
+      dropdown.classList.remove('active');
+    };
+    document.body.addEventListener('click', onBodyClick);
+
+    return () => {
+      document.body.removeEventListener('click', onBodyClick);
+    };
+  }, []);
+
   const handleClick = () => {
     let dropdown = document.querySelector('.' + wrapperClass);
     dropdown.classList.toggle('active');
   };
 
   const handleSelect = (e) => {
-    // document.querySelector(inputClass).value = e.target.innerHTML;
-    setLabel(e.target.innerHTML);
-    document.querySelector(inputClass).classList.add('valid');
+    document.querySelector('.' + inputClass).classList.add('valid');
+    langRef.current.value = e.target.innerHTML;
   };
 
   return (
     <Dropdown
       className={`${wrapperClass + ' ' + className}`}
       onClick={handleClick}
-      title={title}
+      title={label}
+      ref={dropdownRef}
     >
       <Input
         type='text'
         className={inputClass}
         readOnly={true}
         required='required'
+        ref={langRef}
       />
       <InputLabel>{label}</InputLabel>
       <OptionWrapper className='options'>
@@ -110,6 +126,16 @@ const Input = styled.input`
     color: var(--signin-color);
     transform: translateY(-34px);
     font-size: 0.9rem;
+  }
+  &.valid ~ i,
+  &:focus ~ i {
+    height: 44px;
+  }
+
+  &.valid,
+  &.valid ~ svg {
+    color: var(--signin-bg-color);
+    z-index: 10;
   }
 `;
 
