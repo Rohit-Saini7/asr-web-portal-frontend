@@ -4,12 +4,14 @@ import { DownloadIcon, PreviewIcon } from '../components/Icons';
 import { DummyData } from './DummyDataForPreview';
 
 const Preview = () => {
-  const handleClick = (e) => {
+  //* It is just for animation in Button Group.
+  const handleAnimation = (e) => {
     e.target.classList.toggle('active');
     setTimeout(() => {
       e.target.classList.toggle('active');
     }, 200);
   };
+
   return (
     <Container>
       <Heading>Preview/Download</Heading>
@@ -80,11 +82,11 @@ const Preview = () => {
                   <td colSpan='2'>{creationTime}</td>
                   <td>
                     <ButtonGroup className='button-group' id='thirdDimension'>
-                      <Button className='button' onClick={handleClick}>
+                      <Button className='button' onClick={handleAnimation}>
                         <PreviewIcon />
                         <i></i>
                       </Button>
-                      <Button className='button' onClick={handleClick}>
+                      <Button className='button' onClick={handleAnimation}>
                         <DownloadIcon />
                         <i></i>
                       </Button>
@@ -92,11 +94,11 @@ const Preview = () => {
                   </td>
                   <td>
                     <ButtonGroup className='button-group' id='thirdDimension'>
-                      <Button className='button' onClick={handleClick}>
+                      <Button className='button' onClick={handleAnimation}>
                         <PreviewIcon />
                         <i></i>
                       </Button>
-                      <Button className='button' onClick={handleClick}>
+                      <Button className='button' onClick={handleAnimation}>
                         <DownloadIcon />
                         <i></i>
                       </Button>

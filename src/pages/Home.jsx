@@ -1,18 +1,45 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import CustomDropdown from '../components/CustomDropdown';
 import { UploadIcon } from '../components/Icons';
 
 const Home = () => {
-  const [sourceLanguage, setSourceLanguage] = useState(
-    'Select Source Language'
-  );
-  const [targetLanguage, setTargetLanguage] = useState(
-    'Select Target Language'
-  );
+  const fileRef = useRef();
+  const docNameRef = useRef();
+  const sourceLangRef = useRef();
+  const targetLangRef = useRef();
+  const errorRef = useRef();
+  const submitButtonRef = useRef();
+
   const handleFileChange = (e) => {
     if (!!e.target.files)
       document.getElementById('file-name').innerHTML = e.target.files[0].name;
+  };
+
+  const handleSubmit = () => {
+    if (
+      !!fileRef.current.files[0] &&
+      !!docNameRef.current.value &&
+      !!sourceLangRef.current.value &&
+      !!targetLangRef.current.value
+    ) {
+      const data = {
+        file: fileRef.current.files[0],
+        docName: docNameRef.current.value,
+        sourceLanguage: sourceLangRef.current.value,
+        targetLanguage: targetLangRef.current.value,
+      };
+      console.table(data);
+      //TODO: start file uploading with a visual indicator.
+      //TODO: on success upload => show SUCCESS modal.
+      //TODO: on !success upload => show ERROR modal.
+    } else {
+      errorRef.current.innerHTML =
+        (!fileRef.current.files[0] ? 'Media file is Missing. \n' : '') +
+        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '') +
+        (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
+        (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
+    }
   };
 
   return (
@@ -30,7 +57,7 @@ const Home = () => {
           .
         </li>
       </Instructions>
-      <ErrorMessage></ErrorMessage>
+      <ErrorMessage ref={errorRef}></ErrorMessage>
       <InnerContainer>
         <InputWrapper>
           <FileInput
@@ -39,6 +66,7 @@ const Home = () => {
             id='file-7'
             accept='video/*, audio/*'
             onChange={handleFileChange}
+            ref={fileRef}
           />
           <FileInputLabel htmlFor='file-7'>
             <strong>
@@ -49,33 +77,31 @@ const Home = () => {
           </FileInputLabel>
         </InputWrapper>
         <InputWrapper>
-          <InputField type='text' required='required' />
+          <InputField type='text' required='required' ref={docNameRef} />
           <InputLabel>Document Name</InputLabel>
           <i></i>
         </InputWrapper>
         <InputWrapper>
           <CustomDropdown
-            className='alpha2'
             inputClass='sourcelang'
             wrapperClass='sourceDropdown'
             options={['English', 'Hindi', 'Tamil', 'Telgu']}
-            label={sourceLanguage}
-            setLabel={setSourceLanguage}
-            title='Select Source Language'
+            label='Select Source Language'
+            langRef={sourceLangRef}
           />
         </InputWrapper>
         <InputWrapper>
           <CustomDropdown
-            className='alpha'
             inputClass='targetlang'
             wrapperClass='targetDropdown'
             options={['English', 'Hindi', 'Tamil', 'Telgu']}
-            label={targetLanguage}
-            setLabel={setTargetLanguage}
-            title='Select Target Language'
+            label='Select Target Language'
+            langRef={targetLangRef}
           />
         </InputWrapper>
-        <SubmitButton>Convert</SubmitButton>
+        <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
+          Convert
+        </SubmitButton>
       </InnerContainer>
     </Container>
   );
@@ -174,8 +200,6 @@ const FileInputLabel = styled.label`
   border-radius: 10px;
   color: var(--signin-color);
   font-size: 1.25rem;
-  /* text-overflow: ellipsis; */
-  /* white-space: nowrap; */
   cursor: pointer;
   display: flex;
   align-items: center;

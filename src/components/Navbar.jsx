@@ -4,12 +4,9 @@ import styled from 'styled-components';
 
 import {
   DownArrowIcon,
-  // ExportIcon,
   HomeIcon,
   LinkIcon,
   PreviewIcon,
-  // SearchIcon,
-  // UserGroupIcon,
   UserIcon,
 } from './Icons';
 import ThemeSwitch from './ThemeSwitch';
@@ -26,24 +23,13 @@ const Navbar = () => {
           <PreviewIcon />
           Preview/Download
         </NavItem>
-        {/* <NavItem>
-          <UserGroupIcon />
-          Associates
-        </NavItem> */}
-        {/* <NavItem>
-          <ExportIcon />
-          Export Project
-        </NavItem> */}
-        {/* <SearchBar>
-          <SearchIcon />
-          Search
-        </SearchBar> */}
-        <NavDropdown>
+
+        <NavDropdown to='/login'>
           <LinkIcon />
           Quick Links
           <DownArrowIcon />
         </NavDropdown>
-        <NavDropdown>
+        <NavDropdown to=''>
           <UserIcon />
           Profile
           <DownArrowIcon />

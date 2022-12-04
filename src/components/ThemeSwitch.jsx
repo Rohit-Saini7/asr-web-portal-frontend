@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const ThemeSwitch = () => {
   const checkboxRef = useRef();
+
   useEffect(() => {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.documentElement.className = 'dark';

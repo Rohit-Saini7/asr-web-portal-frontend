@@ -25,7 +25,7 @@ const Login = () => {
           </InputWrapper>
           <LinksWrapper>
             <ForgetPassword>Forget Password</ForgetPassword>
-            <CreateAccount>Sign Up</CreateAccount>
+            <CreateAccount>Create Account</CreateAccount>
           </LinksWrapper>
           <SubmitButton>Sign in</SubmitButton>
           <GoogleButton>Sign in with Google</GoogleButton>
