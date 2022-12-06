@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import CustomDropdown from '../components/CustomDropdown';
 import { UploadIcon } from '../components/Icons';
+import ProgressModal from '../components/ProgressModal';
 
 const Home = () => {
   const fileRef = useRef();
@@ -11,6 +12,16 @@ const Home = () => {
   const targetLangRef = useRef();
   const errorRef = useRef();
   const submitButtonRef = useRef();
+  let cancelToken;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [progressData, setProgressData] = useState({
+    done: 0,
+    total: 0,
+    progress: 0,
+    rate: 0,
+    estimated: 0,
+  });
 
   const handleFileChange = (e) => {
     if (!!e.target.files)
@@ -24,18 +35,16 @@ const Home = () => {
       !!sourceLangRef.current.value &&
       !!targetLangRef.current.value
     ) {
-      // const data = {
-      //   file: fileRef.current.files[0],
-      //   docName: docNameRef.current.value,
-      //   sourceLanguage: sourceLangRef.current.value,
-      //   targetLanguage: targetLangRef.current.value,
-      // };
-      // console.table(data);
+      setIsModalOpen(true);
       const formData = new FormData();
       formData.append('file', fileRef.current.files[0]);
 
+      if (typeof cancelToken != typeof undefined) {
+        cancelToken.cancel('Operation canceled due to new request.');
+      }
+
+      cancelToken = axios.CancelToken.source();
       try {
-        console.log('inside try');
         await axios({
           method: 'post',
           url: 'https://udaaniitb.aicte-india.org:8000/asr/transcript',
@@ -43,39 +52,52 @@ const Home = () => {
           data: formData,
           headers: {
             'Content-Type': 'multipart/form-data',
-            'access-control-allow-origin': '*',
-          },
-          proxy: {
-            host: '104.236.174.88',
-            port: 3128,
           },
           onUploadProgress: (p) => {
-            console.log(parseFloat(p.progress * 100));
+            /*p = {
+              "loaded": 1736142,
+              "total": 8301209,
+              "progress": 0.2091432705766112,
+              "bytes": 425984,
+              "rate": 114384,
+              "estimated": 57.39497657014967,
+              "event": {
+                "isTrusted": true
+              },
+              "upload": true
+            } */
+            setProgressData({
+              done: parseInt(p.loaded / 1024),
+              total: parseInt(p.total / 1024),
+              progress: parseInt(p.progress * 100),
+              rate: parseInt(p.rate / 1024),
+              estimated: parseInt(p.estimated),
+            });
           },
+          cancelToken: cancelToken.token,
         })
           .then(function (response) {
-            console.log('inside 1st function');
             console.log(JSON.stringify(response.data));
+
+            //* This block reset the form.
+            fileRef.current.value = null;
+            docNameRef.current.value = null;
+            sourceLangRef.current.value = null;
+            targetLangRef.current.value = null;
+            document.getElementById('file-name').innerHTML = null;
+            document
+              .querySelectorAll('.valid')
+              .forEach((box) => box.classList.remove('valid'));
+
+            //* This block reset the form.
           })
           .catch(function (error) {
-            console.log(error);
+            console.log(error.message);
           });
       } catch (error) {
-        console.log(error);
+        console.log('error from try-catch: ', error);
       }
-      // let requestOptions = {
-      //   method: 'POST',
-      //   body: formData,
-      //   redirect: 'follow',
-      // };
 
-      // fetch(
-      //   'https://udaaniitb.aicte-india.org:8000/asr/transcript',
-      //   requestOptions
-      // )
-      //   .then((response) => response.text())
-      //   .then((result) => console.log(result))
-      //   .catch((error) => console.log('error', error));
       //TODO: start file uploading with a visual indicator.
       //TODO: on success upload => show SUCCESS modal.
       //TODO: on !success upload => show ERROR modal.
@@ -89,67 +111,77 @@ const Home = () => {
   };
 
   return (
-    <Container>
-      <Heading>ASR Post Editor Tool</Heading>
-      <Instructions aria-label='Instructions:'>
-        <li>File name should be greater than 5 characters.</li>
-        <li>Audio or Video name shouldn&#39;t contain any white spaces.</li>
-        <li>First upload the Audio or Video file, then enter other fields.</li>
-        <li>
-          Uploading Audio or Video file size should be less than{' '}
-          <strong>
-            <em>1024 MB</em>
-          </strong>
-          .
-        </li>
-      </Instructions>
-      <ErrorMessage ref={errorRef}></ErrorMessage>
-      <InnerContainer>
-        <InputWrapper>
-          <FileInput
-            type='file'
-            name='file-7'
-            id='file-7'
-            accept='video/*, audio/*'
-            onChange={handleFileChange}
-            ref={fileRef}
-          />
-          <FileInputLabel htmlFor='file-7'>
+    <React.Fragment>
+      {isModalOpen && (
+        <ProgressModal
+          progressData={progressData}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
+      <Container>
+        <Heading>ASR Post Editor Tool</Heading>
+        <Instructions aria-label='Instructions:'>
+          <li>File name should be greater than 5 characters.</li>
+          <li>Audio or Video name shouldn&#39;t contain any white spaces.</li>
+          <li>
+            First upload the Audio or Video file, then enter other fields.
+          </li>
+          <li>
+            Uploading Audio or Video file size should be less than{' '}
             <strong>
-              <UploadIcon />
-              Choose a file…
+              <em>1024 MB</em>
             </strong>
-            <span id='file-name'></span>
-          </FileInputLabel>
-        </InputWrapper>
-        <InputWrapper>
-          <InputField type='text' required='required' ref={docNameRef} />
-          <InputLabel>Document Name</InputLabel>
-          <i></i>
-        </InputWrapper>
-        <InputWrapper>
-          <CustomDropdown
-            inputClass='sourcelang'
-            wrapperClass='sourceDropdown'
-            options={['English', 'Hindi', 'Tamil', 'Telgu']}
-            label='Select Source Language'
-            langRef={sourceLangRef}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <CustomDropdown
-            inputClass='targetlang'
-            wrapperClass='targetDropdown'
-            options={['English', 'Hindi', 'Tamil', 'Telgu']}
-            label='Select Target Language'
-            langRef={targetLangRef}
-          />
-        </InputWrapper>
-        <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
-          Convert
-        </SubmitButton>
-      </InnerContainer>
-    </Container>
+            .
+          </li>
+        </Instructions>
+        <ErrorMessage ref={errorRef}></ErrorMessage>
+        <InnerContainer>
+          <InputWrapper>
+            <FileInput
+              type='file'
+              name='file-7'
+              id='file-7'
+              accept='video/*, audio/*'
+              onChange={handleFileChange}
+              ref={fileRef}
+            />
+            <FileInputLabel htmlFor='file-7'>
+              <strong>
+                <UploadIcon />
+                Choose a file…
+              </strong>
+              <span id='file-name'></span>
+            </FileInputLabel>
+          </InputWrapper>
+          <InputWrapper>
+            <InputField type='text' required='required' ref={docNameRef} />
+            <InputLabel>Document Name</InputLabel>
+            <i></i>
+          </InputWrapper>
+          <InputWrapper>
+            <CustomDropdown
+              inputClass='sourcelang'
+              wrapperClass='sourceDropdown'
+              options={['English', 'Hindi', 'Tamil', 'Telgu']}
+              label='Select Source Language'
+              langRef={sourceLangRef}
+            />
+          </InputWrapper>
+          <InputWrapper>
+            <CustomDropdown
+              inputClass='targetlang'
+              wrapperClass='targetDropdown'
+              options={['English', 'Hindi', 'Tamil', 'Telgu']}
+              label='Select Target Language'
+              langRef={targetLangRef}
+            />
+          </InputWrapper>
+          <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
+            Convert
+          </SubmitButton>
+        </InnerContainer>
+      </Container>
+    </React.Fragment>
   );
 };
 
