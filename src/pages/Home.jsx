@@ -4,6 +4,7 @@ import axios from 'axios';
 import CustomDropdown from '../components/CustomDropdown';
 import { UploadIcon } from '../components/Icons';
 import ProgressModal from '../components/ProgressModal';
+import HomeTabs from '../components/HomeTabs';
 
 const Home = () => {
   const fileRef = useRef();
@@ -22,6 +23,7 @@ const Home = () => {
     rate: 0,
     estimated: 0,
   });
+  const [tabSelected, setTabSelected] = useState('transcript');
 
   const handleFileChange = (e) => {
     if (!!e.target.files)
@@ -98,8 +100,8 @@ const Home = () => {
         console.log('error from try-catch: ', error);
       }
 
-      //TODO: start file uploading with a visual indicator.
-      //TODO: on success upload => show SUCCESS modal.
+      //TODO: ✅ start file uploading with a visual indicator.
+      //TODO: ✅ on success upload => show SUCCESS modal.
       //TODO: on !success upload => show ERROR modal.
     } else {
       errorRef.current.innerHTML =
@@ -136,49 +138,55 @@ const Home = () => {
         </Instructions>
         <ErrorMessage ref={errorRef}></ErrorMessage>
         <InnerContainer>
-          <InputWrapper>
-            <FileInput
-              type='file'
-              name='file-7'
-              id='file-7'
-              accept='video/*, audio/*'
-              onChange={handleFileChange}
-              ref={fileRef}
-            />
-            <FileInputLabel htmlFor='file-7'>
-              <strong>
-                <UploadIcon />
-                Choose a file…
-              </strong>
-              <span id='file-name'></span>
-            </FileInputLabel>
-          </InputWrapper>
-          <InputWrapper>
-            <InputField type='text' required='required' ref={docNameRef} />
-            <InputLabel>Document Name</InputLabel>
-            <i></i>
-          </InputWrapper>
-          <InputWrapper>
-            <CustomDropdown
-              inputClass='sourcelang'
-              wrapperClass='sourceDropdown'
-              options={['English', 'Hindi', 'Tamil', 'Telgu']}
-              label='Select Source Language'
-              langRef={sourceLangRef}
-            />
-          </InputWrapper>
-          <InputWrapper>
-            <CustomDropdown
-              inputClass='targetlang'
-              wrapperClass='targetDropdown'
-              options={['English', 'Hindi', 'Tamil', 'Telgu']}
-              label='Select Target Language'
-              langRef={targetLangRef}
-            />
-          </InputWrapper>
-          <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
-            Convert
-          </SubmitButton>
+          <HomeTabs tabSelected={tabSelected} setTabSelected={setTabSelected} />
+          <FormWrapper>
+            <InputWrapper>
+              <FileInput
+                type='file'
+                name='mediaFile'
+                id='mediaFile'
+                accept='video/*, audio/*'
+                onChange={handleFileChange}
+                ref={fileRef}
+              />
+              <InputLabel data-for='mediaFile'>
+                Upload Video or Audio File
+              </InputLabel>
+              <FileInputLabel htmlFor='mediaFile'>
+                <strong>
+                  <UploadIcon />
+                  Choose a file…
+                </strong>
+                <span id='file-name'></span>
+              </FileInputLabel>
+            </InputWrapper>
+            <InputWrapper>
+              <InputField type='text' required='required' ref={docNameRef} />
+              <InputLabel>Document Name</InputLabel>
+              <i></i>
+            </InputWrapper>
+            <InputWrapper>
+              <CustomDropdown
+                inputClass='sourcelang'
+                wrapperClass='sourceDropdown'
+                options={['English', 'Hindi', 'Tamil', 'Telgu']}
+                label='Select Source Language'
+                langRef={sourceLangRef}
+              />
+            </InputWrapper>
+            <InputWrapper>
+              <CustomDropdown
+                inputClass='targetlang'
+                wrapperClass='targetDropdown'
+                options={['English', 'Hindi', 'Tamil', 'Telgu']}
+                label='Select Target Language'
+                langRef={targetLangRef}
+              />
+            </InputWrapper>
+            <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
+              Convert
+            </SubmitButton>
+          </FormWrapper>
         </InnerContainer>
       </Container>
     </React.Fragment>
@@ -233,21 +241,29 @@ const ErrorMessage = styled.h3`
 const InnerContainer = styled.div`
   max-width: 1350px;
   width: 100%;
-  background: var(--signin-bg-color);
-  position: relative;
   border-radius: 10px;
+  background: var(--signin-bg-color);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const FormWrapper = styled.div`
+  width: 100%;
+  position: relative;
   padding: 40px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   flex-direction: column;
-  box-shadow: var(--shadow);
 `;
 
 const InputWrapper = styled.div`
   position: relative;
   width: 100%;
   margin-top: 35px;
+  display: flex;
   & > i {
     position: absolute;
     left: 0;
@@ -274,7 +290,7 @@ const FileInputLabel = styled.label`
   border: 1px solid var(--signin-color);
   background-color: transparent;
   width: 100%;
-  height: 100%;
+  height: 44px;
   border-radius: 10px;
   color: var(--signin-color);
   font-size: 1.25rem;
@@ -284,6 +300,7 @@ const FileInputLabel = styled.label`
   justify-content: space-around;
   overflow: hidden;
   padding: 5px 1.25rem;
+  align-self: flex-end;
   & > span {
     width: 60%;
     max-width: 20vw;
@@ -326,7 +343,8 @@ const InputField = styled.input`
   z-index: 10;
 
   &:valid ~ span,
-  &:focus ~ span {
+  &:focus ~ span,
+  & ~ span[data-for='mediaFile'] {
     color: var(--signin-color);
     transform: translateY(-34px);
     font-size: 0.9rem;
@@ -346,6 +364,11 @@ const InputLabel = styled.span`
   pointer-events: none;
   letter-spacing: 0.1rem;
   transition: 0.5s;
+  &[data-for='mediaFile'] {
+    color: var(--signin-color);
+    transform: translateY(-34px);
+    font-size: 0.9rem;
+  }
 `;
 
 const SubmitButton = styled.button`

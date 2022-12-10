@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DownloadIcon, PreviewIcon } from '../components/Icons';
+import { DownloadIcon, PreviewIcon, UploadIcon } from '../components/Icons';
 import { DummyData } from './DummyDataForPreview';
 
 const Preview = () => {
@@ -25,13 +25,16 @@ const Preview = () => {
               <th rowSpan='1' colSpan='2'>
                 Name
               </th>
-              <th rowSpan='1' colSpan='2'>
+              <th rowSpan='1' colSpan='1'>
                 Language
               </th>
-              <th rowSpan='2' colSpan='2'>
+              <th rowSpan='2' colSpan='1'>
                 Creation Time
               </th>
-              <th rowSpan='1' colSpan='2'>
+              <th rowSpan='2' colSpan='1'>
+                Modified Time
+              </th>
+              <th rowSpan='1' colSpan='3'>
                 Preview/Download
               </th>
             </tr>
@@ -42,9 +45,7 @@ const Preview = () => {
               <th rowSpan='2' colSpan='1'>
                 Document
               </th>
-              <th rowSpan='1' colSpan='1'>
-                Source
-              </th>
+
               <th rowSpan='1' colSpan='1'>
                 Target
               </th>
@@ -53,6 +54,9 @@ const Preview = () => {
               </th>
               <th rowSpan='1' colSpan='1'>
                 Translation
+              </th>
+              <th rowSpan='1' colSpan='1'>
+                TTS
               </th>
             </tr>
           </thead>
@@ -67,9 +71,9 @@ const Preview = () => {
                   serialNumber,
                   mediaName,
                   documentName,
-                  sourceLanguage,
                   targetLanguage,
                   creationTime,
+                  modifyTime,
                 },
                 index
               ) => (
@@ -77,9 +81,9 @@ const Preview = () => {
                   <td>{serialNumber}</td>
                   <td>{mediaName}</td>
                   <td>{documentName}</td>
-                  <td>{sourceLanguage}</td>
                   <td>{targetLanguage}</td>
-                  <td colSpan='2'>{creationTime}</td>
+                  <td>{creationTime}</td>
+                  <td>{modifyTime}</td>
                   <td>
                     <ButtonGroup className='button-group' id='thirdDimension'>
                       <Button className='button' onClick={handleAnimation}>
@@ -88,6 +92,10 @@ const Preview = () => {
                       </Button>
                       <Button className='button' onClick={handleAnimation}>
                         <DownloadIcon />
+                        <i></i>
+                      </Button>
+                      <Button className='button' onClick={handleAnimation}>
+                        <UploadIcon />
                         <i></i>
                       </Button>
                     </ButtonGroup>
@@ -100,6 +108,26 @@ const Preview = () => {
                       </Button>
                       <Button className='button' onClick={handleAnimation}>
                         <DownloadIcon />
+                        <i></i>
+                      </Button>
+                      <Button className='button' onClick={handleAnimation}>
+                        <UploadIcon />
+                        <i></i>
+                      </Button>
+                    </ButtonGroup>
+                  </td>
+                  <td>
+                    <ButtonGroup className='button-group' id='thirdDimension'>
+                      <Button className='button' onClick={handleAnimation}>
+                        <PreviewIcon />
+                        <i></i>
+                      </Button>
+                      <Button className='button' onClick={handleAnimation}>
+                        <DownloadIcon />
+                        <i></i>
+                      </Button>
+                      <Button className='button' onClick={handleAnimation}>
+                        <UploadIcon />
                         <i></i>
                       </Button>
                     </ButtonGroup>

@@ -23,11 +23,11 @@ const ProgressModal = ({ progressData, setIsModalOpen }) => {
             <Data>
               <DataItem title='File Size'>
                 <EqualIcon />
-                {progressData.total} MB
+                {progressData.total} KB
               </DataItem>
               <DataItem title='Done '>
                 <CheckIcon />
-                {progressData.done} MB
+                {progressData.done} KB
               </DataItem>
               <DataItem title='Upload Speed'>
                 <GaugeHighIcon />
