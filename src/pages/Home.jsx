@@ -1,10 +1,15 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { collection, doc } from 'firebase/firestore';
+
 import CustomDropdown from '../components/CustomDropdown';
 import { UploadIcon } from '../components/Icons';
 import ProgressModal from '../components/ProgressModal';
 import HomeTabs from '../components/HomeTabs';
+import { handleFileUpload } from '../hooks/FileUpload';
+import { db } from '../Firebase';
+import { Navigate } from 'react-router-dom';
 
 const Home = () => {
   const fileRef = useRef();
@@ -13,6 +18,9 @@ const Home = () => {
   const targetLangRef = useRef();
   const errorRef = useRef();
   const submitButtonRef = useRef();
+
+  const user = useSelector((state) => state.userState.user);
+  const dispatch = useDispatch();
   let cancelToken;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,12 +38,51 @@ const Home = () => {
       document.getElementById('file-name').innerHTML = e.target.files[0].name;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (
       !!fileRef.current.files[0] &&
-      !!docNameRef.current.value &&
-      !!sourceLangRef.current.value &&
-      !!targetLangRef.current.value
+      !!docNameRef.current.value
+      // &&
+      // !!sourceLangRef.current.value &&
+      // !!targetLangRef.current.value
+    ) {
+      setIsModalOpen(true);
+      const collectionRef = collection(db, 'usersList', user.uid, 'docs');
+
+      handleFileUpload(
+        fileRef.current.files[0],
+        docNameRef.current.value,
+        dispatch,
+        collectionRef,
+        cancelToken,
+        setProgressData
+      );
+      //? This block reset the form.
+      fileRef.current.value = null;
+      docNameRef.current.value = null;
+      // sourceLangRef.current.value = null;
+      // targetLangRef.current.value = null;
+      document.getElementById('file-name').innerHTML = null;
+      document
+        .querySelectorAll('.valid')
+        .forEach((box) => box.classList.remove('valid'));
+      //?This block reset the form.
+    } else {
+      errorRef.current.innerHTML =
+        (!fileRef.current.files[0] ? 'Media file is Missing. \n' : '') +
+        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '');
+      // +
+      // (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
+      // (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
+    }
+  };
+  /* {
+    if (
+      !!fileRef.current.files[0] &&
+      !!docNameRef.current.value
+      // &&
+      // !!sourceLangRef.current.value &&
+      // !!targetLangRef.current.value
     ) {
       setIsModalOpen(true);
       const formData = new FormData();
@@ -49,25 +96,13 @@ const Home = () => {
       try {
         await axios({
           method: 'post',
-          url: 'https://udaaniitb.aicte-india.org:8000/asr/transcript',
+          url: import.meta.env.VITE_API_URL,
           withCredentials: false,
           data: formData,
           headers: {
             'Content-Type': 'multipart/form-data',
           },
           onUploadProgress: (p) => {
-            /*p = {
-              "loaded": 1736142,
-              "total": 8301209,
-              "progress": 0.2091432705766112,
-              "bytes": 425984,
-              "rate": 114384,
-              "estimated": 57.39497657014967,
-              "event": {
-                "isTrusted": true
-              },
-              "upload": true
-            } */
             setProgressData({
               done: parseInt(p.loaded / 1024),
               total: parseInt(p.total / 1024),
@@ -80,24 +115,24 @@ const Home = () => {
         })
           .then(function (response) {
             console.log(JSON.stringify(response.data));
+            // console.log(user);
 
-            //* This block reset the form.
+            //? This block reset the form.
             fileRef.current.value = null;
             docNameRef.current.value = null;
-            sourceLangRef.current.value = null;
-            targetLangRef.current.value = null;
+            // sourceLangRef.current.value = null;
+            // targetLangRef.current.value = null;
             document.getElementById('file-name').innerHTML = null;
             document
               .querySelectorAll('.valid')
               .forEach((box) => box.classList.remove('valid'));
-
-            //* This block reset the form.
+            //?This block reset the form.
           })
           .catch(function (error) {
-            console.log(error.message);
+            console.log('Error from API hit: ', error.message);
           });
       } catch (error) {
-        console.log('error from try-catch: ', error);
+        console.log('Error from TryCatch: ', error);
       }
 
       //TODO: ✅ start file uploading with a visual indicator.
@@ -106,14 +141,16 @@ const Home = () => {
     } else {
       errorRef.current.innerHTML =
         (!fileRef.current.files[0] ? 'Media file is Missing. \n' : '') +
-        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '') +
-        (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
-        (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
+        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '');
+      // +
+      // (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
+      // (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
     }
-  };
+  } */
 
   return (
     <React.Fragment>
+      {!user && <Navigate to='/' />}
       {isModalOpen && (
         <ProgressModal
           progressData={progressData}
@@ -150,7 +187,11 @@ const Home = () => {
                 ref={fileRef}
               />
               <InputLabel data-for='mediaFile'>
-                Upload Video or Audio File
+                {tabSelected === 'transcript'
+                  ? 'Upload Video or Audio File'
+                  : tabSelected === 'tts'
+                  ? 'Upload Translation File(.xml)'
+                  : 'Upload Transcript File(.xml)'}
               </InputLabel>
               <FileInputLabel htmlFor='mediaFile'>
                 <strong>
@@ -165,24 +206,31 @@ const Home = () => {
               <InputLabel>Document Name</InputLabel>
               <i></i>
             </InputWrapper>
-            <InputWrapper>
-              <CustomDropdown
-                inputClass='sourcelang'
-                wrapperClass='sourceDropdown'
-                options={['English', 'Hindi', 'Tamil', 'Telgu']}
-                label='Select Source Language'
-                langRef={sourceLangRef}
-              />
-            </InputWrapper>
-            <InputWrapper>
-              <CustomDropdown
-                inputClass='targetlang'
-                wrapperClass='targetDropdown'
-                options={['English', 'Hindi', 'Tamil', 'Telgu']}
-                label='Select Target Language'
-                langRef={targetLangRef}
-              />
-            </InputWrapper>
+
+            {tabSelected === 'transcript' ? (
+              ''
+            ) : (
+              <React.Fragment>
+                <InputWrapper>
+                  <CustomDropdown
+                    inputClass='sourcelang'
+                    wrapperClass='sourceDropdown'
+                    options={['English', 'Hindi', 'Tamil', 'Telgu']}
+                    label='Select Source Language'
+                    langRef={sourceLangRef}
+                  />
+                </InputWrapper>
+                <InputWrapper>
+                  <CustomDropdown
+                    inputClass='targetlang'
+                    wrapperClass='targetDropdown'
+                    options={['English', 'Hindi', 'Tamil', 'Telgu']}
+                    label='Select Target Language'
+                    langRef={targetLangRef}
+                  />
+                </InputWrapper>
+              </React.Fragment>
+            )}
             <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
               Convert
             </SubmitButton>

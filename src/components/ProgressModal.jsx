@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { CheckIcon, EqualIcon, GaugeHighIcon, HourglassIcon } from './Icons';
 
@@ -13,9 +14,11 @@ const ProgressModal = ({ progressData, setIsModalOpen }) => {
               You will be notified with mail when transcript is generated
               succesfully.
             </SubHeading>
-            <CloseButton onClick={() => setIsModalOpen(false)}>
-              Close
-            </CloseButton>
+            <Link to='/preview'>
+              <CloseButton onClick={() => setIsModalOpen(false)}>
+                Close
+              </CloseButton>
+            </Link>
           </React.Fragment>
         ) : (
           <React.Fragment>
