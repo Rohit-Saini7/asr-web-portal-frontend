@@ -1,19 +1,57 @@
 import React from 'react';
 import styled from 'styled-components';
-import { DownloadIcon, PreviewIcon } from '../components/Icons';
-import { DummyData } from './DummyDataForPreview';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { Navigate } from 'react-router-dom';
+
+import { DownloadIcon, PreviewIcon, UploadIcon } from '../components/Icons';
+// import { DummyData } from './DummyDataForPreview';
 
 const Preview = () => {
-  //* It is just for animation in Button Group.
-  const handleAnimation = (e) => {
-    e.target.classList.toggle('active');
-    setTimeout(() => {
-      e.target.classList.toggle('active');
-    }, 200);
+  const user = useSelector((state) => state.userState.user);
+  const docs = useSelector((state) => state.userState.docs);
+
+  const handleDownloadTranscript = (docName, token) => {
+    const URL = `${import.meta.env.VITE_API_URL}/${token}`;
+    let res;
+
+    axios({
+      method: 'get',
+      url: URL,
+    })
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data === 'SUCCESS') {
+          axios({
+            method: 'get',
+            url: `${URL}/result`,
+            responseType: 'blob',
+          })
+            .then(function (res) {
+              console.log(res);
+              console.log(res.data);
+              // const blob = new Blob(res.data);
+              const fileURL = window.URL.createObjectURL(res.data);
+              let alink = document.createElement('a');
+              alink.href = fileURL;
+              alink.download = `${docName}.xml`;
+              alink.click();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        } else {
+          console.log('not matched', res);
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
 
   return (
     <Container>
+      {!user && <Navigate to='/' />}
       <Heading>Preview/Download</Heading>
       <TableHeaderWrapper>
         <table cellPadding='0' cellSpacing='0' border='0'>
@@ -25,13 +63,16 @@ const Preview = () => {
               <th rowSpan='1' colSpan='2'>
                 Name
               </th>
-              <th rowSpan='1' colSpan='2'>
+              <th rowSpan='1' colSpan='1'>
                 Language
               </th>
-              <th rowSpan='2' colSpan='2'>
+              <th rowSpan='2' colSpan='1'>
                 Creation Time
               </th>
-              <th rowSpan='1' colSpan='2'>
+              <th rowSpan='2' colSpan='1'>
+                Modified Time
+              </th>
+              <th rowSpan='1' colSpan='3'>
                 Preview/Download
               </th>
             </tr>
@@ -43,9 +84,6 @@ const Preview = () => {
                 Document
               </th>
               <th rowSpan='1' colSpan='1'>
-                Source
-              </th>
-              <th rowSpan='1' colSpan='1'>
                 Target
               </th>
               <th rowSpan='1' colSpan='1'>
@@ -54,6 +92,9 @@ const Preview = () => {
               <th rowSpan='1' colSpan='1'>
                 Translation
               </th>
+              <th rowSpan='1' colSpan='1'>
+                TTS
+              </th>
             </tr>
           </thead>
         </table>
@@ -61,50 +102,82 @@ const Preview = () => {
       <TableBodyWrapper>
         <table cellPadding='0' cellSpacing='0' border='0'>
           <tbody>
-            {DummyData.map(
-              (
-                {
-                  serialNumber,
-                  mediaName,
-                  documentName,
-                  sourceLanguage,
-                  targetLanguage,
-                  creationTime,
-                },
-                index
-              ) => (
-                <tr key={index}>
-                  <td>{serialNumber}</td>
-                  <td>{mediaName}</td>
-                  <td>{documentName}</td>
-                  <td>{sourceLanguage}</td>
-                  <td>{targetLanguage}</td>
-                  <td colSpan='2'>{creationTime}</td>
-                  <td>
-                    <ButtonGroup className='button-group' id='thirdDimension'>
-                      <Button className='button' onClick={handleAnimation}>
-                        <PreviewIcon />
-                        <i></i>
-                      </Button>
-                      <Button className='button' onClick={handleAnimation}>
-                        <DownloadIcon />
-                        <i></i>
-                      </Button>
-                    </ButtonGroup>
-                  </td>
-                  <td>
-                    <ButtonGroup className='button-group' id='thirdDimension'>
-                      <Button className='button' onClick={handleAnimation}>
-                        <PreviewIcon />
-                        <i></i>
-                      </Button>
-                      <Button className='button' onClick={handleAnimation}>
-                        <DownloadIcon />
-                        <i></i>
-                      </Button>
-                    </ButtonGroup>
-                  </td>
-                </tr>
+            {!docs ? (
+              <tr>
+                <td>No Data Found</td>
+              </tr>
+            ) : (
+              docs.map(
+                (
+                  {
+                    creationTime,
+                    docName,
+                    mediaName,
+                    modifyTime,
+                    targetLanguage,
+                    token,
+                  },
+                  index
+                ) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{mediaName}</td>
+                    <td>{docName}</td>
+                    <td>{!!targetLanguage ? targetLanguage : 'Hindi'}</td>
+                    <td>{creationTime}</td>
+                    <td>{modifyTime}</td>
+                    <td>
+                      <ButtonGroup className='button-group' id='thirdDimension'>
+                        <Button className='button' onClick={handleAnimation}>
+                          <PreviewIcon />
+                          <i></i>
+                        </Button>
+                        <Button
+                          className='button'
+                          onClick={(e) => {
+                            handleAnimation(e);
+                            handleDownloadTranscript(docName, token);
+                          }}
+                        >
+                          <DownloadIcon />
+                          <i></i>
+                        </Button>
+                        <Button className='button' onClick={handleAnimation}>
+                          <UploadIcon />
+                          <i></i>
+                        </Button>
+                      </ButtonGroup>
+                    </td>
+                    <td>
+                      <ButtonGroup className='button-group' id='thirdDimension'>
+                        <Button className='button' onClick={handleAnimation}>
+                          <PreviewIcon />
+                          <i></i>
+                        </Button>
+                        <Button className='button' onClick={handleAnimation}>
+                          <DownloadIcon />
+                          <i></i>
+                        </Button>
+                        <Button className='button' onClick={handleAnimation}>
+                          <UploadIcon />
+                          <i></i>
+                        </Button>
+                      </ButtonGroup>
+                    </td>
+                    <td>
+                      <ButtonGroup className='button-group' id='thirdDimension'>
+                        <Button className='button' onClick={handleAnimation}>
+                          <PreviewIcon />
+                          <i></i>
+                        </Button>
+                        <Button className='button' onClick={handleAnimation}>
+                          <DownloadIcon />
+                          <i></i>
+                        </Button>
+                      </ButtonGroup>
+                    </td>
+                  </tr>
+                )
               )
             )}
           </tbody>
@@ -173,6 +246,13 @@ const TableBodyWrapper = styled.div`
   }
 `;
 
+//* It is just for animation in Button Group.
+const handleAnimation = (e) => {
+  e.target.classList.toggle('active');
+  setTimeout(() => {
+    e.target.classList.toggle('active');
+  }, 200);
+};
 const ButtonGroup = styled.div`
   margin: 0 auto;
   width: fit-content;
@@ -206,7 +286,6 @@ const Button = styled.div`
     font-size: 16px;
     text-shadow: 0 0 10px #fff;
     background: var(--table-header-color);
-    height: 33px;
     vertical-align: bottom;
   }
 
@@ -253,5 +332,9 @@ const Button = styled.div`
     top: -6px;
     border-bottom: 6px solid var(--signin-color);
     border-left: 8px solid transparent;
+  }
+
+  &:active {
+    transform: translateY(2px);
   }
 `;

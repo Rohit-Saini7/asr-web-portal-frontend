@@ -1,9 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Navigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from 'firebase/firestore';
+
+import { auth, db, provider } from '../Firebase';
+import { SignInUser } from '../hooks/Auth';
+import { addUser, addDocs, setDocs } from '../redux/slice/userSlice';
 
 const Login = () => {
+  const user = useSelector((state) => state.userState.user);
+  const dispatch = useDispatch();
+
+  const handleGoogleSignIn = async () => {
+    const data = SignInUser(auth, provider);
+
+    const userSnap = await getDoc(doc(db, 'usersList', data.uid));
+    if (userSnap.exists()) {
+      const docSnap = await getDocs(
+        collection(db, 'usersList', data.uid, 'docs')
+      );
+      const allDocs = [];
+      docSnap.forEach((doc) => {
+        // console.log(doc.id, ' => ', doc.data());
+        allDocs.push(doc.data());
+        // console.log(allDocs);
+      });
+      !!docSnap.size && dispatch(setDocs(allDocs));
+    } else {
+      console.log('No such document!');
+      await setDoc(doc(db, 'usersList', data.uid), {
+        name: data.email,
+      });
+      await addDoc(db, 'usersList', data.uid, 'docs', {});
+    }
+
+    dispatch(addUser(data));
+  };
+
   return (
     <Container>
+      {!!user && !!Object.keys(user).length && <Navigate to='/home' />}
       <InnerContainer>
         <LeftSection>
           <Heading>ASR Post Editor Tool</Heading>
@@ -28,7 +72,9 @@ const Login = () => {
             <CreateAccount>Create Account</CreateAccount>
           </LinksWrapper>
           <SubmitButton>Sign in</SubmitButton>
-          <GoogleButton>Sign in with Google</GoogleButton>
+          <GoogleButton onClick={handleGoogleSignIn}>
+            Sign in with Google
+          </GoogleButton>
         </RightSection>
       </InnerContainer>
     </Container>

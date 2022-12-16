@@ -1,26 +1,38 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import Navbar from './components/Navbar';
+import PrimaryPage from './pages/PrimaryPage';
+import ErrorPage from './pages/ErrorPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Preview from './pages/Preview';
 
 export default function App() {
   return (
-    <Router>
-      <Navbar />
-      <Switch>
-        <Route exact path='/login'>
-          <Login />
-        </Route>
-        <Route exact path='/'>
-          <Home />
-        </Route>
-        <Route exact path='/preview'>
-          <Preview />
-        </Route>
-      </Switch>
-    </Router>
+    <RouterProvider
+      router={createBrowserRouter([
+        {
+          path: '/',
+          element: <PrimaryPage />,
+          errorElement: <ErrorPage />,
+          children: [
+            {
+              errorElement: <ErrorPage />,
+              children: [
+                { index: true, element: <Login /> },
+                {
+                  path: '/home',
+                  element: <Home />,
+                },
+                {
+                  path: '/preview',
+                  element: <Preview />,
+                },
+              ],
+            },
+          ],
+        },
+      ])}
+    />
   );
 }

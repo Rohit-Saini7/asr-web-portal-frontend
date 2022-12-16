@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <React.Fragment>
       <Container>
-        <NavItem to='/'>
+        <NavItem to='/home'>
           <HomeIcon />
           Home
         </NavItem>
@@ -23,8 +23,7 @@ const Navbar = () => {
           <PreviewIcon />
           Preview/Download
         </NavItem>
-
-        <NavDropdown to='/login'>
+        <NavDropdown to='/'>
           <LinkIcon />
           Quick Links
           <DownArrowIcon />

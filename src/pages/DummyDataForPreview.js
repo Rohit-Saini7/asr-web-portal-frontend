@@ -6,6 +6,8 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 1, 2022, 6:41 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
+
   },
   {
     serialNumber: 2,
@@ -14,6 +16,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 2, 2022, 6:42 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 3,
@@ -22,6 +25,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 3, 2022, 6:43 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 4,
@@ -30,6 +34,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 4, 2022, 6:44 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 5,
@@ -38,6 +43,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 5, 2022, 6:45 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 6,
@@ -46,6 +52,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 6, 2022, 6:46 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 7,
@@ -54,6 +61,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 7, 2022, 6:47 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 8,
@@ -62,6 +70,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 8, 2022, 6:48 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 9,
@@ -70,6 +79,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 9, 2022, 6:49 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 10,
@@ -78,6 +88,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 10, 2022, 6:40 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 11,
@@ -86,6 +97,7 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. ,11 2022, 6:41 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
   {
     serialNumber: 12,
@@ -94,5 +106,6 @@ export const DummyData = [
     sourceLanguage: 'English',
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 12, 2022, 6:42 p.m.',
+    modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
   },
 ];

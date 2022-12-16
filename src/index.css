@@ -37,15 +37,15 @@ body {
 }
 
 .light {
-  --background-color: #fafafa;
-  --container-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
+  --background-color: #ddd;
+  --container-bg-color: #e6e6e6;
   --error-color: #f8254b;
-  --font-color: rgba(0, 0, 0, 0.7);
+  --font-color: rgba(33, 33, 33, 0.7);
   --hover-font-color: rgb(0, 0, 0);
   --instructions-color: rgb(0, 128, 0, 0.4);
   --label-color: #8f8f8f;
-  --shadow: -11px 11px 22px #bababa, 11px -11px 22px #ffffff;
-  --signin-bg-color: linear-gradient(225deg, #e6e6e6, #ffffff);
+  --shadow: -11px 11px 22px #bababa, 11px -11px 22px #ccc;
+  --signin-bg-color: #e6e6e6;
   --signin-color: #5ae09e;
   --table-header-color: rgba(90, 224, 158, 0.7);
   --table-body-color: rgba(0, 0, 0, 0.1);

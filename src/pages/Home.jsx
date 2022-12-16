@@ -1,7 +1,15 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { collection, doc } from 'firebase/firestore';
+
 import CustomDropdown from '../components/CustomDropdown';
 import { UploadIcon } from '../components/Icons';
+import ProgressModal from '../components/ProgressModal';
+import HomeTabs from '../components/HomeTabs';
+import { handleFileUpload } from '../hooks/FileUpload';
+import { db } from '../Firebase';
+import { Navigate } from 'react-router-dom';
 
 const Home = () => {
   const fileRef = useRef();
@@ -11,6 +19,20 @@ const Home = () => {
   const errorRef = useRef();
   const submitButtonRef = useRef();
 
+  const user = useSelector((state) => state.userState.user);
+  const dispatch = useDispatch();
+  let cancelToken;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [progressData, setProgressData] = useState({
+    done: 0,
+    total: 0,
+    progress: 0,
+    rate: 0,
+    estimated: 0,
+  });
+  const [tabSelected, setTabSelected] = useState('transcript');
+
   const handleFileChange = (e) => {
     if (!!e.target.files)
       document.getElementById('file-name').innerHTML = e.target.files[0].name;
@@ -19,91 +41,201 @@ const Home = () => {
   const handleSubmit = () => {
     if (
       !!fileRef.current.files[0] &&
-      !!docNameRef.current.value &&
-      !!sourceLangRef.current.value &&
-      !!targetLangRef.current.value
+      !!docNameRef.current.value
+      // &&
+      // !!sourceLangRef.current.value &&
+      // !!targetLangRef.current.value
     ) {
-      const data = {
-        file: fileRef.current.files[0],
-        docName: docNameRef.current.value,
-        sourceLanguage: sourceLangRef.current.value,
-        targetLanguage: targetLangRef.current.value,
-      };
-      console.table(data);
-      //TODO: start file uploading with a visual indicator.
-      //TODO: on success upload => show SUCCESS modal.
+      setIsModalOpen(true);
+      const collectionRef = collection(db, 'usersList', user.uid, 'docs');
+
+      handleFileUpload(
+        fileRef.current.files[0],
+        docNameRef.current.value,
+        dispatch,
+        collectionRef,
+        cancelToken,
+        setProgressData
+      );
+      //? This block reset the form.
+      fileRef.current.value = null;
+      docNameRef.current.value = null;
+      // sourceLangRef.current.value = null;
+      // targetLangRef.current.value = null;
+      document.getElementById('file-name').innerHTML = null;
+      document
+        .querySelectorAll('.valid')
+        .forEach((box) => box.classList.remove('valid'));
+      //?This block reset the form.
+    } else {
+      errorRef.current.innerHTML =
+        (!fileRef.current.files[0] ? 'Media file is Missing. \n' : '') +
+        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '');
+      // +
+      // (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
+      // (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
+    }
+  };
+  /* {
+    if (
+      !!fileRef.current.files[0] &&
+      !!docNameRef.current.value
+      // &&
+      // !!sourceLangRef.current.value &&
+      // !!targetLangRef.current.value
+    ) {
+      setIsModalOpen(true);
+      const formData = new FormData();
+      formData.append('file', fileRef.current.files[0]);
+
+      if (typeof cancelToken != typeof undefined) {
+        cancelToken.cancel('Operation canceled due to new request.');
+      }
+
+      cancelToken = axios.CancelToken.source();
+      try {
+        await axios({
+          method: 'post',
+          url: import.meta.env.VITE_API_URL,
+          withCredentials: false,
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          onUploadProgress: (p) => {
+            setProgressData({
+              done: parseInt(p.loaded / 1024),
+              total: parseInt(p.total / 1024),
+              progress: parseInt(p.progress * 100),
+              rate: parseInt(p.rate / 1024),
+              estimated: parseInt(p.estimated),
+            });
+          },
+          cancelToken: cancelToken.token,
+        })
+          .then(function (response) {
+            console.log(JSON.stringify(response.data));
+            // console.log(user);
+
+            //? This block reset the form.
+            fileRef.current.value = null;
+            docNameRef.current.value = null;
+            // sourceLangRef.current.value = null;
+            // targetLangRef.current.value = null;
+            document.getElementById('file-name').innerHTML = null;
+            document
+              .querySelectorAll('.valid')
+              .forEach((box) => box.classList.remove('valid'));
+            //?This block reset the form.
+          })
+          .catch(function (error) {
+            console.log('Error from API hit: ', error.message);
+          });
+      } catch (error) {
+        console.log('Error from TryCatch: ', error);
+      }
+
       //TODO: on !success upload => show ERROR modal.
     } else {
       errorRef.current.innerHTML =
         (!fileRef.current.files[0] ? 'Media file is Missing. \n' : '') +
-        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '') +
-        (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
-        (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
+        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '');
+      // +
+      // (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
+      // (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
     }
-  };
+  } */
 
   return (
-    <Container>
-      <Heading>ASR Post Editor Tool</Heading>
-      <Instructions aria-label='Instructions:'>
-        <li>File name should be greater than 5 characters.</li>
-        <li>Audio or Video name shouldn&#39;t contain any white spaces.</li>
-        <li>First upload the Audio or Video file, then enter other fields.</li>
-        <li>
-          Uploading Audio or Video file size should be less than{' '}
-          <strong>
-            <em>1024 MB</em>
-          </strong>
-          .
-        </li>
-      </Instructions>
-      <ErrorMessage ref={errorRef}></ErrorMessage>
-      <InnerContainer>
-        <InputWrapper>
-          <FileInput
-            type='file'
-            name='file-7'
-            id='file-7'
-            accept='video/*, audio/*'
-            onChange={handleFileChange}
-            ref={fileRef}
-          />
-          <FileInputLabel htmlFor='file-7'>
+    <React.Fragment>
+      {!user && <Navigate to='/' />}
+      {isModalOpen && (
+        <ProgressModal
+          progressData={progressData}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
+      <Container>
+        <Heading>ASR Post Editor Tool</Heading>
+        <Instructions aria-label='Instructions:'>
+          <li>File name should be greater than 5 characters.</li>
+          <li>Audio or Video name shouldn&#39;t contain any white spaces.</li>
+          <li>
+            First upload the Audio or Video file, then enter other fields.
+          </li>
+          <li>
+            Uploading Audio or Video file size should be less than{' '}
             <strong>
-              <UploadIcon />
-              Choose a file…
+              <em>1024 MB</em>
             </strong>
-            <span id='file-name'></span>
-          </FileInputLabel>
-        </InputWrapper>
-        <InputWrapper>
-          <InputField type='text' required='required' ref={docNameRef} />
-          <InputLabel>Document Name</InputLabel>
-          <i></i>
-        </InputWrapper>
-        <InputWrapper>
-          <CustomDropdown
-            inputClass='sourcelang'
-            wrapperClass='sourceDropdown'
-            options={['English', 'Hindi', 'Tamil', 'Telgu']}
-            label='Select Source Language'
-            langRef={sourceLangRef}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <CustomDropdown
-            inputClass='targetlang'
-            wrapperClass='targetDropdown'
-            options={['English', 'Hindi', 'Tamil', 'Telgu']}
-            label='Select Target Language'
-            langRef={targetLangRef}
-          />
-        </InputWrapper>
-        <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
-          Convert
-        </SubmitButton>
-      </InnerContainer>
-    </Container>
+            .
+          </li>
+        </Instructions>
+        <ErrorMessage ref={errorRef}></ErrorMessage>
+        <InnerContainer>
+          <HomeTabs tabSelected={tabSelected} setTabSelected={setTabSelected} />
+          <FormWrapper>
+            <InputWrapper>
+              <FileInput
+                type='file'
+                name='mediaFile'
+                id='mediaFile'
+                accept='video/*, audio/*'
+                onChange={handleFileChange}
+                ref={fileRef}
+              />
+              <InputLabel data-for='mediaFile'>
+                {tabSelected === 'transcript'
+                  ? 'Upload Video or Audio File'
+                  : tabSelected === 'tts'
+                  ? 'Upload Translation File(.xml)'
+                  : 'Upload Transcript File(.xml)'}
+              </InputLabel>
+              <FileInputLabel htmlFor='mediaFile'>
+                <strong>
+                  <UploadIcon />
+                  Choose a file…
+                </strong>
+                <span id='file-name'></span>
+              </FileInputLabel>
+            </InputWrapper>
+            <InputWrapper>
+              <InputField type='text' required='required' ref={docNameRef} />
+              <InputLabel>Document Name</InputLabel>
+              <i></i>
+            </InputWrapper>
+
+            {tabSelected === 'transcript' ? (
+              ''
+            ) : (
+              <React.Fragment>
+                <InputWrapper>
+                  <CustomDropdown
+                    inputClass='sourcelang'
+                    wrapperClass='sourceDropdown'
+                    options={['English', 'Hindi', 'Tamil', 'Telgu']}
+                    label='Select Source Language'
+                    langRef={sourceLangRef}
+                  />
+                </InputWrapper>
+                <InputWrapper>
+                  <CustomDropdown
+                    inputClass='targetlang'
+                    wrapperClass='targetDropdown'
+                    options={['English', 'Hindi', 'Tamil', 'Telgu']}
+                    label='Select Target Language'
+                    langRef={targetLangRef}
+                  />
+                </InputWrapper>
+              </React.Fragment>
+            )}
+            <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
+              Convert
+            </SubmitButton>
+          </FormWrapper>
+        </InnerContainer>
+      </Container>
+    </React.Fragment>
   );
 };
 
@@ -155,21 +287,29 @@ const ErrorMessage = styled.h3`
 const InnerContainer = styled.div`
   max-width: 1350px;
   width: 100%;
-  background: var(--signin-bg-color);
-  position: relative;
   border-radius: 10px;
+  background: var(--signin-bg-color);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const FormWrapper = styled.div`
+  width: 100%;
+  position: relative;
   padding: 40px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   flex-direction: column;
-  box-shadow: var(--shadow);
 `;
 
 const InputWrapper = styled.div`
   position: relative;
   width: 100%;
   margin-top: 35px;
+  display: flex;
   & > i {
     position: absolute;
     left: 0;
@@ -196,7 +336,7 @@ const FileInputLabel = styled.label`
   border: 1px solid var(--signin-color);
   background-color: transparent;
   width: 100%;
-  height: 100%;
+  height: 44px;
   border-radius: 10px;
   color: var(--signin-color);
   font-size: 1.25rem;
@@ -206,6 +346,7 @@ const FileInputLabel = styled.label`
   justify-content: space-around;
   overflow: hidden;
   padding: 5px 1.25rem;
+  align-self: flex-end;
   & > span {
     width: 60%;
     max-width: 20vw;
@@ -248,7 +389,8 @@ const InputField = styled.input`
   z-index: 10;
 
   &:valid ~ span,
-  &:focus ~ span {
+  &:focus ~ span,
+  & ~ span[data-for='mediaFile'] {
     color: var(--signin-color);
     transform: translateY(-34px);
     font-size: 0.9rem;
@@ -268,6 +410,11 @@ const InputLabel = styled.span`
   pointer-events: none;
   letter-spacing: 0.1rem;
   transition: 0.5s;
+  &[data-for='mediaFile'] {
+    color: var(--signin-color);
+    transform: translateY(-34px);
+    font-size: 0.9rem;
+  }
 `;
 
 const SubmitButton = styled.button`
