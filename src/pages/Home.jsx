@@ -135,8 +135,6 @@ const Home = () => {
         console.log('Error from TryCatch: ', error);
       }
 
-      //TODO: ✅ start file uploading with a visual indicator.
-      //TODO: ✅ on success upload => show SUCCESS modal.
       //TODO: on !success upload => show ERROR modal.
     } else {
       errorRef.current.innerHTML =

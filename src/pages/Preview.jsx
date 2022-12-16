@@ -83,7 +83,6 @@ const Preview = () => {
               <th rowSpan='2' colSpan='1'>
                 Document
               </th>
-
               <th rowSpan='1' colSpan='1'>
                 Target
               </th>
@@ -180,9 +179,6 @@ const Preview = () => {
                   </tr>
                 )
               )
-              /* <tr>
-                <td>Data Found</td>
-              </tr> */
             )}
           </tbody>
         </table>
@@ -257,7 +253,6 @@ const handleAnimation = (e) => {
     e.target.classList.toggle('active');
   }, 200);
 };
-
 const ButtonGroup = styled.div`
   margin: 0 auto;
   width: fit-content;
@@ -291,7 +286,6 @@ const Button = styled.div`
     font-size: 16px;
     text-shadow: 0 0 10px #fff;
     background: var(--table-header-color);
-    /* height: 33px; */
     vertical-align: bottom;
   }
 
