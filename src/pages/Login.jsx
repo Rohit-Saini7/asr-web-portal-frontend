@@ -1,47 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-} from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 
-import { auth, db, provider } from '../Firebase';
-import { SignInUser } from '../hooks/Auth';
-import { addUser, addDocs, setDocs } from '../redux/slice/userSlice';
+import { db } from '../Firebase';
+import { addUser, setDocs } from '../redux/slice/userSlice';
+import jwtDecode from 'jwt-decode';
 
 const Login = () => {
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id:
+        '796598186652-600nrc4c4q9669lu69097hjjehtb4bv4.apps.googleusercontent.com',
+      callback: handleGoogleSignIn,
+    });
+    google.accounts.id.renderButton(document.getElementById('signInDiv'), {
+      size: 'large',
+    });
+  }, []);
+
   const user = useSelector((state) => state.userState.user);
   const dispatch = useDispatch();
 
-  const handleGoogleSignIn = async () => {
-    const data = SignInUser(auth, provider);
+  const handleGoogleSignIn = async (res) => {
+    const data = jwtDecode(res.credential);
 
-    const userSnap = await getDoc(doc(db, 'usersList', data.uid));
+    const userSnap = await getDoc(doc(db, 'usersList', data.email));
     if (userSnap.exists()) {
       const docSnap = await getDocs(
-        collection(db, 'usersList', data.uid, 'docs')
+        collection(db, 'usersList', data.email, 'docs')
       );
       const allDocs = [];
       docSnap.forEach((doc) => {
-        // console.log(doc.id, ' => ', doc.data());
         allDocs.push(doc.data());
-        // console.log(allDocs);
       });
       !!docSnap.size && dispatch(setDocs(allDocs));
     } else {
-      console.log('No such document!');
-      await setDoc(doc(db, 'usersList', data.uid), {
-        name: data.email,
+      await setDoc(doc(db, 'usersList', data.email), {
+        data: data.email,
       });
-      await addDoc(db, 'usersList', data.uid, 'docs', {});
     }
-
     dispatch(addUser(data));
   };
 
@@ -57,24 +57,7 @@ const Login = () => {
         </LeftSection>
         <RightSection>
           <Heading>Sign in</Heading>
-          <InputWrapper>
-            <InputField type='text' required='required' />
-            <InputLabel>Email</InputLabel>
-            <i></i>
-          </InputWrapper>
-          <InputWrapper>
-            <InputField type='password' required='required' />
-            <InputLabel>Password</InputLabel>
-            <i></i>
-          </InputWrapper>
-          <LinksWrapper>
-            <ForgetPassword>Forget Password</ForgetPassword>
-            <CreateAccount>Create Account</CreateAccount>
-          </LinksWrapper>
-          <SubmitButton>Sign in</SubmitButton>
-          <GoogleButton onClick={handleGoogleSignIn}>
-            Sign in with Google
-          </GoogleButton>
+          <GoogleButton id='signInDiv'></GoogleButton>
         </RightSection>
       </InnerContainer>
     </Container>
@@ -113,7 +96,7 @@ const SubHeadnig = styled.p`
 `;
 
 const RightSection = styled.section`
-  height: 70%;
+  height: max-content;
   width: 30%;
   background: var(--signin-bg-color);
   position: relative;
@@ -123,6 +106,88 @@ const RightSection = styled.section`
   flex-direction: column;
   box-shadow: var(--shadow);
 `;
+
+const GoogleButton = styled.div`
+  border-radius: 5px;
+  transition: 0.2s;
+  border: 1px solid var(--signin-color);
+  margin-top: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  &::after {
+    z-index: 0;
+    content: 'Sign In With Google';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    font-weight: 600;
+    width: max-content;
+  }
+  &:hover {
+    translate: 0 -2px;
+  }
+  &:active {
+    translate: 0 2px;
+  }
+  & > div,
+  & > div > div,
+  & > div > div > iframe {
+    width: 100% !important;
+  }
+  & > div > div > iframe {
+    visibility: hidden !important;
+    margin: 0 !important;
+  }
+`;
+
+/* 
+  const handleGoogleSignIndone = async () => {
+    const userSnap = await getDoc(doc(db, 'usersList', data.email));
+    if (userSnap.exists()) {
+      const docSnap = await getDocs(
+        collection(db, 'usersList', data.email, 'docs')
+      );
+      const allDocs = [];
+      docSnap.forEach((doc) => {
+        // console.log(doc.id, ' => ', doc.data());
+        allDocs.push(doc.data());
+        // console.log(allDocs);
+      });
+      !!docSnap.size && dispatch(setDocs(allDocs));
+    } else {
+      console.log('No such document!');
+      await setDoc(doc(db, 'usersList', data.email), {
+        name: data.email,
+      });
+      await addDoc(db, 'usersList', data.email, 'docs', {});
+    }
+    dispatch(addUser(data));
+  };
+
+
+  <InputWrapper>
+    <InputField type='text' required='required' />
+    <InputLabel>Email</InputLabel>
+    <i></i>
+  </InputWrapper>
+  <InputWrapper>
+    <InputField type='password' required='required' />
+    <InputLabel>Password</InputLabel>
+    <i></i>
+  </InputWrapper>
+  <LinksWrapper>
+    <ForgetPassword>Forget Password</ForgetPassword>
+    <CreateAccount>Create Account</CreateAccount>
+  </LinksWrapper>
+  <SubmitButton>Sign in</SubmitButton> 
+
+
 
 const InputWrapper = styled.div`
   position: relative;
@@ -228,11 +293,5 @@ const SubmitButton = styled.button`
   &:active {
     translate: 0 2px;
   }
-`;
-
-const GoogleButton = styled(SubmitButton)`
-  color: var(--signin-color);
-  background: transparent;
-  border: 1px solid var(--signin-color);
-  margin-top: 20px;
-`;
+`; 
+*/

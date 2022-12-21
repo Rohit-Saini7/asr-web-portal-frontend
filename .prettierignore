@@ -1,6 +1,8 @@
 build
 coverage
 
+.env
+
 **/.git
 **/.svn
 **/.hg

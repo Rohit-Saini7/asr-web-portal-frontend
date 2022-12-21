@@ -78,7 +78,7 @@ const InnerContainer = styled.div`
 
 const Heading = styled.h2`
   font-size: 2rem;
-  width: fit-content;
+  width: max-content;
   align-self: center;
 `;
 
@@ -97,7 +97,7 @@ const CloseButton = styled.button`
   color: var(--background-color);
   padding: 11px 25px;
   width: 100%;
-  max-width: fit-content;
+  max-width: max-content;
   align-self: center;
   margin-top: 10px;
   border-radius: 5px;

@@ -41,7 +41,6 @@ export const handleFileUpload = async (
       const creationTime = moment(Date().toLocaleString()).format(
         'MMM DD, YYYY | hh:mm A'
       );
-      console.log(typeof response.data);
       const data = {
         mediaName: file.name,
         docName: docName,
@@ -53,7 +52,7 @@ export const handleFileUpload = async (
       dispatch(addDocs(data));
     });
   } catch (error) {
-    console.log('Error from file upload: ', error);
+    console.error('Error from file upload: ', error);
   }
 
   //TODO: ✅ start file uploading with a visual indicator.
