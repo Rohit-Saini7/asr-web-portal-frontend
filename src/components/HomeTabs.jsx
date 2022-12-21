@@ -25,7 +25,6 @@ const HomeTabs = ({ setTabSelected }) => {
         lastValue !== e.target.attributes.name.value &&
         e.target.attributes.name.value
     );
-    console.log(e);
     e.target.classList.add('active');
   };
 

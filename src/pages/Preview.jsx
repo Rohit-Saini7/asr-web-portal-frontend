@@ -20,7 +20,6 @@ const Preview = () => {
       url: URL,
     })
       .then(function (response) {
-        console.log(response.data);
         if (response.data === 'SUCCESS') {
           axios({
             method: 'get',
@@ -28,9 +27,6 @@ const Preview = () => {
             responseType: 'blob',
           })
             .then(function (res) {
-              console.log(res);
-              console.log(res.data);
-              // const blob = new Blob(res.data);
               const fileURL = window.URL.createObjectURL(res.data);
               let alink = document.createElement('a');
               alink.href = fileURL;
@@ -38,9 +34,10 @@ const Preview = () => {
               alink.click();
             })
             .catch(function (error) {
-              console.log(error);
+              console.error(error);
             });
         } else {
+          //! pending
           console.log('not matched', res);
         }
       })
@@ -57,44 +54,21 @@ const Preview = () => {
         <table cellPadding='0' cellSpacing='0' border='0'>
           <thead>
             <tr>
-              <th rowSpan='2' colSpan='1'>
-                Sr. No.
-              </th>
-              <th rowSpan='1' colSpan='2'>
-                Name
-              </th>
-              <th rowSpan='1' colSpan='1'>
-                Language
-              </th>
-              <th rowSpan='2' colSpan='1'>
-                Creation Time
-              </th>
-              <th rowSpan='2' colSpan='1'>
-                Modified Time
-              </th>
-              <th rowSpan='1' colSpan='3'>
-                Preview/Download
-              </th>
+              <th rowSpan='2'>Sr. No.</th>
+              <th colSpan='2'>Name</th>
+              <th colSpan='1'>Language</th>
+              <th colSpan='2'>Time</th>
+              <th colSpan='3'>Preview/Download</th>
             </tr>
             <tr>
-              <th rowSpan='2' colSpan='1'>
-                Media
-              </th>
-              <th rowSpan='2' colSpan='1'>
-                Document
-              </th>
-              <th rowSpan='1' colSpan='1'>
-                Target
-              </th>
-              <th rowSpan='1' colSpan='1'>
-                Transcript
-              </th>
-              <th rowSpan='1' colSpan='1'>
-                Translation
-              </th>
-              <th rowSpan='1' colSpan='1'>
-                TTS
-              </th>
+              <th>Media</th>
+              <th>Document</th>
+              <th>Source|Target</th>
+              <th>Creation</th>
+              <th>Modify</th>
+              <th>Transcript</th>
+              <th>Translation</th>
+              <th>TTS</th>
             </tr>
           </thead>
         </table>
@@ -123,7 +97,10 @@ const Preview = () => {
                     <td>{index + 1}</td>
                     <td>{mediaName}</td>
                     <td>{docName}</td>
-                    <td>{!!targetLanguage ? targetLanguage : 'Hindi'}</td>
+                    <td>
+                      {!!targetLanguage ? targetLanguage : 'Hindi'} {' | '}
+                      {!!targetLanguage ? targetLanguage : 'Hindi'}
+                    </td>
                     <td>{creationTime}</td>
                     <td>{modifyTime}</td>
                     <td>
@@ -201,7 +178,7 @@ const Container = styled.div`
 const Heading = styled.h1`
   font-size: 2.5rem;
   margin-top: 2rem;
-  width: fit-content;
+  width: max-content;
   align-self: center;
 `;
 
@@ -238,7 +215,7 @@ const TableBodyWrapper = styled.div`
       background: var(--table-body-color);
     }
     & > tbody > tr > td {
-      padding: 5px 15px;
+      padding: 5px;
       vertical-align: middle;
       font-size: 1rem;
       font-weight: 500;
@@ -255,7 +232,7 @@ const handleAnimation = (e) => {
 };
 const ButtonGroup = styled.div`
   margin: 0 auto;
-  width: fit-content;
+  width: max-content;
   max-height: 40px;
   overflow: hidden;
   border-radius: 10px;

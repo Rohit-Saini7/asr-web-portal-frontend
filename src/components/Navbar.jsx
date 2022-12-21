@@ -1,17 +1,22 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { addUser } from '../redux/slice/userSlice';
 
 import {
   DownArrowIcon,
   HomeIcon,
   LinkIcon,
+  LogOutIcon,
   PreviewIcon,
-  UserIcon,
 } from './Icons';
 import ThemeSwitch from './ThemeSwitch';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const handleLogOut = () => dispatch(addUser(null));
+
   return (
     <React.Fragment>
       <Container>
@@ -28,11 +33,10 @@ const Navbar = () => {
           Quick Links
           <DownArrowIcon />
         </NavDropdown>
-        <NavDropdown to=''>
-          <UserIcon />
-          Profile
-          <DownArrowIcon />
-        </NavDropdown>
+        <NavItem onClick={handleLogOut}>
+          <LogOutIcon />
+          Sign Out
+        </NavItem>
         <ThemeSwitch />
       </Container>
     </React.Fragment>

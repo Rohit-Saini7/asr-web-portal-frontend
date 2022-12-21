@@ -47,7 +47,7 @@ const Home = () => {
       // !!targetLangRef.current.value
     ) {
       setIsModalOpen(true);
-      const collectionRef = collection(db, 'usersList', user.uid, 'docs');
+      const collectionRef = collection(db, 'usersList', user.email, 'docs');
 
       handleFileUpload(
         fileRef.current.files[0],
@@ -114,8 +114,6 @@ const Home = () => {
           cancelToken: cancelToken.token,
         })
           .then(function (response) {
-            console.log(JSON.stringify(response.data));
-            // console.log(user);
 
             //? This block reset the form.
             fileRef.current.value = null;
@@ -129,10 +127,10 @@ const Home = () => {
             //?This block reset the form.
           })
           .catch(function (error) {
-            console.log('Error from API hit: ', error.message);
+            console.error('Error from API hit: ', error.message);
           });
       } catch (error) {
-        console.log('Error from TryCatch: ', error);
+        console.error('Error from TryCatch: ', error);
       }
 
       //TODO: on !success upload => show ERROR modal.
@@ -253,13 +251,13 @@ const Container = styled.div`
 const Heading = styled.h1`
   font-size: 2.5rem;
   margin-top: 2rem;
-  width: fit-content;
+  width: max-content;
   align-self: center;
 `;
 
 const Instructions = styled.ul`
   width: 100%;
-  max-width: fit-content;
+  max-width: max-content;
   align-self: center;
   margin-top: 2rem;
   text-align: justify;
@@ -425,7 +423,7 @@ const SubmitButton = styled.button`
   color: var(--background-color);
   padding: 11px 25px;
   width: 100%;
-  max-width: fit-content;
+  max-width: max-content;
   align-self: center;
   margin-top: 10px;
   border-radius: 5px;
