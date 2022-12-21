@@ -29,10 +29,10 @@ export const handleFileUpload = async (
       },
       onUploadProgress: (p) => {
         setProgressData({
-          done: parseInt(p.loaded / 1024),
-          total: parseInt(p.total / 1024),
+          done: parseInt(p.loaded / 1048576),
+          total: parseInt(p.total / 1048576),
           progress: parseInt(p.progress * 100),
-          rate: parseInt(p.rate / 1024),
+          rate: parseInt(p.rate / 1048576),
           estimated: parseInt(p.estimated),
         });
       },

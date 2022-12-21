@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 
 import { DownloadIcon, PreviewIcon, UploadIcon } from '../components/Icons';
+import PendingModal from '../components/PendingModal';
 // import { DummyData } from './DummyDataForPreview';
 
 const Preview = () => {
+  const [isPending, setIsPending] = useState({
+    name: 'transcript',
+    status: false,
+  });
+
   const user = useSelector((state) => state.userState.user);
   const docs = useSelector((state) => state.userState.docs);
 
-  const handleDownloadTranscript = (docName, token) => {
+  const handleDownload = (downloadName, docName, token) => {
     const URL = `${import.meta.env.VITE_API_URL}/${token}`;
-    let res;
 
     axios({
       method: 'get',
@@ -27,6 +32,13 @@ const Preview = () => {
             responseType: 'blob',
           })
             .then(function (res) {
+              /* 
+                ? to read the response for preview
+               res.data
+                .text()
+                .then((resp) => console.log(`response : ${resp}`))
+                .catch((e) => e); 
+              */
               const fileURL = window.URL.createObjectURL(res.data);
               let alink = document.createElement('a');
               alink.href = fileURL;
@@ -37,8 +49,10 @@ const Preview = () => {
               console.error(error);
             });
         } else {
-          //! pending
-          console.log('not matched', res);
+          setIsPending(() => ({ status: true, name: downloadName }));
+          setTimeout(() => {
+            setIsPending(() => ({ status: false, name: downloadName }));
+          }, 10000);
         }
       })
       .catch(function (error) {
@@ -47,120 +61,146 @@ const Preview = () => {
   };
 
   return (
-    <Container>
-      {!user && <Navigate to='/' />}
-      <Heading>Preview/Download</Heading>
-      <TableHeaderWrapper>
-        <table cellPadding='0' cellSpacing='0' border='0'>
-          <thead>
-            <tr>
-              <th rowSpan='2'>Sr. No.</th>
-              <th colSpan='2'>Name</th>
-              <th colSpan='1'>Language</th>
-              <th colSpan='2'>Time</th>
-              <th colSpan='3'>Preview/Download</th>
-            </tr>
-            <tr>
-              <th>Media</th>
-              <th>Document</th>
-              <th>Source|Target</th>
-              <th>Creation</th>
-              <th>Modify</th>
-              <th>Transcript</th>
-              <th>Translation</th>
-              <th>TTS</th>
-            </tr>
-          </thead>
-        </table>
-      </TableHeaderWrapper>
-      <TableBodyWrapper>
-        <table cellPadding='0' cellSpacing='0' border='0'>
-          <tbody>
-            {!docs ? (
+    <React.Fragment>
+      {isPending.status && (
+        <PendingModal isPending={isPending} setIsPending={setIsPending} />
+      )}
+      <Container>
+        {!user && <Navigate to='/' />}
+        <Heading>Preview/Download</Heading>
+        <TableHeaderWrapper>
+          <table cellPadding='0' cellSpacing='0' border='0'>
+            <thead>
               <tr>
-                <td>No Data Found</td>
+                <th rowSpan='2'>Sr. No.</th>
+                <th colSpan='2'>Name</th>
+                <th colSpan='1'>Language</th>
+                <th colSpan='2'>Time</th>
+                <th colSpan='3'>Preview/Download</th>
               </tr>
-            ) : (
-              docs.map(
-                (
-                  {
-                    creationTime,
-                    docName,
-                    mediaName,
-                    modifyTime,
-                    targetLanguage,
-                    token,
-                  },
-                  index
-                ) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{mediaName}</td>
-                    <td>{docName}</td>
-                    <td>
-                      {!!targetLanguage ? targetLanguage : 'Hindi'} {' | '}
-                      {!!targetLanguage ? targetLanguage : 'Hindi'}
-                    </td>
-                    <td>{creationTime}</td>
-                    <td>{modifyTime}</td>
-                    <td>
-                      <ButtonGroup className='button-group' id='thirdDimension'>
-                        <Button className='button' onClick={handleAnimation}>
-                          <PreviewIcon />
-                          <i></i>
-                        </Button>
-                        <Button
-                          className='button'
-                          onClick={(e) => {
-                            handleAnimation(e);
-                            handleDownloadTranscript(docName, token);
-                          }}
+              <tr>
+                <th>Media</th>
+                <th>Document</th>
+                <th>Source|Target</th>
+                <th>Creation</th>
+                <th>Modify</th>
+                <th>Transcript</th>
+                <th>Translation</th>
+                <th>TTS</th>
+              </tr>
+            </thead>
+          </table>
+        </TableHeaderWrapper>
+        <TableBodyWrapper>
+          <table cellPadding='0' cellSpacing='0' border='0'>
+            <tbody>
+              {!docs ? (
+                <tr>
+                  <td>No Data Found</td>
+                </tr>
+              ) : (
+                docs.map(
+                  (
+                    {
+                      creationTime,
+                      docName,
+                      mediaName,
+                      modifyTime,
+                      targetLanguage,
+                      token,
+                    },
+                    index
+                  ) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{mediaName}</td>
+                      <td>{docName}</td>
+                      <td>
+                        {!!targetLanguage ? targetLanguage : 'Hindi'} {' | '}
+                        {!!targetLanguage ? targetLanguage : 'Hindi'}
+                      </td>
+                      <td>{creationTime}</td>
+                      <td>{modifyTime}</td>
+                      <td>
+                        <ButtonGroup
+                          className='button-group'
+                          id='thirdDimension'
                         >
-                          <DownloadIcon />
-                          <i></i>
-                        </Button>
-                        <Button className='button' onClick={handleAnimation}>
-                          <UploadIcon />
-                          <i></i>
-                        </Button>
-                      </ButtonGroup>
-                    </td>
-                    <td>
-                      <ButtonGroup className='button-group' id='thirdDimension'>
-                        <Button className='button' onClick={handleAnimation}>
-                          <PreviewIcon />
-                          <i></i>
-                        </Button>
-                        <Button className='button' onClick={handleAnimation}>
-                          <DownloadIcon />
-                          <i></i>
-                        </Button>
-                        <Button className='button' onClick={handleAnimation}>
-                          <UploadIcon />
-                          <i></i>
-                        </Button>
-                      </ButtonGroup>
-                    </td>
-                    <td>
-                      <ButtonGroup className='button-group' id='thirdDimension'>
-                        <Button className='button' onClick={handleAnimation}>
-                          <PreviewIcon />
-                          <i></i>
-                        </Button>
-                        <Button className='button' onClick={handleAnimation}>
-                          <DownloadIcon />
-                          <i></i>
-                        </Button>
-                      </ButtonGroup>
-                    </td>
-                  </tr>
+                          <Button className='button' onClick={handleAnimation}>
+                            <PreviewIcon />
+                            <i></i>
+                          </Button>
+                          <Button
+                            className='button'
+                            onClick={(e) => {
+                              handleAnimation(e);
+                              handleDownload('Transcript', docName, token);
+                            }}
+                          >
+                            <DownloadIcon />
+                            <i></i>
+                          </Button>
+                          <Button className='button' onClick={handleAnimation}>
+                            <UploadIcon />
+                            <i></i>
+                          </Button>
+                        </ButtonGroup>
+                      </td>
+                      <td>
+                        <ButtonGroup
+                          className='button-group'
+                          id='thirdDimension'
+                        >
+                          <Button className='button' onClick={handleAnimation}>
+                            <PreviewIcon />
+                            <i></i>
+                          </Button>
+                          <Button
+                            className='button'
+                            onClick={(e) => {
+                              handleAnimation(e);
+                              handleDownload('Translation', docName, token);
+                            }}
+                          >
+                            <DownloadIcon />
+                            <i></i>
+                          </Button>
+                          <Button className='button' onClick={handleAnimation}>
+                            <UploadIcon />
+                            <i></i>
+                          </Button>
+                        </ButtonGroup>
+                      </td>
+                      <td>
+                        <ButtonGroup
+                          className='button-group'
+                          id='thirdDimension'
+                        >
+                          <Button className='button' onClick={handleAnimation}>
+                            <PreviewIcon />
+                            <i></i>
+                          </Button>
+                          <Button
+                            className='button'
+                            onClick={(e) => {
+                              handleAnimation(e);
+                              handleDownload('TTS', docName, token);
+                            }}
+                          >
+                            <DownloadIcon />
+                            <i></i>
+                          </Button>
+                        </ButtonGroup>
+                      </td>
+                    </tr>
+                  )
                 )
-              )
-            )}
-          </tbody>
-        </table>
-      </TableBodyWrapper>
-    </Container>
+              )}
+            </tbody>
+          </table>
+        </TableBodyWrapper>
+      </Container>
+    </React.Fragment>
   );
 };
 
