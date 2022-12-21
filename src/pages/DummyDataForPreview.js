@@ -7,7 +7,6 @@ export const DummyData = [
     targetLanguage: 'Hindi',
     creationTime: 'Nov. 1, 2022, 6:41 p.m.',
     modifyTime: 'Nov. 1, 2022, 6:41 p.m.',
-
   },
   {
     serialNumber: 2,
