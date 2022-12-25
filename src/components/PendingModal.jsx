@@ -61,7 +61,6 @@ const SubHeading = styled.h3`
 const CloseButton = styled.button`
   margin: auto;
   border: none;
-  outline: none;
   background: var(--signin-color);
   color: var(--background-color);
   padding: 11px 25px;
@@ -76,6 +75,9 @@ const CloseButton = styled.button`
   transition: 0.2s;
   box-shadow: var(--shadow);
   &:hover {
+    translate: 0 -2px;
+  }
+  &:focus {
     translate: 0 -2px;
   }
   &:active {
