@@ -50,6 +50,10 @@ const Label = styled.label`
   position: relative;
   width: var(--width-of-switch);
   height: var(--height-of-switch);
+
+  &:has(input:focus) {
+    border-bottom: 3px solid var(--signin-color);
+  }
 `;
 
 const Checkbox = styled.input`

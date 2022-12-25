@@ -22,7 +22,7 @@ const ProgressModal = ({ progressData, setIsModalOpen }) => {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <ProgressBar progress={progressData.progress} />
+            <ProgressBar />
             <Data>
               <DataItem title='File Size'>
                 <EqualIcon />
@@ -92,14 +92,12 @@ const SubHeading = styled.h3`
 const CloseButton = styled.button`
   margin: auto;
   border: none;
-  outline: none;
   background: var(--signin-color);
   color: var(--background-color);
   padding: 11px 25px;
   width: 100%;
   max-width: max-content;
   align-self: center;
-  margin-top: 10px;
   border-radius: 5px;
   font-size: 1.2rem;
   font-weight: 600;
@@ -137,34 +135,7 @@ const ProgressBar = styled.div`
     box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25),
       inset 0 1px rgba(255, 255, 255, 0.1);
     width: ${({ progress }) => progress}%;
-    background-color: ${({ progress }) => {
-      if (0 < progress <= 10) return '#86e01e';
-      else if (10 < progress <= 25) return '#f27011';
-      else if (25 < progress <= 50) return '#f2b01e';
-      else if (50 < progress <= 75) return '#f2d31b';
-      else if (75 < progress <= 100) return '#86e01e';
-      else return '#f63a0f';
-    }};
-    /* animation: progress 5s infinite; */
-    /* @keyframes progress {
-      0% {
-        width: 0%;
-        background-color: #f63a0f;
-      }
-      25% {
-        background-color: #f27011;
-      }
-      50% {
-        background-color: #f2b01e;
-      }
-      75% {
-        background-color: #f2d31b;
-      }
-      100% {
-        width: 100%;
-        background-color: #86e01e;
-      }
-    } */
+    background-color: #86e01e;
   }
 `;
 

@@ -144,6 +144,14 @@ const GoogleButton = styled.div`
     visibility: hidden !important;
     margin: 0 !important;
   }
+  & > div > iframe {
+    visibility: hidden !important;
+    margin: 0 !important;
+  }
+
+  & > div {
+    z-index: 1;
+  }
 `;
 
 /* 

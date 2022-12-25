@@ -147,12 +147,7 @@ const Home = () => {
   return (
     <React.Fragment>
       {!user && <Navigate to='/' />}
-      {isModalOpen && (
-        <ProgressModal
-          progressData={progressData}
-          setIsModalOpen={setIsModalOpen}
-        />
-      )}
+
       <Container>
         <Heading>ASR Post Editor Tool</Heading>
         <Instructions aria-label='Instructions:'>
@@ -199,11 +194,11 @@ const Home = () => {
             </InputWrapper>
             <InputWrapper>
               <InputField type='text' required='required' ref={docNameRef} />
-              <InputLabel>Document Name</InputLabel>
+              <InputLabel>Output File Name</InputLabel>
               <i></i>
             </InputWrapper>
 
-            {tabSelected === 'transcript' ? (
+            {tabSelected === 'tts' ? (
               ''
             ) : (
               <React.Fragment>
@@ -233,6 +228,12 @@ const Home = () => {
           </FormWrapper>
         </InnerContainer>
       </Container>
+      {isModalOpen && (
+        <ProgressModal
+          progressData={progressData}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </React.Fragment>
   );
 };
@@ -251,12 +252,13 @@ const Container = styled.div`
 const Heading = styled.h1`
   font-size: 2.5rem;
   margin-top: 2rem;
-  width: max-content;
+  width: 95%;
+  max-width: max-content;
   align-self: center;
 `;
 
 const Instructions = styled.ul`
-  width: 100%;
+  width: 95%;
   max-width: max-content;
   align-self: center;
   margin-top: 2rem;
@@ -278,13 +280,16 @@ const Instructions = styled.ul`
 const ErrorMessage = styled.h3`
   margin: 20px;
   font-size: 2rem;
-  height: 3rem;
+  max-height: max-content;
   color: var(--error-color);
+  &:empty {
+    height: 3rem;
+  }
 `;
 
 const InnerContainer = styled.div`
+  width: 95%;
   max-width: 1350px;
-  width: 100%;
   border-radius: 10px;
   background: var(--signin-bg-color);
   box-shadow: var(--shadow);
@@ -298,9 +303,14 @@ const FormWrapper = styled.div`
   position: relative;
   padding: 40px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 20px;
   flex-direction: column;
+  @media (max-width: 800px) {
+    grid-template-rows: 1fr;
+  }
+  @media (min-width: 801px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 const InputWrapper = styled.div`
@@ -328,6 +338,10 @@ const FileInput = styled.input`
   overflow: hidden;
   position: absolute;
   z-index: -1;
+  &:focus ~ label {
+    background: var(--signin-color);
+    color: var(--background-color);
+  }
 `;
 
 const FileInputLabel = styled.label`
@@ -418,7 +432,6 @@ const InputLabel = styled.span`
 const SubmitButton = styled.button`
   margin: auto;
   border: none;
-  outline: none;
   background: var(--signin-color);
   color: var(--background-color);
   padding: 11px 25px;

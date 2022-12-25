@@ -278,8 +278,12 @@ const ButtonGroup = styled.div`
   border-radius: 10px;
 `;
 
-const Button = styled.div`
+const Button = styled.button`
+  background: transparent;
+  border: 0;
+  outline: none;
   background: var(--container-bg-color);
+  color: var(--font-color);
   border: none;
   width: 40px;
   height: 40px;
@@ -295,7 +299,8 @@ const Button = styled.div`
     margin: 6px;
     display: block;
   }
-  &:hover {
+  &:hover,
+  &:focus {
     background: var(--table-header-color);
   }
 

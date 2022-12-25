@@ -33,6 +33,7 @@ body {
   --signin-color: #45f3ff;
   --table-header-color: rgba(69, 243, 255, 0.7);
   --table-body-color: rgba(255, 255, 255, 0.1);
+  --nav-background-color: rgba(0, 0, 0, 0.9);
 }
 
 .light {
@@ -48,6 +49,7 @@ body {
   --signin-color: #5ae09e;
   --table-header-color: rgba(90, 224, 158, 0.7);
   --table-body-color: rgba(0, 0, 0, 0.1);
+  --nav-background-color: rgba(255, 255, 255, 0.9);
 }
 
 ::-webkit-scrollbar {
