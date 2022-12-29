@@ -6,10 +6,13 @@ import { addDocs } from '../redux/slice/userSlice';
 export const handleFileUpload = async (
   file,
   docName,
+  sourceLang,
+  targetLang,
   dispatch,
   collectionRef,
   cancelToken,
-  setProgressData
+  setProgressData,
+  tabSelected
 ) => {
   if (typeof cancelToken != typeof undefined) {
     cancelToken.cancel('Operation canceled due to new request.');
@@ -21,11 +24,13 @@ export const handleFileUpload = async (
   try {
     await axios({
       method: 'post',
-      url: import.meta.env.VITE_API_URL,
+      url: `${import.meta.env.VITE_API_URL}/${tabSelected}`,
       withCredentials: false,
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
+        source_language: sourceLang,
+        destination_language: targetLang,
       },
       onUploadProgress: (p) => {
         setProgressData({
@@ -44,9 +49,11 @@ export const handleFileUpload = async (
       const data = {
         mediaName: file.name,
         docName: docName,
+        language: `${sourceLang} | ${targetLang}`,
         creationTime: creationTime,
         modifyTime: creationTime,
         token: response.data,
+        willGenerate: tabSelected,
       };
       await addDoc(collectionRef, data);
       dispatch(addDocs(data));

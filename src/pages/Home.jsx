@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { collection, doc } from 'firebase/firestore';
+import { collection } from 'firebase/firestore';
 
 import CustomDropdown from '../components/CustomDropdown';
 import { UploadIcon } from '../components/Icons';
@@ -41,10 +41,9 @@ const Home = () => {
   const handleSubmit = () => {
     if (
       !!fileRef.current.files[0] &&
-      !!docNameRef.current.value
-      // &&
-      // !!sourceLangRef.current.value &&
-      // !!targetLangRef.current.value
+      !!docNameRef.current.value &&
+      !!sourceLangRef.current.value &&
+      !!targetLangRef.current.value
     ) {
       setIsModalOpen(true);
       const collectionRef = collection(db, 'usersList', user.email, 'docs');
@@ -52,97 +51,32 @@ const Home = () => {
       handleFileUpload(
         fileRef.current.files[0],
         docNameRef.current.value,
+        sourceLangRef.current.value,
+        targetLangRef.current.value,
         dispatch,
         collectionRef,
         cancelToken,
-        setProgressData
+        setProgressData,
+        tabSelected
       );
-      //? This block reset the form.
+      //? -------This block reset the form.-------
       fileRef.current.value = null;
       docNameRef.current.value = null;
-      // sourceLangRef.current.value = null;
-      // targetLangRef.current.value = null;
+      sourceLangRef.current.value = null;
+      targetLangRef.current.value = null;
       document.getElementById('file-name').innerHTML = null;
       document
         .querySelectorAll('.valid')
         .forEach((box) => box.classList.remove('valid'));
-      //?This block reset the form.
+      //? -------This block reset the form.-------
     } else {
       errorRef.current.innerHTML =
-        (!fileRef.current.files[0] ? 'Media file is Missing. \n' : '') +
-        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '');
-      // +
-      // (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
-      // (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
+        (!fileRef.current.files[0] ? 'Media file is Missing. ' : '') +
+        (!docNameRef.current.value ? 'Document Name is Missing. ' : '') +
+        (!sourceLangRef.current.value ? 'Source Language is Missing. ' : '') +
+        (!targetLangRef.current.value ? 'Target Language is Missing. ' : '');
     }
   };
-  /* {
-    if (
-      !!fileRef.current.files[0] &&
-      !!docNameRef.current.value
-      // &&
-      // !!sourceLangRef.current.value &&
-      // !!targetLangRef.current.value
-    ) {
-      setIsModalOpen(true);
-      const formData = new FormData();
-      formData.append('file', fileRef.current.files[0]);
-
-      if (typeof cancelToken != typeof undefined) {
-        cancelToken.cancel('Operation canceled due to new request.');
-      }
-
-      cancelToken = axios.CancelToken.source();
-      try {
-        await axios({
-          method: 'post',
-          url: import.meta.env.VITE_API_URL,
-          withCredentials: false,
-          data: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-          onUploadProgress: (p) => {
-            setProgressData({
-              done: parseInt(p.loaded / 1024),
-              total: parseInt(p.total / 1024),
-              progress: parseInt(p.progress * 100),
-              rate: parseInt(p.rate / 1024),
-              estimated: parseInt(p.estimated),
-            });
-          },
-          cancelToken: cancelToken.token,
-        })
-          .then(function (response) {
-
-            //? This block reset the form.
-            fileRef.current.value = null;
-            docNameRef.current.value = null;
-            // sourceLangRef.current.value = null;
-            // targetLangRef.current.value = null;
-            document.getElementById('file-name').innerHTML = null;
-            document
-              .querySelectorAll('.valid')
-              .forEach((box) => box.classList.remove('valid'));
-            //?This block reset the form.
-          })
-          .catch(function (error) {
-            console.error('Error from API hit: ', error.message);
-          });
-      } catch (error) {
-        console.error('Error from TryCatch: ', error);
-      }
-
-      //TODO: on !success upload => show ERROR modal.
-    } else {
-      errorRef.current.innerHTML =
-        (!fileRef.current.files[0] ? 'Media file is Missing. \n' : '') +
-        (!docNameRef.current.value ? 'Document Name is Missing. \n' : '');
-      // +
-      // (!sourceLangRef.current.value ? 'Source Language is Missing. \n' : '') +
-      // (!targetLangRef.current.value ? 'Target Language is Missing. \n' : '');
-    }
-  } */
 
   return (
     <React.Fragment>
@@ -173,7 +107,9 @@ const Home = () => {
                 type='file'
                 name='mediaFile'
                 id='mediaFile'
-                accept='video/*, audio/*'
+                accept={
+                  tabSelected === 'transcript' ? 'video/*, audio/*' : 'text/xml'
+                }
                 onChange={handleFileChange}
                 ref={fileRef}
               />
@@ -206,7 +142,7 @@ const Home = () => {
                   <CustomDropdown
                     inputClass='sourcelang'
                     wrapperClass='sourceDropdown'
-                    options={['English', 'Hindi', 'Tamil', 'Telgu']}
+                    options={['english', 'hindi']}
                     label='Select Source Language'
                     langRef={sourceLangRef}
                   />
@@ -215,7 +151,7 @@ const Home = () => {
                   <CustomDropdown
                     inputClass='targetlang'
                     wrapperClass='targetDropdown'
-                    options={['English', 'Hindi', 'Tamil', 'Telgu']}
+                    options={['english', 'hindi']}
                     label='Select Target Language'
                     langRef={targetLangRef}
                   />

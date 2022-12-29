@@ -169,6 +169,7 @@ const Option = styled.div`
   padding: 12px 20px;
   cursor: pointer;
   transition: 0.5s;
+  text-transform: capitalize;
 
   &:hover {
     background: var(--signin-color);
