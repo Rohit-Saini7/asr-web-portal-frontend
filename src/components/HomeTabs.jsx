@@ -1,19 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-//? # Transcript
-//?   - upload audio/ video
-//?   - doc name
-
-//? # Translation
-//?  - upload transcript
-//?   - doc name
-//?   - source and target language
-
-//? # tts
-//?   - upload translation
-//?   - doc name
-
 const HomeTabs = ({ setTabSelected }) => {
   const handleClick = (e) => {
     const tabs = document.querySelectorAll('.tabs');
@@ -36,7 +23,7 @@ const HomeTabs = ({ setTabSelected }) => {
       <Tabs className='tabs' name='translation' onClick={handleClick}>
         Translation <i></i>
       </Tabs>
-      <Tabs className='tabs' name='tts' onClick={handleClick}>
+      <Tabs className='tabs' name='TTS' onClick={handleClick}>
         TTS <i></i>
       </Tabs>
     </Container>

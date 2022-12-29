@@ -22,7 +22,7 @@ const ProgressModal = ({ progressData, setIsModalOpen }) => {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <ProgressBar />
+            <ProgressBar progress={progressData.progress} />
             <Data>
               <DataItem title='File Size'>
                 <EqualIcon />

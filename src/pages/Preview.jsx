@@ -1,69 +1,32 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 
-import { DownloadIcon, PreviewIcon, UploadIcon } from '../components/Icons';
 import PendingModal from '../components/PendingModal';
-// import { DummyData } from './DummyDataForPreview';
+import PreviewModal from '../components/PreviewModal';
+import PreviewButtons from '../components/PreviewButtons';
 
 const Preview = () => {
   const [isPending, setIsPending] = useState({
     name: 'transcript',
     status: false,
   });
+  const [previewData, setPreviewData] = useState('');
 
   const user = useSelector((state) => state.userState.user);
   const docs = useSelector((state) => state.userState.docs);
-
-  const handleDownload = (downloadName, docName, token) => {
-    const URL = `${import.meta.env.VITE_API_URL}/${token}`;
-
-    axios({
-      method: 'get',
-      url: URL,
-    })
-      .then(function (response) {
-        if (response.data === 'SUCCESS') {
-          axios({
-            method: 'get',
-            url: `${URL}/result`,
-            responseType: 'blob',
-          })
-            .then(function (res) {
-              /* 
-                ? to read the response for preview
-               res.data
-                .text()
-                .then((resp) => console.log(`response : ${resp}`))
-                .catch((e) => e); 
-              */
-              const fileURL = window.URL.createObjectURL(res.data);
-              let alink = document.createElement('a');
-              alink.href = fileURL;
-              alink.download = `${docName}.xml`;
-              alink.click();
-            })
-            .catch(function (error) {
-              console.error(error);
-            });
-        } else {
-          setIsPending(() => ({ status: true, name: downloadName }));
-          setTimeout(() => {
-            setIsPending(() => ({ status: false, name: downloadName }));
-          }, 10000);
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  };
 
   return (
     <React.Fragment>
       {isPending.status && (
         <PendingModal isPending={isPending} setIsPending={setIsPending} />
+      )}
+      {!!previewData && (
+        <PreviewModal
+          previewData={previewData}
+          setPreviewData={setPreviewData}
+        />
       )}
       <Container>
         {!user && <Navigate to='/' />}
@@ -94,7 +57,7 @@ const Preview = () => {
         <TableBodyWrapper>
           <table cellPadding='0' cellSpacing='0' border='0'>
             <tbody>
-              {!docs ? (
+              {!docs.length ? (
                 <tr>
                   <td>No Data Found</td>
                 </tr>
@@ -104,10 +67,11 @@ const Preview = () => {
                     {
                       creationTime,
                       docName,
+                      language,
                       mediaName,
                       modifyTime,
-                      targetLanguage,
                       token,
+                      willGenerate,
                     },
                     index
                   ) => (
@@ -115,83 +79,16 @@ const Preview = () => {
                       <td>{index + 1}</td>
                       <td>{mediaName}</td>
                       <td>{docName}</td>
-                      <td>
-                        {!!targetLanguage ? targetLanguage : 'Hindi'} {' | '}
-                        {!!targetLanguage ? targetLanguage : 'Hindi'}
-                      </td>
+                      <td>{language}</td>
                       <td>{creationTime}</td>
                       <td>{modifyTime}</td>
-                      <td>
-                        <ButtonGroup
-                          className='button-group'
-                          id='thirdDimension'
-                        >
-                          <Button className='button' onClick={handleAnimation}>
-                            <PreviewIcon />
-                            <i></i>
-                          </Button>
-                          <Button
-                            className='button'
-                            onClick={(e) => {
-                              handleAnimation(e);
-                              handleDownload('Transcript', docName, token);
-                            }}
-                          >
-                            <DownloadIcon />
-                            <i></i>
-                          </Button>
-                          <Button className='button' onClick={handleAnimation}>
-                            <UploadIcon />
-                            <i></i>
-                          </Button>
-                        </ButtonGroup>
-                      </td>
-                      <td>
-                        <ButtonGroup
-                          className='button-group'
-                          id='thirdDimension'
-                        >
-                          <Button className='button' onClick={handleAnimation}>
-                            <PreviewIcon />
-                            <i></i>
-                          </Button>
-                          <Button
-                            className='button'
-                            onClick={(e) => {
-                              handleAnimation(e);
-                              handleDownload('Translation', docName, token);
-                            }}
-                          >
-                            <DownloadIcon />
-                            <i></i>
-                          </Button>
-                          <Button className='button' onClick={handleAnimation}>
-                            <UploadIcon />
-                            <i></i>
-                          </Button>
-                        </ButtonGroup>
-                      </td>
-                      <td>
-                        <ButtonGroup
-                          className='button-group'
-                          id='thirdDimension'
-                        >
-                          <Button className='button' onClick={handleAnimation}>
-                            <PreviewIcon />
-                            <i></i>
-                          </Button>
-                          <Button
-                            className='button'
-                            onClick={(e) => {
-                              handleAnimation(e);
-                              handleDownload('TTS', docName, token);
-                            }}
-                          >
-                            <DownloadIcon />
-                            <i></i>
-                          </Button>
-                        </ButtonGroup>
-                      </td>
+                      <PreviewButtons
+                        docName={docName}
+                        token={token}
+                        setPreviewData={setPreviewData}
+                        setIsPending={setIsPending}
+                        willGenerate={willGenerate}
+                      />
                     </tr>
                   )
                 )
@@ -260,103 +157,5 @@ const TableBodyWrapper = styled.div`
       font-size: 1rem;
       font-weight: 500;
     }
-  }
-`;
-
-//* It is just for animation in Button Group.
-const handleAnimation = (e) => {
-  e.target.classList.toggle('active');
-  setTimeout(() => {
-    e.target.classList.toggle('active');
-  }, 200);
-};
-const ButtonGroup = styled.div`
-  margin: 0 auto;
-  width: max-content;
-  max-height: 40px;
-  overflow: hidden;
-  border-radius: 10px;
-`;
-
-const Button = styled.button`
-  background: transparent;
-  border: 0;
-  outline: none;
-  background: var(--container-bg-color);
-  color: var(--font-color);
-  border: none;
-  width: 40px;
-  height: 40px;
-  padding: 6px;
-  display: inline-block;
-  font-size: 16px;
-  margin: 0;
-  position: relative;
-  transition: 0.01s;
-
-  & > svg {
-    text-align: center;
-    margin: 6px;
-    display: block;
-  }
-  &:hover,
-  &:focus {
-    background: var(--table-header-color);
-  }
-
-  &.active {
-    font-size: 16px;
-    text-shadow: 0 0 10px #fff;
-    background: var(--table-header-color);
-    vertical-align: bottom;
-  }
-
-  &.active svg {
-    text-shadow: 0 0 10px #fff;
-    margin-top: 6px;
-    font-size: 14px;
-  }
-
-  &.active:before {
-    content: '';
-    position: absolute;
-    z-index: 11;
-    left: 0px;
-    top: 0px;
-    border-top: 33px solid var(--signin-color);
-    border-right: 8px solid transparent;
-  }
-  &.active:after {
-    content: '';
-    position: absolute;
-    z-index: 11;
-    right: 0px;
-    top: 0px;
-    border-top: 33px solid var(--signin-color);
-    border-left: 8px solid transparent;
-  }
-
-  &.active i:before {
-    content: '';
-    position: absolute;
-    z-index: 11;
-    left: 0px;
-    top: -6px;
-    border-bottom: 6px solid var(--signin-color);
-    border-right: 8px solid transparent;
-  }
-
-  &.active i:after {
-    content: '';
-    position: absolute;
-    z-index: 11;
-    right: 0px;
-    top: -6px;
-    border-bottom: 6px solid var(--signin-color);
-    border-left: 8px solid transparent;
-  }
-
-  &:active {
-    transform: translateY(2px);
   }
 `;
