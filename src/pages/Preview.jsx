@@ -31,7 +31,7 @@ const Preview = () => {
       <Container>
         {!user && <Navigate to='/' />}
         <Heading>Preview/Download</Heading>
-        <TableHeaderWrapper>
+        <TableWrapper>
           <table cellPadding='0' cellSpacing='0' border='0'>
             <thead>
               <tr>
@@ -52,10 +52,6 @@ const Preview = () => {
                 <th>TTS</th>
               </tr>
             </thead>
-          </table>
-        </TableHeaderWrapper>
-        <TableBodyWrapper>
-          <table cellPadding='0' cellSpacing='0' border='0'>
             <tbody>
               {!docs.length ? (
                 <tr>
@@ -95,7 +91,7 @@ const Preview = () => {
               )}
             </tbody>
           </table>
-        </TableBodyWrapper>
+        </TableWrapper>
       </Container>
     </React.Fragment>
   );
@@ -110,6 +106,9 @@ const Container = styled.div`
   align-items: center;
   position: relative;
   text-align: center;
+  @media (min-width: 801px) {
+    align-items: center;
+  }
 `;
 
 const Heading = styled.h1`
@@ -119,35 +118,25 @@ const Heading = styled.h1`
   align-self: center;
 `;
 
-const TableHeaderWrapper = styled.div`
-  background-color: var(--table-header-color);
-  border: 1px solid transparent;
-  border-radius: 10px 10px 0 0;
+const TableWrapper = styled.div`
+  width: 95%;
+  max-width: 1350px;
   margin-top: 30px;
+  overflow: auto;
   & > table {
+    border-radius: 10px;
+    overflow: hidden;
     width: 100%;
-    max-width: 1350px;
-    table-layout: fixed;
+    table-layout: auto;
+    border: 1px solid var(--table-header-color);
 
     & > thead > tr > th {
       padding: 10px;
       font-weight: 600;
       font-size: 1rem;
       text-transform: uppercase;
+      background-color: var(--table-header-color);
     }
-  }
-`;
-
-const TableBodyWrapper = styled.div`
-  max-height: 60vh;
-  overflow-x: auto;
-  border: 1px solid var(--table-header-color);
-  border-radius: 0 0 10px 10px;
-
-  & > table {
-    width: 100%;
-    max-width: 1350px;
-    table-layout: fixed;
     & > tbody > tr:nth-of-type(even) td {
       background: var(--table-body-color);
     }

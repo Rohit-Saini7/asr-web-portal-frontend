@@ -51,13 +51,12 @@ const ProgressModal = ({ progressData, setIsModalOpen }) => {
 export default ProgressModal;
 
 const Container = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
-  left: 0;
   width: 100vw;
   height: 100vh;
   display: flex;
-  z-index: 10000;
+  z-index: 6;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.3);
@@ -65,7 +64,7 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
   max-width: 1350px;
-  width: 100%;
+  width: 95%;
   background: var(--signin-bg-color);
   position: relative;
   border-radius: 10px;
@@ -84,7 +83,7 @@ const Heading = styled.h2`
 
 const SubHeading = styled.h3`
   font-size: 1.5rem;
-  width: 50%;
+  width: 95%;
   align-self: center;
   text-align: center;
 `;
@@ -137,13 +136,21 @@ const ProgressBar = styled.div`
     width: ${({ progress }) => progress}%;
     background-color: #86e01e;
   }
+  @media (max-width: 800px) {
+    width: 95%;
+  }
 `;
 
 const Data = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
   font-size: 1.5rem;
+  @media (max-width: 800px) {
+    grid-template-rows: 1fr;
+  }
+  @media (min-width: 801px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `;
 
 const DataItem = styled.div`

@@ -46,6 +46,8 @@ const CustomDropdown = ({
       <Input
         type='text'
         className={inputClass}
+        onFocus={handleClick}
+        onBlur={handleClick}
         readOnly={true}
         required='required'
         ref={langRef}
@@ -89,7 +91,7 @@ const Dropdown = styled.div`
   svg {
     height: 24px;
     width: 24px;
-    z-index: 100;
+    z-index: 2;
     position: absolute;
     top: 50%;
     right: 20px;
@@ -121,6 +123,7 @@ const Input = styled.input`
   background: transparent;
   outline: none;
   border: none;
+  text-transform: capitalize;
   &.valid ~ span,
   &:focus ~ span {
     color: var(--signin-color);
@@ -135,7 +138,7 @@ const Input = styled.input`
   &.valid,
   &.valid ~ svg {
     color: var(--signin-bg-color);
-    z-index: 10;
+    z-index: 1;
   }
 `;
 
@@ -143,7 +146,7 @@ const InputLabel = styled.span`
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 1000;
+  z-index: 3;
   padding: 20px 0px 10px;
   font-size: 1rem;
   color: var(--label-color);
@@ -154,6 +157,7 @@ const InputLabel = styled.span`
 
 const OptionWrapper = styled.div`
   position: absolute;
+  z-index: 4;
   top: 70px;
   width: 100%;
   border-radius: 10px;

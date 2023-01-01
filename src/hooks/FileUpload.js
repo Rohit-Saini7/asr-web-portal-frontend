@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addDoc } from 'firebase/firestore';
+import { addDoc, serverTimestamp } from 'firebase/firestore';
 import moment from 'moment';
 import { addDocs } from '../redux/slice/userSlice';
 
@@ -54,6 +54,7 @@ export const handleFileUpload = async (
         modifyTime: creationTime,
         token: response.data,
         willGenerate: tabSelected,
+        timestamp: serverTimestamp(),
       };
       await addDoc(collectionRef, data);
       dispatch(addDocs(data));

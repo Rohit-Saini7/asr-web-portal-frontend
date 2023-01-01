@@ -85,7 +85,7 @@ const Burger = styled.button`
   background-color: transparent;
   display: none;
   transition: all 0.7s ease;
-  z-index: 3;
+  z-index: 5;
   @media (max-width: 800px) {
     display: block;
   }
@@ -130,8 +130,8 @@ const Nav = styled.div`
   justify-content: space-evenly;
 
   @media (max-width: 800px) {
-    z-index: 2;
-    position: absolute;
+    z-index: 4;
+    position: fixed;
     top: 0;
     left: 0;
     background: var(--nav-background-color);
@@ -175,6 +175,7 @@ const NavItem = styled(Link)`
   gap: 5px;
   transition: all ease-in-out 250ms;
   position: relative;
+  outline: none;
 
   &::before {
     content: '';
@@ -187,7 +188,8 @@ const NavItem = styled(Link)`
     transition: all ease-in-out 250ms;
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: var(--signin-color);
     &::before {
       width: 100%;

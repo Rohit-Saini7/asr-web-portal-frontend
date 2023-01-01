@@ -81,7 +81,6 @@ const Home = () => {
   return (
     <React.Fragment>
       {!user && <Navigate to='/' />}
-
       <Container>
         <Heading>ASR Post Editor Tool</Heading>
         <Instructions aria-label='Instructions:'>
@@ -134,7 +133,7 @@ const Home = () => {
               <i></i>
             </InputWrapper>
 
-            {tabSelected === 'tts' ? (
+            {tabSelected === 'TTS' ? (
               ''
             ) : (
               <React.Fragment>
@@ -334,7 +333,7 @@ const InputField = styled.input`
   color: var(--signin-bg-color);
   font-size: 1rem;
   letter-spacing: 0.1rem;
-  z-index: 10;
+  z-index: 6;
 
   &:valid ~ span,
   &:focus ~ span,

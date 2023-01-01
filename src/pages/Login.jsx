@@ -2,48 +2,22 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
-
-import { db } from '../Firebase';
-import { addUser, setDocs } from '../redux/slice/userSlice';
-import jwtDecode from 'jwt-decode';
+import { handleGoogleSignIn } from '../hooks/Auth';
 
 const Login = () => {
+  const user = useSelector((state) => state.userState.user);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     /* global google */
     google.accounts.id.initialize({
-      client_id:
-        '796598186652-600nrc4c4q9669lu69097hjjehtb4bv4.apps.googleusercontent.com',
-      callback: handleGoogleSignIn,
+      client_id: import.meta.env.VITE_GOOGLE_API,
+      callback: (res) => handleGoogleSignIn(res, dispatch),
     });
     google.accounts.id.renderButton(document.getElementById('signInDiv'), {
       size: 'large',
     });
   }, []);
-
-  const user = useSelector((state) => state.userState.user);
-  const dispatch = useDispatch();
-
-  const handleGoogleSignIn = async (res) => {
-    const data = jwtDecode(res.credential);
-
-    const userSnap = await getDoc(doc(db, 'usersList', data.email));
-    if (userSnap.exists()) {
-      const docSnap = await getDocs(
-        collection(db, 'usersList', data.email, 'docs')
-      );
-      const allDocs = [];
-      docSnap.forEach((doc) => {
-        allDocs.push(doc.data());
-      });
-      !!docSnap.size && dispatch(setDocs(allDocs));
-    } else {
-      await setDoc(doc(db, 'usersList', data.email), {
-        data: data.email,
-      });
-    }
-    dispatch(addUser(data));
-  };
 
   return (
     <Container>
@@ -77,13 +51,20 @@ const InnerContainer = styled.div`
   height: 70vh;
   max-width: 1350px;
   width: 100%;
-  display: flex;
-  justify-content: space-evenly;
   align-items: center;
+  display: grid;
+  @media (max-width: 800px) {
+    grid-template-rows: 1fr;
+  }
+  @media (min-width: 801px) {
+    grid-template-columns: 10fr 6fr;
+  }
 `;
 
 const LeftSection = styled.section`
   text-align: center;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Heading = styled.h2`
@@ -97,7 +78,7 @@ const SubHeadnig = styled.p`
 
 const RightSection = styled.section`
   height: max-content;
-  width: 30%;
+  width: 77%;
   background: var(--signin-bg-color);
   position: relative;
   border-radius: 10px;
@@ -105,6 +86,12 @@ const RightSection = styled.section`
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow);
+  @media (max-width: 800px) {
+    width: 90%;
+    display: flex;
+    align-self: center;
+    justify-self: center;
+  }
 `;
 
 const GoogleButton = styled.div`
@@ -129,7 +116,8 @@ const GoogleButton = styled.div`
     font-weight: 600;
     width: max-content;
   }
-  &:hover {
+  &:hover,
+  &:focus {
     translate: 0 -2px;
   }
   &:active {
@@ -155,30 +143,7 @@ const GoogleButton = styled.div`
 `;
 
 /* 
-  const handleGoogleSignIndone = async () => {
-    const userSnap = await getDoc(doc(db, 'usersList', data.email));
-    if (userSnap.exists()) {
-      const docSnap = await getDocs(
-        collection(db, 'usersList', data.email, 'docs')
-      );
-      const allDocs = [];
-      docSnap.forEach((doc) => {
-        // console.log(doc.id, ' => ', doc.data());
-        allDocs.push(doc.data());
-        // console.log(allDocs);
-      });
-      !!docSnap.size && dispatch(setDocs(allDocs));
-    } else {
-      console.log('No such document!');
-      await setDoc(doc(db, 'usersList', data.email), {
-        name: data.email,
-      });
-      await addDoc(db, 'usersList', data.email, 'docs', {});
-    }
-    dispatch(addUser(data));
-  };
-
-
+ 
   <InputWrapper>
     <InputField type='text' required='required' />
     <InputLabel>Email</InputLabel>
@@ -224,7 +189,7 @@ const InputField = styled.input`
   color: var(--signin-bg-color);
   font-size: 1rem;
   letter-spacing: 0.1rem;
-  z-index: 10;
+  z-index: 6;
 
   &:valid ~ span,
   &:focus ~ span {
