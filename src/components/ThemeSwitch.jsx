@@ -25,7 +25,17 @@ const ThemeSwitch = () => {
     }
   };
   return (
-    <Label>
+    <Label
+      className='themeSwitch'
+      onFocus={() =>
+        document.querySelector('.themeSwitch').classList.add('themeSwitchFocus')
+      }
+      onBlur={() =>
+        document
+          .querySelector('.themeSwitch')
+          .classList.remove('themeSwitchFocus')
+      }
+    >
       <Checkbox
         type='checkbox'
         id='dark'
@@ -51,7 +61,7 @@ const Label = styled.label`
   width: var(--width-of-switch);
   height: var(--height-of-switch);
 
-  &:has(input:focus) {
+  &.themeSwitchFocus {
     border-bottom: 3px solid var(--signin-color);
   }
 `;

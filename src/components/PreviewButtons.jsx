@@ -55,7 +55,6 @@ const PreviewButtons = ({
             <Button
               className='button'
               onClick={(e) => {
-                console.log('preview');
                 handleAnimation(e);
                 handlePreview(
                   'translation',
@@ -174,7 +173,7 @@ const Button = styled.button`
   &.active:before {
     content: '';
     position: absolute;
-    z-index: 11;
+    z-index: 7;
     left: 0px;
     top: 0px;
     border-top: 33px solid var(--signin-color);
@@ -183,7 +182,7 @@ const Button = styled.button`
   &.active:after {
     content: '';
     position: absolute;
-    z-index: 11;
+    z-index: 7;
     right: 0px;
     top: 0px;
     border-top: 33px solid var(--signin-color);
@@ -193,7 +192,7 @@ const Button = styled.button`
   &.active i:before {
     content: '';
     position: absolute;
-    z-index: 11;
+    z-index: 7;
     left: 0px;
     top: -6px;
     border-bottom: 6px solid var(--signin-color);
@@ -203,7 +202,7 @@ const Button = styled.button`
   &.active i:after {
     content: '';
     position: absolute;
-    z-index: 11;
+    z-index: 7;
     right: 0px;
     top: -6px;
     border-bottom: 6px solid var(--signin-color);

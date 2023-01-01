@@ -25,7 +25,7 @@ const Container = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 10000;
+  z-index: 5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,12 +48,14 @@ const InnerContainer = styled.div`
 const Heading = styled.h2`
   font-size: 2rem;
   width: max-content;
+  max-width: 95%;
+  text-align: center;
   align-self: center;
 `;
 
 const SubHeading = styled.h3`
   font-size: 1.5rem;
-  width: 50%;
+  width: 95%;
   align-self: center;
   text-align: center;
 `;
