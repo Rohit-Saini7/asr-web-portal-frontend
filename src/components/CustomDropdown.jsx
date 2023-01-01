@@ -46,8 +46,6 @@ const CustomDropdown = ({
       <Input
         type='text'
         className={inputClass}
-        onFocus={handleClick}
-        onBlur={handleClick}
         readOnly={true}
         required='required'
         ref={langRef}
