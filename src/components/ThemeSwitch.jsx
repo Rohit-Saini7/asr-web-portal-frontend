@@ -62,7 +62,7 @@ const Label = styled.label`
   height: var(--height-of-switch);
 
   &.themeSwitchFocus {
-    border-bottom: 3px solid var(--signin-color);
+    border-bottom: 3px solid var(--main-color);
   }
 `;
 
@@ -72,11 +72,11 @@ const Checkbox = styled.input`
   height: 0;
 
   &:checked + span {
-    background-color: var(--background-color);
+    background-color: var(--doc-bg-color);
   }
   &:checked + span:before {
     left: calc(100% - (var(--size-of-icon) + var(--slider-offset)));
-    background: var(--background-color);
+    background: var(--doc-bg-color);
     box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
   }
 `;

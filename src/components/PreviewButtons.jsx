@@ -136,7 +136,7 @@ const Button = styled.button`
   border: 0;
   outline: none;
   background: var(--container-bg-color);
-  color: var(--font-color);
+  color: var(--doc-font-color);
   border: none;
   width: 40px;
   height: 40px;
@@ -176,7 +176,7 @@ const Button = styled.button`
     z-index: 7;
     left: 0px;
     top: 0px;
-    border-top: 33px solid var(--signin-color);
+    border-top: 33px solid var(--main-color);
     border-right: 8px solid transparent;
   }
   &.active:after {
@@ -185,7 +185,7 @@ const Button = styled.button`
     z-index: 7;
     right: 0px;
     top: 0px;
-    border-top: 33px solid var(--signin-color);
+    border-top: 33px solid var(--main-color);
     border-left: 8px solid transparent;
   }
 
@@ -195,7 +195,7 @@ const Button = styled.button`
     z-index: 7;
     left: 0px;
     top: -6px;
-    border-bottom: 6px solid var(--signin-color);
+    border-bottom: 6px solid var(--main-color);
     border-right: 8px solid transparent;
   }
 
@@ -205,7 +205,7 @@ const Button = styled.button`
     z-index: 7;
     right: 0px;
     top: -6px;
-    border-bottom: 6px solid var(--signin-color);
+    border-bottom: 6px solid var(--main-color);
     border-left: 8px solid transparent;
   }
 

@@ -79,7 +79,7 @@ const SubHeadnig = styled.p`
 const RightSection = styled.section`
   height: max-content;
   width: 77%;
-  background: var(--signin-bg-color);
+  background: var(--container-bg-color);
   position: relative;
   border-radius: 10px;
   padding: 50px 40px;
@@ -97,7 +97,7 @@ const RightSection = styled.section`
 const GoogleButton = styled.div`
   border-radius: 5px;
   transition: 0.2s;
-  border: 1px solid var(--signin-color);
+  border: 1px solid var(--main-color);
   margin-top: 20px;
   box-shadow: var(--shadow);
   display: flex;
@@ -172,7 +172,7 @@ const InputWrapper = styled.div`
     bottom: 0;
     width: 100%;
     height: 2px;
-    background: var(--signin-color);
+    background: var(--main-color);
     border-radius: 4px;
     transition: 0.5s;
     pointer-events: none;
@@ -186,14 +186,14 @@ const InputField = styled.input`
   background: transparent;
   border: none;
   outline: none;
-  color: var(--signin-bg-color);
+  color: var(--container-bg-color);
   font-size: 1rem;
   letter-spacing: 0.1rem;
   z-index: 6;
 
   &:valid ~ span,
   &:focus ~ span {
-    color: var(--signin-color);
+    color: var(--main-color);
     transform: translateY(-34px);
     font-size: 0.9rem;
   }
@@ -222,35 +222,35 @@ const LinksWrapper = styled.div`
 const ForgetPassword = styled.a`
   margin: 10px 0;
   font-size: 1rem;
-  color: var(--font-color);
+  color: var(--doc-font-color);
   text-decoration: none;
   cursor: pointer;
   transition: 0.2s;
   border-bottom: 1px solid transparent;
   &:hover {
-    color: var(--signin-color);
-    border-bottom: 1px solid var(--signin-color);
+    color: var(--main-color);
+    border-bottom: 1px solid var(--main-color);
   }
 `;
 
 const CreateAccount = styled.a`
   margin: 10px 0;
   font-size: 1rem;
-  color: var(--signin-color);
+  color: var(--main-color);
   text-decoration: none;
   cursor: pointer;
   border-bottom: 1px solid transparent;
   transition: 0.2s;
   &:hover {
-    border-bottom: 1px solid var(--signin-color);
+    border-bottom: 1px solid var(--main-color);
   }
 `;
 
 const SubmitButton = styled.button`
   border: none;
   outline: none;
-  background: var(--signin-color);
-  color: var(--background-color);
+  background: var(--main-color);
+  color: var(--doc-bg-color);
   padding: 11px 25px;
   width: 100%;
   margin-top: 10px;
