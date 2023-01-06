@@ -65,7 +65,7 @@ const Container = styled.div`
 const InnerContainer = styled.div`
   max-width: 1350px;
   width: 95%;
-  background: var(--signin-bg-color);
+  background: var(--container-bg-color);
   position: relative;
   border-radius: 10px;
   padding: 40px;
@@ -91,8 +91,8 @@ const SubHeading = styled.h3`
 const CloseButton = styled.button`
   margin: auto;
   border: none;
-  background: var(--signin-color);
-  color: var(--background-color);
+  background: var(--main-color);
+  color: var(--doc-bg-color);
   padding: 11px 25px;
   width: 100%;
   max-width: max-content;

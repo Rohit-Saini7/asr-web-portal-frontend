@@ -62,6 +62,15 @@ export const handleFileUpload = async (
   } catch (error) {
     console.error('Error from file upload: ', error);
   }
+  //? -------This block reset the form.-------
+  docName = null;
+  sourceLang = null;
+  targetLang = null;
+  document.getElementById('file-name').innerHTML = null;
+  document
+    .querySelectorAll('.valid')
+    .forEach((box) => box.classList.remove('valid'));
+  //? -------This block reset the form.-------
 
   //TODO: ✅ start file uploading with a visual indicator.
   //TODO: ✅ on success upload => show SUCCESS modal.

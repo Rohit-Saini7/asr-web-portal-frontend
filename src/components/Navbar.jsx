@@ -98,7 +98,7 @@ const BurgerIcon = styled.div`
   &::after {
     width: 24px;
     height: 2px;
-    background: var(--font-color);
+    background: var(--doc-font-color);
     transition: 0.3s;
   }
   &::before,
@@ -169,7 +169,7 @@ const Nav = styled.div`
 
 const NavItem = styled(Link)`
   text-decoration: none;
-  color: var(--font-color);
+  color: var(--doc-font-color);
   display: flex;
   align-items: center;
   gap: 5px;
@@ -182,7 +182,7 @@ const NavItem = styled(Link)`
     height: 3px;
     border-radius: 3px;
     width: 0%;
-    background-color: var(--signin-color);
+    background-color: var(--main-color);
     position: absolute;
     bottom: -10px;
     transition: all ease-in-out 250ms;
@@ -190,7 +190,7 @@ const NavItem = styled(Link)`
 
   &:hover,
   &:focus {
-    color: var(--signin-color);
+    color: var(--main-color);
     &::before {
       width: 100%;
     }

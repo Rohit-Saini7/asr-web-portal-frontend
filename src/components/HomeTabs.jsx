@@ -39,7 +39,7 @@ const Container = styled.nav`
   display: grid;
   align-items: center;
   gap: 20px;
-  background-color: var(--signin-color);
+  background-color: var(--main-color);
   @media (max-width: 800px) {
     width: 69%;
     grid-template-rows: 1fr;
@@ -59,12 +59,12 @@ const Tabs = styled.div`
   border-radius: 10px;
   transition: 0.2s;
   cursor: pointer;
-  color: var(--background-color);
+  color: var(--doc-bg-color);
   position: relative;
 
   &.active {
-    background-color: var(--signin-bg-color);
-    color: var(--signin-color);
+    background-color: var(--container-bg-color);
+    color: var(--main-color);
   }
 
   @media (min-width: 801px) {
@@ -102,11 +102,11 @@ const Tabs = styled.div`
       box-shadow: 0 6px 0 0.5px transparent;
     }
     &.active > i::after {
-      box-shadow: 0 6px 0 0.6px var(--signin-bg-color);
+      box-shadow: 0 6px 0 0.6px var(--container-bg-color);
     }
 
     &.active > i::before {
-      box-shadow: 0 6px 0 0.5px var(--signin-bg-color);
+      box-shadow: 0 6px 0 0.5px var(--container-bg-color);
     }
   }
 `;

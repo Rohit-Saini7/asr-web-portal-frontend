@@ -8,8 +8,8 @@
   font-size: 16px;
   font-weight: 400;
   color-scheme: light dark;
-  color: var(--font-color);
-  background-color: var(--background-color);
+  color: var(--doc-font-color);
+  background-color: var(--doc-bg-color);
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 
@@ -20,36 +20,50 @@ body {
   min-height: 100vh;
 }
 
+/* 
+Dark Pallet:
+#14FFEC
+#0D7377
+#323232
+#212121
+*/
+
 .dark {
-  --background-color: #242424;
-  --container-bg-color: rgba(255, 255, 255, 0.1);
+  --container-bg-color: #323232;
+  --doc-bg-color: #212121;
+  --doc-font-color: #c0c0c0;
   --error-color: #f8254b;
-  --font-color: rgba(255, 255, 255, 0.7);
-  --hover-font-color: rgb(255, 255, 255);
+  --hover-font-color: #212121;
   --instructions-color: rgb(0, 128, 0, 0.4);
   --label-color: #8f8f8f;
-  --shadow: -11px 11px 22px #161616, 11px -11px 22px #323232;
-  --signin-bg-color: #28292d;
-  --signin-color: #45f3ff;
-  --table-header-color: rgba(69, 243, 255, 0.7);
+  --main-color: #14ffec;
+  --nav-background-color: rgba(0, 0, 0, 0.9); /* mobile only */
+  --shadow: 7px 7px 14px #181818, -7px -7px 14px #2a2a2a;
+  --table-header-color: #0d7377;
   --table-body-color: rgba(255, 255, 255, 0.1);
-  --nav-background-color: rgba(0, 0, 0, 0.9);
 }
 
+/*
+  Light Pallet:
+  #28df99 
+  #5ae09e 
+  #e6e6e6 
+  #dddddd
+*/
+
 .light {
-  --background-color: #ddd;
   --container-bg-color: #e6e6e6;
+  --doc-bg-color: #ddd;
+  --doc-font-color: #4f4f4f;
   --error-color: #f8254b;
-  --font-color: rgba(33, 33, 33, 0.7);
-  --hover-font-color: rgb(0, 0, 0);
+  --hover-font-color: #111;
   --instructions-color: rgb(0, 128, 0, 0.4);
   --label-color: #8f8f8f;
+  --main-color: #28df99;
+  --nav-background-color: rgba(255, 255, 255, 0.9); /* mobile only */
   --shadow: -11px 11px 22px #bababa, 11px -11px 22px #ccc;
-  --signin-bg-color: #e6e6e6;
-  --signin-color: #5ae09e;
-  --table-header-color: rgba(90, 224, 158, 0.7);
+  --table-header-color: #5ae09e;
   --table-body-color: rgba(0, 0, 0, 0.1);
-  --nav-background-color: rgba(255, 255, 255, 0.9);
 }
 
 ::-webkit-scrollbar {

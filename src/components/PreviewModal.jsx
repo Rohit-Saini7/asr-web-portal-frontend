@@ -16,8 +16,8 @@ const PreviewModal = ({ previewData, setPreviewData }) => {
           wrapEnabled
           showPrintMargin={false}
           style={{
-            background: ' var(--signin-bg-color)',
-            color: 'var(--font-color)',
+            background: ' var(--container-bg-color)',
+            color: 'var(--doc-font-color)',
           }}
         />
       </InnerContainer>
@@ -43,7 +43,7 @@ const Container = styled.div`
 const InnerContainer = styled.div`
   max-width: 1350px;
   width: 100%;
-  background: var(--signin-bg-color);
+  background: var(--container-bg-color);
   position: relative;
   border-radius: 10px;
   padding: 40px;
@@ -53,19 +53,19 @@ const InnerContainer = styled.div`
   gap: 30px;
   box-shadow: var(--shadow);
   .ace_gutter {
-    background: var(--signin-bg-color);
-    color: var(--font-color);
+    background: var(--container-bg-color);
+    color: var(--doc-font-color);
   }
   .ace_gutter-active-line {
-    background-color: var(--signin-bg-color);
+    background-color: var(--container-bg-color);
   }
 `;
 
 const CloseButton = styled.button`
   margin: auto;
   border: none;
-  background: var(--signin-color);
-  color: var(--background-color);
+  background: var(--main-color);
+  color: var(--doc-bg-color);
   padding: 11px 25px;
   width: 100%;
   max-width: max-content;

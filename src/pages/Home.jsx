@@ -39,6 +39,7 @@ const Home = () => {
   };
 
   const handleSubmit = () => {
+    console.log(fileRef.current.value);
     if (
       !!fileRef.current.files[0] &&
       !!docNameRef.current.value &&
@@ -59,16 +60,6 @@ const Home = () => {
         setProgressData,
         tabSelected
       );
-      //? -------This block reset the form.-------
-      fileRef.current.value = null;
-      docNameRef.current.value = null;
-      sourceLangRef.current.value = null;
-      targetLangRef.current.value = null;
-      document.getElementById('file-name').innerHTML = null;
-      document
-        .querySelectorAll('.valid')
-        .forEach((box) => box.classList.remove('valid'));
-      //? -------This block reset the form.-------
     } else {
       errorRef.current.innerHTML =
         (!fileRef.current.files[0] ? 'Media file is Missing. ' : '') +
@@ -226,7 +217,7 @@ const InnerContainer = styled.div`
   width: 95%;
   max-width: 1350px;
   border-radius: 10px;
-  background: var(--signin-bg-color);
+  background: var(--container-bg-color);
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
@@ -259,7 +250,7 @@ const InputWrapper = styled.div`
     bottom: 0;
     width: 100%;
     height: 2px;
-    background: var(--signin-color);
+    background: var(--main-color);
     border-radius: 4px;
     transition: 0.5s;
     pointer-events: none;
@@ -274,18 +265,18 @@ const FileInput = styled.input`
   position: absolute;
   z-index: -1;
   &:focus ~ label {
-    background: var(--signin-color);
-    color: var(--background-color);
+    background: var(--main-color);
+    color: var(--doc-bg-color);
   }
 `;
 
 const FileInputLabel = styled.label`
-  border: 1px solid var(--signin-color);
+  border: 1px solid var(--main-color);
   background-color: transparent;
   width: 100%;
   height: 44px;
   border-radius: 10px;
-  color: var(--signin-color);
+  color: var(--main-color);
   font-size: 1.25rem;
   cursor: pointer;
   display: flex;
@@ -302,8 +293,8 @@ const FileInputLabel = styled.label`
     overflow: hidden;
   }
   & > strong {
-    color: var(--background-color);
-    background-color: var(--signin-color);
+    color: var(--doc-bg-color);
+    background-color: var(--main-color);
     padding: 5px 25px;
     border-radius: 10px;
     display: inline-block;
@@ -330,7 +321,7 @@ const InputField = styled.input`
   background: transparent;
   border: none;
   outline: none;
-  color: var(--signin-bg-color);
+  color: var(--container-bg-color);
   font-size: 1rem;
   letter-spacing: 0.1rem;
   z-index: 6;
@@ -338,7 +329,7 @@ const InputField = styled.input`
   &:valid ~ span,
   &:focus ~ span,
   & ~ span[data-for='mediaFile'] {
-    color: var(--signin-color);
+    color: var(--main-color);
     transform: translateY(-34px);
     font-size: 0.9rem;
   }
@@ -358,7 +349,7 @@ const InputLabel = styled.span`
   letter-spacing: 0.1rem;
   transition: 0.5s;
   &[data-for='mediaFile'] {
-    color: var(--signin-color);
+    color: var(--main-color);
     transform: translateY(-34px);
     font-size: 0.9rem;
   }
@@ -367,8 +358,8 @@ const InputLabel = styled.span`
 const SubmitButton = styled.button`
   margin: auto;
   border: none;
-  background: var(--signin-color);
-  color: var(--background-color);
+  background: var(--main-color);
+  color: var(--doc-bg-color);
   padding: 11px 25px;
   width: 100%;
   max-width: max-content;

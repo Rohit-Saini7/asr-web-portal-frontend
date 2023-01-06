@@ -46,8 +46,6 @@ const CustomDropdown = ({
       <Input
         type='text'
         className={inputClass}
-        onFocus={handleClick}
-        onBlur={handleClick}
         readOnly={true}
         required='required'
         ref={langRef}
@@ -82,7 +80,7 @@ const Dropdown = styled.div`
     bottom: 0;
     width: 100%;
     height: 2px;
-    background: var(--signin-color);
+    background: var(--main-color);
     border-radius: 4px;
     transition: 0.5s;
     pointer-events: none;
@@ -126,7 +124,7 @@ const Input = styled.input`
   text-transform: capitalize;
   &.valid ~ span,
   &:focus ~ span {
-    color: var(--signin-color);
+    color: var(--main-color);
     transform: translateY(-34px);
     font-size: 0.9rem;
   }
@@ -137,7 +135,7 @@ const Input = styled.input`
 
   &.valid,
   &.valid ~ svg {
-    color: var(--signin-bg-color);
+    color: var(--container-bg-color);
     z-index: 1;
   }
 `;
@@ -165,7 +163,7 @@ const OptionWrapper = styled.div`
   visibility: hidden;
   opacity: 0;
   transition: 0.25s;
-  background-color: var(--background-color);
+  background-color: var(--doc-bg-color);
   box-shadow: var(--shadow);
 `;
 
@@ -176,7 +174,7 @@ const Option = styled.div`
   text-transform: capitalize;
 
   &:hover {
-    background: var(--signin-color);
+    background: var(--main-color);
     color: var(--hover-font-color);
   }
 `;
