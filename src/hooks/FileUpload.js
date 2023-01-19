@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { addDoc, serverTimestamp } from 'firebase/firestore';
 import moment from 'moment';
+import { addError, changeStatus } from '../redux/slice/errorSlice';
 import { addDocs } from '../redux/slice/userSlice';
 
 export const handleFileUpload = async (
@@ -12,6 +13,7 @@ export const handleFileUpload = async (
   collectionRef,
   cancelToken,
   setProgressData,
+  setIsModalOpen,
   tabSelected
 ) => {
   if (typeof cancelToken != typeof undefined) {
@@ -21,6 +23,7 @@ export const handleFileUpload = async (
   const formData = new FormData();
   formData.append('file', file);
   cancelToken = axios.CancelToken.source();
+
   try {
     await axios({
       method: 'post',
@@ -29,15 +32,15 @@ export const handleFileUpload = async (
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
-        source_language: sourceLang,
-        destination_language: targetLang,
+        source_language: sourceLang.toLowerCase(),
+        destination_language: targetLang.toLowerCase(),
       },
       onUploadProgress: (p) => {
         setProgressData({
           done: parseInt(p.loaded / 1048576),
           total: parseInt(p.total / 1048576),
           progress: parseInt(p.progress * 100),
-          rate: parseInt(p.rate / 1048576),
+          rate: parseFloat(p.rate / 1048576).toFixed(2),
           estimated: parseInt(p.estimated),
         });
       },
@@ -59,8 +62,10 @@ export const handleFileUpload = async (
       await addDoc(collectionRef, data);
       dispatch(addDocs(data));
     });
-  } catch (error) {
-    console.error('Error from file upload: ', error);
+  } catch (err) {
+    dispatch(addError(err));
+    dispatch(changeStatus(true));
+    setIsModalOpen(false);
   }
   //? -------This block reset the form.-------
   docName = null;
@@ -71,8 +76,4 @@ export const handleFileUpload = async (
     .querySelectorAll('.valid')
     .forEach((box) => box.classList.remove('valid'));
   //? -------This block reset the form.-------
-
-  //TODO: ✅ start file uploading with a visual indicator.
-  //TODO: ✅ on success upload => show SUCCESS modal.
-  //TODO: on !success upload => show ERROR modal.
 };

@@ -39,10 +39,13 @@ const Navbar = () => {
             <PreviewIcon />
             Preview/Download
           </NavItem>
-          <NavItem to='/home'>
+          <QuickLink
+            href='https://www.cse.iitb.ac.in/~asr/VAgyojaka'
+            target='_blank'
+          >
             <LinkIcon />
             Quick Links
-          </NavItem>
+          </QuickLink>
           <NavItem onClick={handleLogOut}>
             <LogOutIcon />
             Sign Out
@@ -168,6 +171,39 @@ const Nav = styled.div`
 `;
 
 const NavItem = styled(Link)`
+  text-decoration: none;
+  color: var(--doc-font-color);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all ease-in-out 250ms;
+  position: relative;
+  outline: none;
+
+  &::before {
+    content: '';
+    height: 3px;
+    border-radius: 3px;
+    width: 0%;
+    background-color: var(--main-color);
+    position: absolute;
+    bottom: -10px;
+    transition: all ease-in-out 250ms;
+  }
+
+  &:hover,
+  &:focus {
+    color: var(--main-color);
+    &::before {
+      width: 100%;
+    }
+  }
+  &:active {
+    translate: 0 5px;
+  }
+`;
+
+const QuickLink = styled.a`
   text-decoration: none;
   color: var(--doc-font-color);
   display: flex;

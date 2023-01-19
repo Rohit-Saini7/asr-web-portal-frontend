@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { DownArrowIcon } from './Icons';
 
 const CustomDropdown = ({
-  className,
   options = ['no option provided'],
   inputClass,
   wrapperClass,
@@ -38,7 +37,7 @@ const CustomDropdown = ({
 
   return (
     <Dropdown
-      className={`${wrapperClass + ' ' + className}`}
+      className={`${wrapperClass}`}
       onClick={handleClick}
       title={label}
       ref={dropdownRef}
@@ -103,7 +102,7 @@ const Dropdown = styled.div`
 
   &.active > div,
   &:focus > div {
-    visibility: visible;
+    display: block;
     opacity: 1;
   }
 `;
@@ -155,12 +154,12 @@ const InputLabel = styled.span`
 
 const OptionWrapper = styled.div`
   position: absolute;
-  z-index: 4;
-  top: 70px;
+  z-index: 7;
+  bottom: 0;
   width: 100%;
   border-radius: 10px;
   overflow: hidden;
-  visibility: hidden;
+  display: none;
   opacity: 0;
   transition: 0.25s;
   background-color: var(--doc-bg-color);
