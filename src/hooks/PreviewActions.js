@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { convertXML } from 'simple-xml-to-json';
+import { addError, changeStatus } from '../redux/slice/errorSlice';
 
 export const handlePreview = (
   callType,
   token,
   setPreviewData,
-  setIsPending
+  setIsPending,
+  dispatch
 ) => {
   if (callType === 'TTS') {
     setIsPending(() => ({ status: true, name: callType }));
@@ -25,22 +27,29 @@ export const handlePreview = (
           url: `${URL}/result`,
         })
           .then(function (res) {
-            const data = res.data;
-            const { transcript } = convertXML(data);
+            const { transcript } = convertXML(res.data);
             let fileContent = '';
             transcript.children.forEach(({ line }) => {
               let lineContent = '';
               line.children.forEach(({ word }) => {
-                if (!!word.content && !!word.is_valid)
-                  lineContent += ` ${word.content}`;
+                if (!!word.content) lineContent += ` ${word.content}`;
               });
               fileContent += `[${line.speaker}] ${lineContent} [${line.timestamp}]\n`;
             });
             setPreviewData(fileContent);
           })
           .catch(function (error) {
-            console.error(error);
+            dispatch(addError(err));
+            dispatch(changeStatus(true));
           });
+      } else if (response.data === 'FAILURE') {
+        const err = {
+          name: 'File Generation Error',
+          message: 'Server failed to generate Translation.',
+          code: 'FILE_GEN_FAILURE',
+        };
+        dispatch(addError(err));
+        dispatch(changeStatus(true));
       } else {
         setIsPending(() => ({ status: true, name: callType }));
         setTimeout(() => {
@@ -48,12 +57,19 @@ export const handlePreview = (
         }, 10000);
       }
     })
-    .catch(function (error) {
-      console.error(error);
+    .catch(function (err) {
+      dispatch(addError(err));
+      dispatch(changeStatus(true));
     });
 };
 
-export const handleDownload = (callType, docName, token, setIsPending) => {
+export const handleDownload = (
+  callType,
+  docName,
+  token,
+  setIsPending,
+  dispatch
+) => {
   if (callType === 'TTS') {
     setIsPending(() => ({ status: true, name: callType }));
     return;
@@ -79,9 +95,18 @@ export const handleDownload = (callType, docName, token, setIsPending) => {
             alink.download = `${callType}_${docName}.xml`;
             alink.click();
           })
-          .catch(function (error) {
-            console.error(error);
+          .catch(function (err) {
+            dispatch(addError(err));
+            dispatch(changeStatus(true));
           });
+      } else if (response.data === 'FAILURE') {
+        const err = {
+          name: 'File Generation Error',
+          message: 'Server failed to generate Translation.',
+          code: 'FILE_GEN_FAILURE',
+        };
+        dispatch(addError(err));
+        dispatch(changeStatus(true));
       } else {
         setIsPending(() => ({ status: true, name: callType }));
         setTimeout(() => {
@@ -89,7 +114,8 @@ export const handleDownload = (callType, docName, token, setIsPending) => {
         }, 10000);
       }
     })
-    .catch(function (error) {
-      console.error(error);
+    .catch(function (err) {
+      dispatch(addError(err));
+      dispatch(changeStatus(true));
     });
 };

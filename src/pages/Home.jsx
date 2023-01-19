@@ -10,6 +10,22 @@ import HomeTabs from '../components/HomeTabs';
 import { handleFileUpload } from '../hooks/FileUpload';
 import { db } from '../Firebase';
 import { Navigate } from 'react-router-dom';
+import ErrorModal from '../components/ErrorModal';
+
+const LanguageOptions = [
+  'English',
+  'Assamese',
+  'Hindi',
+  'Marathi',
+  'Tamil',
+  'Bengali',
+  'Kannada',
+  'Odia',
+  'Telugu',
+  'Gujarati',
+  'Malayalam',
+  'Punjabi',
+];
 
 const Home = () => {
   const fileRef = useRef();
@@ -20,6 +36,8 @@ const Home = () => {
   const submitButtonRef = useRef();
 
   const user = useSelector((state) => state.userState.user);
+  const errorStatus = useSelector((state) => state.errorState.status);
+
   const dispatch = useDispatch();
   let cancelToken;
 
@@ -39,12 +57,12 @@ const Home = () => {
   };
 
   const handleSubmit = () => {
-    console.log(fileRef.current.value);
     if (
       !!fileRef.current.files[0] &&
       !!docNameRef.current.value &&
       !!sourceLangRef.current.value &&
-      !!targetLangRef.current.value
+      !!targetLangRef.current.value &&
+      !(sourceLangRef.current.value === targetLangRef.current.value)
     ) {
       setIsModalOpen(true);
       const collectionRef = collection(db, 'usersList', user.email, 'docs');
@@ -58,6 +76,7 @@ const Home = () => {
         collectionRef,
         cancelToken,
         setProgressData,
+        setIsModalOpen,
         tabSelected
       );
     } else {
@@ -65,13 +84,17 @@ const Home = () => {
         (!fileRef.current.files[0] ? 'Media file is Missing. ' : '') +
         (!docNameRef.current.value ? 'Document Name is Missing. ' : '') +
         (!sourceLangRef.current.value ? 'Source Language is Missing. ' : '') +
-        (!targetLangRef.current.value ? 'Target Language is Missing. ' : '');
+        (!targetLangRef.current.value ? 'Target Language is Missing. ' : '') +
+        (sourceLangRef.current.value === targetLangRef.current.value
+          ? "Source and Target Language can't be same. "
+          : '');
     }
   };
 
   return (
     <React.Fragment>
       {!user && <Navigate to='/' />}
+      {errorStatus && <ErrorModal />}
       <Container>
         <Heading>ASR Post Editor Tool</Heading>
         <Instructions aria-label='Instructions:'>
@@ -132,7 +155,7 @@ const Home = () => {
                   <CustomDropdown
                     inputClass='sourcelang'
                     wrapperClass='sourceDropdown'
-                    options={['english', 'hindi']}
+                    options={LanguageOptions}
                     label='Select Source Language'
                     langRef={sourceLangRef}
                   />
@@ -141,7 +164,7 @@ const Home = () => {
                   <CustomDropdown
                     inputClass='targetlang'
                     wrapperClass='targetDropdown'
-                    options={['english', 'hindi']}
+                    options={LanguageOptions}
                     label='Select Target Language'
                     langRef={targetLangRef}
                   />

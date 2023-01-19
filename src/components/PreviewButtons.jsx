@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { handleDownload, handlePreview } from '../hooks/PreviewActions';
 import { DownloadIcon, PreviewIcon, UploadIcon } from './Icons';
@@ -10,6 +11,8 @@ const PreviewButtons = ({
   setIsPending,
   willGenerate,
 }) => {
+  const dispatch = useDispatch();
+
   return (
     <React.Fragment>
       {willGenerate === 'transcript' ? (
@@ -23,7 +26,8 @@ const PreviewButtons = ({
                   'transcript',
                   token,
                   setPreviewData,
-                  setIsPending
+                  setIsPending,
+                  dispatch
                 );
               }}
             >
@@ -34,7 +38,13 @@ const PreviewButtons = ({
               className='button'
               onClick={(e) => {
                 handleAnimation(e);
-                handleDownload('transcript', docName, token, setIsPending);
+                handleDownload(
+                  'transcript',
+                  docName,
+                  token,
+                  setIsPending,
+                  dispatch
+                );
               }}
             >
               <DownloadIcon />
@@ -60,7 +70,8 @@ const PreviewButtons = ({
                   'translation',
                   token,
                   setPreviewData,
-                  setIsPending
+                  setIsPending,
+                  dispatch
                 );
               }}
             >
@@ -71,7 +82,13 @@ const PreviewButtons = ({
               className='button'
               onClick={(e) => {
                 handleAnimation(e);
-                handleDownload('translation', docName, token, setIsPending);
+                handleDownload(
+                  'translation',
+                  docName,
+                  token,
+                  setIsPending,
+                  dispatch
+                );
               }}
             >
               <DownloadIcon />
@@ -92,7 +109,13 @@ const PreviewButtons = ({
             className='button'
             onClick={(e) => {
               handleAnimation(e);
-              handlePreview('TTS', token, setPreviewData, setIsPending);
+              handlePreview(
+                'TTS',
+                token,
+                setPreviewData,
+                setIsPending,
+                dispatch
+              );
             }}
           >
             <PreviewIcon />
@@ -102,7 +125,7 @@ const PreviewButtons = ({
             className='button'
             onClick={(e) => {
               handleAnimation(e);
-              handleDownload('TTS', docName, token, setIsPending);
+              handleDownload('TTS', docName, token, setIsPending, dispatch);
             }}
           >
             <DownloadIcon />

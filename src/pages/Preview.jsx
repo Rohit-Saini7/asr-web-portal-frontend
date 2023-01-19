@@ -6,6 +6,7 @@ import { Navigate } from 'react-router-dom';
 import PendingModal from '../components/PendingModal';
 import PreviewModal from '../components/PreviewModal';
 import PreviewButtons from '../components/PreviewButtons';
+import ErrorModal from '../components/ErrorModal';
 
 const Preview = () => {
   const [isPending, setIsPending] = useState({
@@ -16,6 +17,7 @@ const Preview = () => {
 
   const user = useSelector((state) => state.userState.user);
   const docs = useSelector((state) => state.userState.docs);
+  const errorStatus = useSelector((state) => state.errorState.status);
 
   return (
     <React.Fragment>
@@ -28,6 +30,7 @@ const Preview = () => {
           setPreviewData={setPreviewData}
         />
       )}
+      {errorStatus && <ErrorModal />}
       <Container>
         {!user && <Navigate to='/' />}
         <Heading>Preview/Download</Heading>
@@ -122,6 +125,7 @@ const TableWrapper = styled.div`
   width: 95%;
   max-width: 1350px;
   margin-top: 30px;
+  margin-bottom: 30px;
   overflow: auto;
   & > table {
     border-radius: 10px;
