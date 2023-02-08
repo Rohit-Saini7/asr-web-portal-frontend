@@ -11,6 +11,8 @@ import { handleFileUpload } from '../hooks/FileUpload';
 import { db } from '../Firebase';
 import { Navigate } from 'react-router-dom';
 import ErrorModal from '../components/ErrorModal';
+import MultiSelect, { ShowSelectedDict } from '../components/MultiSelect';
+import { dict } from '../assets/dict';
 
 const LanguageOptions = [
   'English',
@@ -32,6 +34,7 @@ const Home = () => {
   const docNameRef = useRef();
   const sourceLangRef = useRef();
   const targetLangRef = useRef();
+  const dictRef = useRef();
   const errorRef = useRef();
   const submitButtonRef = useRef();
 
@@ -50,6 +53,8 @@ const Home = () => {
     estimated: 0,
   });
   const [tabSelected, setTabSelected] = useState('transcript');
+  const [dictsList, setDictsList] = useState(dict);
+  const [selectedDicts, setSelectedDicts] = useState([]);
 
   const handleFileChange = (e) => {
     if (!!e.target.files)
@@ -83,9 +88,11 @@ const Home = () => {
       errorRef.current.innerHTML =
         (!fileRef.current.files[0] ? 'Media file is Missing. ' : '') +
         (!docNameRef.current.value ? 'Document Name is Missing. ' : '') +
-        (!sourceLangRef.current.value ? 'Source Language is Missing. ' : '') +
-        (!targetLangRef.current.value ? 'Target Language is Missing. ' : '') +
-        (sourceLangRef.current.value === targetLangRef.current.value
+        (!sourceLangRef.current.value
+          ? 'Source Language is Missing. '
+          : !targetLangRef.current.value
+          ? 'Target Language is Missing. '
+          : sourceLangRef.current.value === targetLangRef.current.value
           ? "Source and Target Language can't be same. "
           : '');
     }
@@ -171,6 +178,24 @@ const Home = () => {
                 </InputWrapper>
               </React.Fragment>
             )}
+            <InputWrapper>
+              <MultiSelect
+                inputClass='dict'
+                wrapperClass='dictMultiSelect'
+                options={dictsList}
+                setDictsList={setDictsList}
+                label='Select Dictionaries'
+                langRef={dictRef}
+                selectedDicts={selectedDicts}
+                setSelectedDicts={setSelectedDicts}
+              />
+            </InputWrapper>
+            <InputWrapper>
+              <ShowSelectedDict
+                selectedDicts={selectedDicts}
+                setSelectedDicts={setSelectedDicts}
+              />
+            </InputWrapper>
             <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
               Convert
             </SubmitButton>
@@ -231,9 +256,6 @@ const ErrorMessage = styled.h3`
   font-size: 2rem;
   max-height: max-content;
   color: var(--error-color);
-  &:empty {
-    height: 3rem;
-  }
 `;
 
 const InnerContainer = styled.div`
@@ -245,6 +267,7 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 20px;
 `;
 
 const FormWrapper = styled.div`
@@ -265,6 +288,7 @@ const FormWrapper = styled.div`
 const InputWrapper = styled.div`
   position: relative;
   width: 100%;
+  max-width: 100%;
   margin-top: 35px;
   display: flex;
   & > i {

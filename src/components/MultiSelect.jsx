@@ -2,12 +2,15 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { DownArrowIcon } from './Icons';
 
-const CustomDropdown = ({
+const MultiSelect = ({
   options = ['no option provided'],
+  setDictsList,
   inputClass,
   wrapperClass,
   label,
   langRef,
+  selectedDicts,
+  setSelectedDicts,
 }) => {
   const dropdownRef = useRef();
   useEffect(() => {
@@ -32,7 +35,14 @@ const CustomDropdown = ({
 
   const handleSelect = (e) => {
     document.querySelector('.' + inputClass).classList.add('valid');
-    langRef.current.value = e.target.innerHTML;
+    langRef.current.value = `${selectedDicts.length + 1} Dictionaries selected`;
+    setSelectedDicts((p) => [
+      ...p,
+      {
+        name: e.target.innerHTML,
+        code: e.target.attributes['data-code'].value,
+      },
+    ]);
   };
 
   return (
@@ -52,8 +62,8 @@ const CustomDropdown = ({
       <InputLabel>{label}</InputLabel>
       <OptionWrapper className='options'>
         {options.map((option, index) => (
-          <Option key={index} onClick={handleSelect}>
-            {option}
+          <Option key={index} data-code={option.code} onClick={handleSelect}>
+            {option.name}
           </Option>
         ))}
       </OptionWrapper>
@@ -63,7 +73,7 @@ const CustomDropdown = ({
   );
 };
 
-export default CustomDropdown;
+export default MultiSelect;
 
 const Dropdown = styled.div`
   margin: auto;
@@ -157,8 +167,9 @@ const OptionWrapper = styled.div`
   z-index: 7;
   bottom: 70px;
   width: 100%;
+  max-height: 50vh;
+  overflow: scroll;
   border-radius: 10px;
-  overflow: hidden;
   display: none;
   opacity: 0;
   transition: 0.25s;
@@ -175,5 +186,89 @@ const Option = styled.div`
   &:hover {
     background: var(--main-color);
     color: var(--hover-font-color);
+  }
+`;
+
+export const ShowSelectedDict = ({ selectedDicts, setSelectedDicts }) => {
+  return (
+    <Container>
+      {!!selectedDicts.length
+        ? selectedDicts.map((dict, index) => (
+            <BadgeWrapper key={index}>
+              {dict.name}
+              <CrossSign
+                onClick={() => {
+                  setSelectedDicts((p) =>
+                    p.filter((d) => d.name !== dict.name)
+                  );
+                }}
+              />
+            </BadgeWrapper>
+          ))
+        : 'No Dictionaries selected'}
+    </Container>
+  );
+};
+
+const Container = styled.div`
+  text-align: justify;
+`;
+
+const BadgeWrapper = styled.div`
+  height: 2rem;
+  line-height: 18px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  background: var(--main-color);
+  color: var(--container-bg-color);
+  margin-right: 5px;
+  margin-bottom: 5px;
+`;
+
+const CrossSign = styled.button`
+  background: transparent;
+  border: none;
+  outline: none;
+  margin-left: 5px;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  transition: 0.5s;
+  border-radius: 50%;
+
+  &:hover,
+  &:focus {
+    background: var(--container-bg-color);
+    &::before,
+    &::after {
+      background: var(--main-color);
+    }
+  }
+
+  &::before,
+  &::after {
+    width: 15px;
+    height: 2px;
+    position: absolute;
+    content: '';
+    left: 0;
+    background: var(--container-bg-color);
+    translate: 0 7px;
+  }
+  &::before {
+    top: -8px;
+    transform: translateY(8px) rotate(45deg);
+  }
+  &::after {
+    top: 8px;
+    transform: translateY(-8px) rotate(-45deg);
   }
 `;
