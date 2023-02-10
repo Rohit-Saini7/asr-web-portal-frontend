@@ -63,6 +63,26 @@ const Home = () => {
 
   const handleSubmit = () => {
     if (
+      tabSelected === 'TTS' &&
+      !!fileRef.current.files[0] &&
+      !!docNameRef.current.value
+    ) {
+      setIsModalOpen(true);
+      const collectionRef = collection(db, 'usersList', user.email, 'docs');
+
+      handleFileUpload(
+        fileRef.current.files[0],
+        docNameRef.current.value,
+        '-',
+        '-',
+        dispatch,
+        collectionRef,
+        cancelToken,
+        setProgressData,
+        setIsModalOpen,
+        tabSelected
+      );
+    } else if (
       !!fileRef.current.files[0] &&
       !!docNameRef.current.value &&
       !!sourceLangRef.current.value &&

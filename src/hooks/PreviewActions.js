@@ -70,11 +70,6 @@ export const handleDownload = (
   setIsPending,
   dispatch
 ) => {
-  if (callType === 'TTS') {
-    setIsPending(() => ({ status: true, name: callType }));
-    return;
-  }
-
   const URL = `${import.meta.env.VITE_API_URL}/${callType}/${token}`;
 
   axios({
@@ -89,10 +84,13 @@ export const handleDownload = (
           responseType: 'blob',
         })
           .then(function (res) {
+            console.log(res.headers);
             const fileURL = window.URL.createObjectURL(res.data);
             let alink = document.createElement('a');
             alink.href = fileURL;
-            alink.download = `${callType}_${docName}.xml`;
+            if (callType !== 'TTS')
+              alink.download = `${callType}_${docName}.xml`;
+            else alink.download = `${callType}_${docName}.mp3`;
             alink.click();
           })
           .catch(function (err) {
