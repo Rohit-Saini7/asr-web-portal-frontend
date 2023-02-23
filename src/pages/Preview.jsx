@@ -13,7 +13,7 @@ const Preview = () => {
     name: 'transcript',
     status: false,
   });
-  const [previewData, setPreviewData] = useState('');
+  const [previewData, setPreviewData] = useState({ dataType: '', data: '' });
 
   const user = useSelector((state) => state.userState.user);
   const docs = useSelector((state) => state.userState.docs);
@@ -24,7 +24,7 @@ const Preview = () => {
       {isPending.status && (
         <PendingModal isPending={isPending} setIsPending={setIsPending} />
       )}
-      {!!previewData && (
+      {!!previewData.data && (
         <PreviewModal
           previewData={previewData}
           setPreviewData={setPreviewData}

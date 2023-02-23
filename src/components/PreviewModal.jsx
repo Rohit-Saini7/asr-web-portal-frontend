@@ -3,23 +3,30 @@ import styled from 'styled-components';
 import AceEditor from 'react-ace';
 
 const PreviewModal = ({ previewData, setPreviewData }) => {
+  console.log(previewData);
   return (
     <Container>
       <InnerContainer>
-        <CloseButton onClick={() => setPreviewData('')}>Close</CloseButton>
-        <AceEditor
-          fontSize='1rem'
-          name='UNIQUE_ID_OF_DIV'
-          value={previewData}
-          width='100%'
-          readOnly
-          wrapEnabled
-          showPrintMargin={false}
-          style={{
-            background: ' var(--container-bg-color)',
-            color: 'var(--doc-font-color)',
-          }}
-        />
+        <CloseButton onClick={() => setPreviewData({ dataType: '', data: '' })}>
+          Close
+        </CloseButton>
+        {previewData.dataType !== 'audio' ? (
+          <AceEditor
+            fontSize='1rem'
+            name='UNIQUE_ID_OF_DIV'
+            value={previewData.data}
+            width='100%'
+            readOnly
+            wrapEnabled
+            showPrintMargin={false}
+            style={{
+              background: ' var(--container-bg-color)',
+              color: 'var(--doc-font-color)',
+            }}
+          />
+        ) : (
+          <audio src={previewData.data} controls />
+        )}
       </InnerContainer>
     </Container>
   );
