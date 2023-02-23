@@ -43,7 +43,7 @@ export const handleFileUpload = async (
       break;
   }
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('file', file.current.files[0]);
   cancelToken = axios.CancelToken.source();
 
   try {
@@ -68,7 +68,7 @@ export const handleFileUpload = async (
         'MMM DD, YYYY | hh:mm A'
       );
       const data = {
-        mediaName: file.name,
+        mediaName: file.current.files[0].name,
         docName: docName,
         language: `${sourceLang} | ${targetLang}`,
         creationTime: creationTime,
@@ -86,6 +86,7 @@ export const handleFileUpload = async (
     setIsModalOpen(false);
   }
   //? -------This block reset the form.-------
+  file.current.value = null;
   docName = null;
   sourceLang = null;
   targetLang = null;

@@ -69,7 +69,7 @@ const Home = () => {
       if (tabSelected === 'transcript') {
         setIsModalOpen(true);
         handleFileUpload(
-          fileRef.current.files[0],
+          fileRef,
           docNameRef.current.value,
           '-',
           '-',
@@ -88,7 +88,7 @@ const Home = () => {
         if (tabSelected === 'TTS') {
           setIsModalOpen(true);
           handleFileUpload(
-            fileRef.current.files[0],
+            fileRef,
             docNameRef.current.value,
             sourceLangRef.current.value,
             targetLangRef.current.value,
@@ -100,18 +100,39 @@ const Home = () => {
             tabSelected
           );
         } else {
-          if ('a' === 'a') {
+          if (!!selectedDicts.length) {
             if (tabSelected === 'translation') {
-              //
               console.log('action for translation');
-              //
+              handleFileUpload(
+                fileRef,
+                docNameRef.current.value,
+                sourceLangRef.current.value,
+                targetLangRef.current.value,
+                dispatch,
+                collectionRef,
+                cancelToken,
+                setProgressData,
+                setIsModalOpen,
+                tabSelected,
+                selectedDicts
+              );
             } else if (tabSelected === 'V2V') {
-              //
-              console.log('action for v2v');
-              //
+              handleFileUpload(
+                fileRef,
+                docNameRef.current.value,
+                sourceLangRef.current.value,
+                targetLangRef.current.value,
+                dispatch,
+                collectionRef,
+                cancelToken,
+                setProgressData,
+                setIsModalOpen,
+                tabSelected,
+                selectedDicts
+              );
             }
           } else {
-            console.log('dict error');
+            errorRef.current.innerHTML = 'Please select at least 1 Dictionary.';
           }
         }
       } else {
