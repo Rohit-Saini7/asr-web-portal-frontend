@@ -8,7 +8,7 @@ const MultiSelect = ({
   inputClass,
   wrapperClass,
   label,
-  langRef,
+  dictRef,
   selectedDicts,
   setSelectedDicts,
 }) => {
@@ -28,6 +28,14 @@ const MultiSelect = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (!!selectedDicts.length) {
+      dictRef.current.value = `${selectedDicts.length} Dictionaries selected`;
+    } else {
+      dictRef.current.value = null;
+    }
+  }, [selectedDicts]);
+
   const handleClick = () => {
     let dropdown = document.querySelector('.' + wrapperClass);
     dropdown.classList.toggle('active');
@@ -35,7 +43,7 @@ const MultiSelect = ({
 
   const handleSelect = (e) => {
     document.querySelector('.' + inputClass).classList.add('valid');
-    langRef.current.value = `${selectedDicts.length + 1} Dictionaries selected`;
+
     setSelectedDicts((p) => [
       ...p,
       {
@@ -43,6 +51,13 @@ const MultiSelect = ({
         code: e.target.attributes['data-code'].value,
       },
     ]);
+
+    setDictsList((p) => {
+      p.forEach((d) => {
+        if (d.name === e.target.innerHTML) d.selected = true;
+      });
+      return p;
+    });
   };
 
   return (
@@ -57,7 +72,7 @@ const MultiSelect = ({
         className={inputClass}
         readOnly={true}
         required='required'
-        ref={langRef}
+        ref={dictRef}
       />
       <InputLabel>{label}</InputLabel>
       <OptionWrapper className='options'>
@@ -76,7 +91,7 @@ const MultiSelect = ({
 export default MultiSelect;
 
 const Dropdown = styled.div`
-  margin: auto;
+  margin: 0 auto;
   position: relative;
   width: 100%;
   height: 50px;
@@ -189,7 +204,11 @@ const Option = styled.div`
   }
 `;
 
-export const ShowSelectedDict = ({ selectedDicts, setSelectedDicts }) => {
+export const ShowSelectedDict = ({
+  selectedDicts,
+  setSelectedDicts,
+  setDictsList,
+}) => {
   return (
     <Container>
       {!!selectedDicts.length
@@ -201,6 +220,12 @@ export const ShowSelectedDict = ({ selectedDicts, setSelectedDicts }) => {
                   setSelectedDicts((p) =>
                     p.filter((d) => d.name !== dict.name)
                   );
+                  setDictsList((p) => {
+                    p.forEach((d) => {
+                      if (d.name === dict.name) d.selected = false;
+                    });
+                    return p;
+                  });
                 }}
               />
             </BadgeWrapper>
