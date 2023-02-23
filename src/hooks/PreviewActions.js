@@ -9,11 +9,6 @@ export const handlePreview = (
   setIsPending,
   dispatch
 ) => {
-  if (callType === 'TTS') {
-    setIsPending(() => ({ status: true, name: callType }));
-    return;
-  }
-
   const URL = `${import.meta.env.VITE_API_URL}/${callType}/${token}`;
 
   axios({
@@ -22,26 +17,42 @@ export const handlePreview = (
   })
     .then(function (response) {
       if (response.data === 'SUCCESS') {
-        axios({
-          method: 'get',
-          url: `${URL}/result`,
-        })
-          .then(function (res) {
-            const { transcript } = convertXML(res.data);
-            let fileContent = '';
-            transcript.children.forEach(({ line }) => {
-              let lineContent = '';
-              line.children.forEach(({ word }) => {
-                if (!!word.content) lineContent += ` ${word.content}`;
-              });
-              fileContent += `[${line.speaker}] ${lineContent} [${line.timestamp}]\n`;
-            });
-            setPreviewData(fileContent);
+        if (callType !== 'TTS') {
+          axios({
+            method: 'get',
+            url: `${URL}/result`,
           })
-          .catch(function (error) {
-            dispatch(addError(err));
-            dispatch(changeStatus(true));
-          });
+            .then(function (res) {
+              const { transcript } = convertXML(res.data);
+              let fileContent = '';
+              transcript.children.forEach(({ line }) => {
+                let lineContent = '';
+                line.children.forEach(({ word }) => {
+                  if (!!word.content) lineContent += ` ${word.content}`;
+                });
+                fileContent += `[${line.speaker}] ${lineContent} [${line.timestamp}]\n`;
+              });
+              setPreviewData({ dataType: 'text', data: fileContent });
+            })
+            .catch(function (err) {
+              dispatch(addError(err));
+              dispatch(changeStatus(true));
+            });
+        } else {
+          axios({
+            method: 'get',
+            url: `${URL}/result`,
+            responseType: 'blob',
+          })
+            .then(function (res) {
+              const fileURL = window.URL.createObjectURL(res.data);
+              setPreviewData({ dataType: 'audio', data: fileURL });
+            })
+            .catch(function (err) {
+              dispatch(addError(err));
+              dispatch(changeStatus(true));
+            });
+        }
       } else if (response.data === 'FAILURE') {
         const err = {
           name: 'File Generation Error',
@@ -70,11 +81,6 @@ export const handleDownload = (
   setIsPending,
   dispatch
 ) => {
-  if (callType === 'TTS') {
-    setIsPending(() => ({ status: true, name: callType }));
-    return;
-  }
-
   const URL = `${import.meta.env.VITE_API_URL}/${callType}/${token}`;
 
   axios({
@@ -89,10 +95,13 @@ export const handleDownload = (
           responseType: 'blob',
         })
           .then(function (res) {
+            console.log(res.headers);
             const fileURL = window.URL.createObjectURL(res.data);
             let alink = document.createElement('a');
             alink.href = fileURL;
-            alink.download = `${callType}_${docName}.xml`;
+            if (callType !== 'TTS')
+              alink.download = `${callType}_${docName}.xml`;
+            else alink.download = `${callType}_${docName}.mp3`;
             alink.click();
           })
           .catch(function (err) {

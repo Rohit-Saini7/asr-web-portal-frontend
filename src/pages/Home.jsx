@@ -11,6 +11,8 @@ import { handleFileUpload } from '../hooks/FileUpload';
 import { db } from '../Firebase';
 import { Navigate } from 'react-router-dom';
 import ErrorModal from '../components/ErrorModal';
+import MultiSelect, { ShowSelectedDict } from '../components/MultiSelect';
+import { dict } from '../assets/dict';
 
 const LanguageOptions = [
   'English',
@@ -32,6 +34,7 @@ const Home = () => {
   const docNameRef = useRef();
   const sourceLangRef = useRef();
   const targetLangRef = useRef();
+  const dictRef = useRef();
   const errorRef = useRef();
   const submitButtonRef = useRef();
 
@@ -51,43 +54,100 @@ const Home = () => {
   });
   const [tabSelected, setTabSelected] = useState('transcript');
 
+  const [dictsList, setDictsList] = useState(dict);
+  const [selectedDicts, setSelectedDicts] = useState([]);
+
   const handleFileChange = (e) => {
     if (!!e.target.files)
       document.getElementById('file-name').innerHTML = e.target.files[0].name;
   };
 
   const handleSubmit = () => {
-    if (
-      !!fileRef.current.files[0] &&
-      !!docNameRef.current.value &&
-      !!sourceLangRef.current.value &&
-      !!targetLangRef.current.value &&
-      !(sourceLangRef.current.value === targetLangRef.current.value)
-    ) {
-      setIsModalOpen(true);
-      const collectionRef = collection(db, 'usersList', user.email, 'docs');
+    const collectionRef = collection(db, 'usersList', user.email, 'docs');
 
-      handleFileUpload(
-        fileRef.current.files[0],
-        docNameRef.current.value,
-        sourceLangRef.current.value,
-        targetLangRef.current.value,
-        dispatch,
-        collectionRef,
-        cancelToken,
-        setProgressData,
-        setIsModalOpen,
-        tabSelected
-      );
+    if (!!fileRef.current.files[0] && !!docNameRef.current.value) {
+      if (tabSelected === 'transcript') {
+        setIsModalOpen(true);
+        handleFileUpload(
+          fileRef,
+          docNameRef.current.value,
+          '-',
+          '-',
+          dispatch,
+          collectionRef,
+          cancelToken,
+          setProgressData,
+          setIsModalOpen,
+          tabSelected
+        );
+      } else if (
+        !!sourceLangRef.current.value &&
+        !!targetLangRef.current.value &&
+        !(sourceLangRef.current.value === targetLangRef.current.value)
+      ) {
+        if (tabSelected === 'TTS') {
+          setIsModalOpen(true);
+          handleFileUpload(
+            fileRef,
+            docNameRef.current.value,
+            sourceLangRef.current.value,
+            targetLangRef.current.value,
+            dispatch,
+            collectionRef,
+            cancelToken,
+            setProgressData,
+            setIsModalOpen,
+            tabSelected
+          );
+        } else {
+          if (!!selectedDicts.length) {
+            if (tabSelected === 'translation') {
+              console.log('action for translation');
+              handleFileUpload(
+                fileRef,
+                docNameRef.current.value,
+                sourceLangRef.current.value,
+                targetLangRef.current.value,
+                dispatch,
+                collectionRef,
+                cancelToken,
+                setProgressData,
+                setIsModalOpen,
+                tabSelected,
+                selectedDicts
+              );
+            } else if (tabSelected === 'V2V') {
+              handleFileUpload(
+                fileRef,
+                docNameRef.current.value,
+                sourceLangRef.current.value,
+                targetLangRef.current.value,
+                dispatch,
+                collectionRef,
+                cancelToken,
+                setProgressData,
+                setIsModalOpen,
+                tabSelected,
+                selectedDicts
+              );
+            }
+          } else {
+            errorRef.current.innerHTML = 'Please select at least 1 Dictionary.';
+          }
+        }
+      } else {
+        errorRef.current.innerHTML = !sourceLangRef.current.value
+          ? 'Source Language is Missing. '
+          : !targetLangRef.current.value
+          ? 'Target Language is Missing. '
+          : sourceLangRef.current.value === targetLangRef.current.value
+          ? "Source and Target Language can't be same. "
+          : '';
+      }
     } else {
       errorRef.current.innerHTML =
         (!fileRef.current.files[0] ? 'Media file is Missing. ' : '') +
-        (!docNameRef.current.value ? 'Document Name is Missing. ' : '') +
-        (!sourceLangRef.current.value ? 'Source Language is Missing. ' : '') +
-        (!targetLangRef.current.value ? 'Target Language is Missing. ' : '') +
-        (sourceLangRef.current.value === targetLangRef.current.value
-          ? "Source and Target Language can't be same. "
-          : '');
+        (!docNameRef.current.value ? 'Document Name is Missing. ' : '');
     }
   };
 
@@ -115,21 +175,23 @@ const Home = () => {
         <InnerContainer>
           <HomeTabs tabSelected={tabSelected} setTabSelected={setTabSelected} />
           <FormWrapper>
-            <InputWrapper>
+            <InputWrapper visible={true}>
               <FileInput
                 type='file'
                 name='mediaFile'
                 id='mediaFile'
                 accept={
-                  tabSelected === 'transcript' ? 'video/*, audio/*' : 'text/xml'
+                  tabSelected === 'transcript' || tabSelected === 'V2V'
+                    ? 'video/*, audio/*'
+                    : 'text/xml'
                 }
                 onChange={handleFileChange}
                 ref={fileRef}
               />
               <InputLabel data-for='mediaFile'>
-                {tabSelected === 'transcript'
+                {tabSelected === 'transcript' || tabSelected === 'V2V'
                   ? 'Upload Video or Audio File'
-                  : tabSelected === 'tts'
+                  : tabSelected === 'TTS'
                   ? 'Upload Translation File(.xml)'
                   : 'Upload Transcript File(.xml)'}
               </InputLabel>
@@ -141,36 +203,64 @@ const Home = () => {
                 <span id='file-name'></span>
               </FileInputLabel>
             </InputWrapper>
-            <InputWrapper>
+            <InputWrapper visible={true}>
               <InputField type='text' required='required' ref={docNameRef} />
               <InputLabel>Output File Name</InputLabel>
               <i></i>
             </InputWrapper>
-
-            {tabSelected === 'TTS' ? (
-              ''
-            ) : (
-              <React.Fragment>
-                <InputWrapper>
-                  <CustomDropdown
-                    inputClass='sourcelang'
-                    wrapperClass='sourceDropdown'
-                    options={LanguageOptions}
-                    label='Select Source Language'
-                    langRef={sourceLangRef}
-                  />
-                </InputWrapper>
-                <InputWrapper>
-                  <CustomDropdown
-                    inputClass='targetlang'
-                    wrapperClass='targetDropdown'
-                    options={LanguageOptions}
-                    label='Select Target Language'
-                    langRef={targetLangRef}
-                  />
-                </InputWrapper>
-              </React.Fragment>
-            )}
+            <InputWrapper
+              visible={!(tabSelected === 'transcript') ? true : false}
+            >
+              <CustomDropdown
+                inputClass='sourcelang'
+                wrapperClass='sourceDropdown'
+                options={LanguageOptions}
+                label='Select Source Language'
+                langRef={sourceLangRef}
+              />
+            </InputWrapper>
+            <InputWrapper
+              visible={!(tabSelected === 'transcript') ? true : false}
+            >
+              <CustomDropdown
+                inputClass='targetlang'
+                wrapperClass='targetDropdown'
+                options={LanguageOptions}
+                label='Select Target Language'
+                langRef={targetLangRef}
+              />
+            </InputWrapper>
+            <InputWrapper
+              visible={
+                tabSelected === 'translation' || tabSelected === 'V2V'
+                  ? true
+                  : false
+              }
+            >
+              <MultiSelect
+                inputClass='dict'
+                wrapperClass='dictMultiSelect'
+                options={dictsList.filter((dict) => !dict.selected && dict)}
+                setDictsList={setDictsList}
+                label='Select Dictionaries'
+                dictRef={dictRef}
+                selectedDicts={selectedDicts}
+                setSelectedDicts={setSelectedDicts}
+              />
+            </InputWrapper>
+            <InputWrapper
+              visible={
+                tabSelected === 'translation' || tabSelected === 'V2V'
+                  ? true
+                  : false
+              }
+            >
+              <ShowSelectedDict
+                selectedDicts={selectedDicts}
+                setSelectedDicts={setSelectedDicts}
+                setDictsList={setDictsList}
+              />
+            </InputWrapper>
             <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
               Convert
             </SubmitButton>
@@ -231,9 +321,6 @@ const ErrorMessage = styled.h3`
   font-size: 2rem;
   max-height: max-content;
   color: var(--error-color);
-  &:empty {
-    height: 3rem;
-  }
 `;
 
 const InnerContainer = styled.div`
@@ -245,6 +332,7 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 20px;
 `;
 
 const FormWrapper = styled.div`
@@ -265,8 +353,9 @@ const FormWrapper = styled.div`
 const InputWrapper = styled.div`
   position: relative;
   width: 100%;
+  max-width: 100%;
   margin-top: 35px;
-  display: flex;
+  display: ${({ visible }) => (visible ? 'flex' : 'none')};
   & > i {
     position: absolute;
     left: 0;

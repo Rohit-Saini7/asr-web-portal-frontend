@@ -42,7 +42,7 @@ const ErrorModal = () => {
 export default ErrorModal;
 
 const Container = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -56,7 +56,7 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
   max-width: 1350px;
-  width: 100%;
+  width: 95%;
   background: var(--container-bg-color);
   position: relative;
   border-radius: 10px;

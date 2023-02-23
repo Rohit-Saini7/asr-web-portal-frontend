@@ -16,12 +16,34 @@ export const handleFileUpload = async (
   setIsModalOpen,
   tabSelected
 ) => {
+  let headersForTab;
+
   if (typeof cancelToken != typeof undefined) {
     cancelToken.cancel('Operation canceled due to new request.');
   }
 
+  switch (tabSelected) {
+    case 'translation':
+      headersForTab = {
+        'Content-Type': 'multipart/form-data',
+        source_language: sourceLang.toLowerCase(),
+        destination_language: targetLang.toLowerCase(),
+      };
+      break;
+    case 'TTS':
+      headersForTab = {
+        'Content-Type': 'multipart/form-data',
+        output_language: `${targetLang} Male`,
+      };
+      break;
+    default:
+      headersForTab = {
+        'Content-Type': 'multipart/form-data',
+      };
+      break;
+  }
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('file', file.current.files[0]);
   cancelToken = axios.CancelToken.source();
 
   try {
@@ -30,11 +52,7 @@ export const handleFileUpload = async (
       url: `${import.meta.env.VITE_API_URL}/${tabSelected}`,
       withCredentials: false,
       data: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        source_language: sourceLang.toLowerCase(),
-        destination_language: targetLang.toLowerCase(),
-      },
+      headers: headersForTab,
       onUploadProgress: (p) => {
         setProgressData({
           done: parseInt(p.loaded / 1048576),
@@ -50,7 +68,7 @@ export const handleFileUpload = async (
         'MMM DD, YYYY | hh:mm A'
       );
       const data = {
-        mediaName: file.name,
+        mediaName: file.current.files[0].name,
         docName: docName,
         language: `${sourceLang} | ${targetLang}`,
         creationTime: creationTime,
@@ -68,6 +86,7 @@ export const handleFileUpload = async (
     setIsModalOpen(false);
   }
   //? -------This block reset the form.-------
+  file.current.value = null;
   docName = null;
   sourceLang = null;
   targetLang = null;

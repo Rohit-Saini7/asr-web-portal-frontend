@@ -26,6 +26,9 @@ const HomeTabs = ({ setTabSelected }) => {
       <Tabs className='tabs' name='TTS' onClick={handleClick}>
         TTS <i></i>
       </Tabs>
+      <Tabs className='tabs' name='V2V' onClick={handleClick}>
+        V2V <i></i>
+      </Tabs>
     </Container>
   );
 };
@@ -46,7 +49,7 @@ const Container = styled.nav`
   }
   @media (min-width: 801px) {
     width: 77%;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 `;
 
@@ -85,9 +88,9 @@ const Tabs = styled.div`
       background-color: transparent;
       position: absolute;
       bottom: 0;
-      right: -16px;
-      border-bottom-left-radius: 10px;
-      box-shadow: 0 6px 0 0.6px transparent;
+      right: -15px;
+      border-bottom-left-radius: 12px;
+      box-shadow: 0 6px 0 0.5px transparent;
     }
     & > i::before {
       content: '';
@@ -97,12 +100,12 @@ const Tabs = styled.div`
       background-color: transparent;
       position: absolute;
       bottom: 0;
-      left: -16px;
-      border-bottom-right-radius: 10px;
+      left: -15px;
+      border-bottom-right-radius: 12px;
       box-shadow: 0 6px 0 0.5px transparent;
     }
     &.active > i::after {
-      box-shadow: 0 6px 0 0.6px var(--container-bg-color);
+      box-shadow: 0 6px 0 0.5px var(--container-bg-color);
     }
 
     &.active > i::before {
