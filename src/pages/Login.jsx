@@ -25,9 +25,9 @@ const Login = () => {
       <InnerContainer>
         <LeftSection>
           <Heading>ASR Post Editor Tool</Heading>
-          <SubHeadnig>
+          <SubHeading>
             Upload the Video or Audio file & get the Transcript and Translation.
-          </SubHeadnig>
+          </SubHeading>
         </LeftSection>
         <RightSection>
           <Heading>Sign in</Heading>
@@ -72,7 +72,7 @@ const Heading = styled.h2`
   text-align: center;
 `;
 
-const SubHeadnig = styled.p`
+const SubHeading = styled.p`
   font-size: 1.2rem;
 `;
 

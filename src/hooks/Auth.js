@@ -19,7 +19,7 @@ export const handleGoogleSignIn = async (res, dispatch) => {
   if (userSnap.exists()) {
     const q = query(
       collection(db, 'usersList', data.email, 'docs'),
-      orderBy('timestamp')
+      orderBy('timestamp', 'desc')
     );
     const docSnap = await getDocs(q);
 

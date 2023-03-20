@@ -38,21 +38,23 @@ const Preview = () => {
           <table cellPadding='0' cellSpacing='0' border='0'>
             <thead>
               <tr>
-                <th rowSpan='2'>Sr. No.</th>
+                <th rowSpan='2'>S.N.</th>
                 <th colSpan='2'>Name</th>
                 <th colSpan='1'>Language</th>
                 <th colSpan='2'>Time</th>
-                <th colSpan='3'>Preview/Download</th>
+                <th colSpan='5'>Preview/Download</th>
               </tr>
               <tr>
-                <th>Media</th>
                 <th>Document</th>
+                <th>Media</th>
                 <th>Source|Target</th>
                 <th>Creation</th>
                 <th>Modify</th>
                 <th>Transcript</th>
                 <th>Translation</th>
                 <th>TTS</th>
+                <th>V2V</th>
+                <th>Custom</th>
               </tr>
             </thead>
             <tbody>

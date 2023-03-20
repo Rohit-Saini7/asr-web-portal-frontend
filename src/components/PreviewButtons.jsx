@@ -59,7 +59,7 @@ const PreviewButtons = ({
       ) : (
         <td>-</td>
       )}
-      {willGenerate !== 'TTS' ? (
+      {willGenerate === 'translation' ? (
         <td>
           <ButtonGroup className='button-group' id='thirdDimension'>
             <Button
@@ -103,36 +103,108 @@ const PreviewButtons = ({
       ) : (
         <td>-</td>
       )}
-      <td>
-        <ButtonGroup className='button-group' id='thirdDimension'>
-          <Button
-            className='button'
-            onClick={(e) => {
-              handleAnimation(e);
-              handlePreview(
-                'TTS',
-                token,
-                setPreviewData,
-                setIsPending,
-                dispatch
-              );
-            }}
-          >
-            <PreviewIcon />
-            <i></i>
-          </Button>
-          <Button
-            className='button'
-            onClick={(e) => {
-              handleAnimation(e);
-              handleDownload('TTS', docName, token, setIsPending, dispatch);
-            }}
-          >
-            <DownloadIcon />
-            <i></i>
-          </Button>
-        </ButtonGroup>
-      </td>
+      {willGenerate === 'TTS' ? (
+        <td>
+          <ButtonGroup className='button-group' id='thirdDimension'>
+            <Button
+              className='button'
+              onClick={(e) => {
+                handleAnimation(e);
+                handlePreview(
+                  'TTS',
+                  token,
+                  setPreviewData,
+                  setIsPending,
+                  dispatch
+                );
+              }}
+            >
+              <PreviewIcon />
+              <i></i>
+            </Button>
+            <Button
+              className='button'
+              onClick={(e) => {
+                handleAnimation(e);
+                handleDownload('TTS', docName, token, setIsPending, dispatch);
+              }}
+            >
+              <DownloadIcon />
+              <i></i>
+            </Button>
+          </ButtonGroup>
+        </td>
+      ) : (
+        <td>-</td>
+      )}
+      {willGenerate === 'V2V' ? (
+        <td>
+          <ButtonGroup className='button-group' id='thirdDimension'>
+            <Button
+              className='button'
+              onClick={(e) => {
+                handleAnimation(e);
+                handlePreview(
+                  'TTS',
+                  token,
+                  setPreviewData,
+                  setIsPending,
+                  dispatch
+                );
+              }}
+            >
+              <PreviewIcon />
+              <i></i>
+            </Button>
+            <Button
+              className='button'
+              onClick={(e) => {
+                handleAnimation(e);
+                handleDownload('TTS', docName, token, setIsPending, dispatch);
+              }}
+            >
+              <DownloadIcon />
+              <i></i>
+            </Button>
+          </ButtonGroup>
+        </td>
+      ) : (
+        <td>-</td>
+      )}
+      {willGenerate === 'custom' ? (
+        <td>
+          <ButtonGroup className='button-group' id='thirdDimension'>
+            <Button
+              className='button'
+              onClick={(e) => {
+                handleAnimation(e);
+                handlePreview(
+                  'TTS',
+                  token,
+                  setPreviewData,
+                  setIsPending,
+                  dispatch
+                );
+              }}
+            >
+              <PreviewIcon />
+              <i></i>
+            </Button>
+            <Button
+              className='button'
+              onClick={(e) => {
+                handleAnimation(e);
+                handleDownload('TTS', docName, token, setIsPending, dispatch);
+              }}
+            >
+              <DownloadIcon />
+              <i></i>
+            </Button>
+          </ButtonGroup>
+        </td>
+      ) : (
+        <td>-</td>
+      )}
     </React.Fragment>
   );
 };
