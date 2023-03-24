@@ -24,9 +24,7 @@ export const handleGoogleSignIn = async (res, dispatch) => {
     const docSnap = await getDocs(q);
 
     const allDocs = [];
-    docSnap.forEach((doc) => {
-      allDocs.push(doc.data());
-    });
+    docSnap.forEach((doc) => allDocs.push({ id: doc.id, ...doc.data() }));
     !!docSnap.size && dispatch(setDocs(allDocs));
   } else {
     await setDoc(doc(db, 'usersList', data.email), {

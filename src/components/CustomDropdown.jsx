@@ -69,9 +69,9 @@ const Dropdown = styled.div`
   margin: auto;
   position: relative;
   width: 100%;
-  height: 50px;
   background-color: transparent;
   transition: 0.2s;
+  height: 64px;
 
   & > i {
     position: absolute;
@@ -90,7 +90,7 @@ const Dropdown = styled.div`
     width: 24px;
     z-index: 2;
     position: absolute;
-    top: 50%;
+    top: 42px;
     right: 20px;
     translate: 0 -50%;
     transition: 0.5s;
@@ -115,8 +115,8 @@ const Input = styled.input`
   height: 100%;
   cursor: pointer;
   border-radius: 10px;
-  padding: 12px 20px;
-  font-size: 1rem;
+  padding: 20px 10px 0;
+  font-size: 1.2rem;
   background: transparent;
   outline: none;
   border: none;
@@ -124,8 +124,9 @@ const Input = styled.input`
   &.valid ~ span,
   &:focus ~ span {
     color: var(--main-color);
-    transform: translateY(-34px);
-    font-size: 0.9rem;
+    top: 0;
+    translate: 0 0%;
+    font-size: 1rem;
   }
   &.valid ~ i,
   &:focus ~ i {
@@ -142,10 +143,10 @@ const Input = styled.input`
 const InputLabel = styled.span`
   position: absolute;
   left: 0;
-  top: 0;
+  top: 50%;
+  translate: 0 -50%;
   z-index: 3;
-  padding: 20px 0px 10px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: var(--label-color);
   pointer-events: none;
   letter-spacing: 0.1rem;

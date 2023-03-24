@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import AceEditor from 'react-ace';
 
 const PreviewModal = ({ previewData, setPreviewData }) => {
-  console.log(previewData);
   return (
     <Container>
       <InnerContainer>

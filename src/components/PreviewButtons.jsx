@@ -17,7 +17,7 @@ const PreviewButtons = ({
     <React.Fragment>
       {willGenerate === 'transcript' ? (
         <td>
-          <ButtonGroup className='button-group' id='thirdDimension'>
+          <ButtonGroup>
             <Button
               className='button'
               onClick={(e) => {
@@ -61,7 +61,7 @@ const PreviewButtons = ({
       )}
       {willGenerate === 'translation' ? (
         <td>
-          <ButtonGroup className='button-group' id='thirdDimension'>
+          <ButtonGroup>
             <Button
               className='button'
               onClick={(e) => {
@@ -105,7 +105,7 @@ const PreviewButtons = ({
       )}
       {willGenerate === 'TTS' ? (
         <td>
-          <ButtonGroup className='button-group' id='thirdDimension'>
+          <ButtonGroup>
             <Button
               className='button'
               onClick={(e) => {
@@ -139,7 +139,7 @@ const PreviewButtons = ({
       )}
       {willGenerate === 'V2V' ? (
         <td>
-          <ButtonGroup className='button-group' id='thirdDimension'>
+          <ButtonGroup>
             <Button
               className='button'
               onClick={(e) => {
@@ -173,7 +173,7 @@ const PreviewButtons = ({
       )}
       {willGenerate === 'custom' ? (
         <td>
-          <ButtonGroup className='button-group' id='thirdDimension'>
+          <ButtonGroup>
             <Button
               className='button'
               onClick={(e) => {
@@ -218,7 +218,8 @@ const handleAnimation = (e) => {
     e.target.classList.toggle('active');
   }, 200);
 };
-const ButtonGroup = styled.div`
+
+export const ButtonGroup = styled.div`
   margin: 0 auto;
   width: max-content;
   max-height: 40px;
@@ -226,7 +227,7 @@ const ButtonGroup = styled.div`
   border-radius: 10px;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   background: transparent;
   border: 0;
   outline: none;
