@@ -95,7 +95,6 @@ export const handleDownload = (
           responseType: 'blob',
         })
           .then(function (res) {
-            console.log(res.headers);
             const fileURL = window.URL.createObjectURL(res.data);
             let alink = document.createElement('a');
             alink.href = fileURL;

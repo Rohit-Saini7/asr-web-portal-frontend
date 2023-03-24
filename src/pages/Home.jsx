@@ -13,6 +13,7 @@ import { Navigate } from 'react-router-dom';
 import ErrorModal from '../components/ErrorModal';
 import MultiSelect, { ShowSelectedDict } from '../components/MultiSelect';
 import { dict } from '../assets/dict';
+import MediaFileInput from '../components/MediaFileInput';
 
 const LanguageOptions = [
   'English',
@@ -102,7 +103,7 @@ const Home = () => {
         } else {
           if (!!selectedDicts.length) {
             if (tabSelected === 'translation') {
-              console.log('action for translation');
+              setIsModalOpen(true);
               handleFileUpload(
                 fileRef,
                 docNameRef.current.value,
@@ -117,6 +118,7 @@ const Home = () => {
                 selectedDicts
               );
             } else if (tabSelected === 'V2V') {
+              setIsModalOpen(true);
               handleFileUpload(
                 fileRef,
                 docNameRef.current.value,
@@ -175,34 +177,11 @@ const Home = () => {
         <InnerContainer>
           <HomeTabs tabSelected={tabSelected} setTabSelected={setTabSelected} />
           <FormWrapper>
-            <InputWrapper visible={true}>
-              <FileInput
-                type='file'
-                name='mediaFile'
-                id='mediaFile'
-                accept={
-                  tabSelected === 'transcript' || tabSelected === 'V2V'
-                    ? 'video/*, audio/*'
-                    : 'text/xml'
-                }
-                onChange={handleFileChange}
-                ref={fileRef}
-              />
-              <InputLabel data-for='mediaFile'>
-                {tabSelected === 'transcript' || tabSelected === 'V2V'
-                  ? 'Upload Video or Audio File'
-                  : tabSelected === 'TTS'
-                  ? 'Upload Translation File(.xml)'
-                  : 'Upload Transcript File(.xml)'}
-              </InputLabel>
-              <FileInputLabel htmlFor='mediaFile'>
-                <strong>
-                  <UploadIcon />
-                  Choose a file…
-                </strong>
-                <span id='file-name'></span>
-              </FileInputLabel>
-            </InputWrapper>
+            <MediaFileInput
+              handleFileChange={handleFileChange}
+              tabSelected={tabSelected}
+              fileRef={fileRef}
+            />
             <InputWrapper visible={true}>
               <InputField type='text' required='required' ref={docNameRef} />
               <InputLabel>Output File Name</InputLabel>
@@ -261,6 +240,7 @@ const Home = () => {
                 setDictsList={setDictsList}
               />
             </InputWrapper>
+
             <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
               Convert
             </SubmitButton>
@@ -356,6 +336,8 @@ const InputWrapper = styled.div`
   max-width: 100%;
   margin-top: 35px;
   display: ${({ visible }) => (visible ? 'flex' : 'none')};
+  height: 64px;
+
   & > i {
     position: absolute;
     left: 0;
@@ -369,81 +351,24 @@ const InputWrapper = styled.div`
   }
 `;
 
-const FileInput = styled.input`
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
-  &:focus ~ label {
-    background: var(--main-color);
-    color: var(--doc-bg-color);
-  }
-`;
-
-const FileInputLabel = styled.label`
-  border: 1px solid var(--main-color);
-  background-color: transparent;
-  width: 100%;
-  height: 44px;
-  border-radius: 10px;
-  color: var(--main-color);
-  font-size: 1.25rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  overflow: hidden;
-  padding: 5px 1.25rem;
-  align-self: flex-end;
-  & > span {
-    width: 60%;
-    max-width: 20vw;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-  & > strong {
-    color: var(--doc-bg-color);
-    background-color: var(--main-color);
-    padding: 5px 25px;
-    border-radius: 10px;
-    display: inline-block;
-    font-size: 1.25rem;
-    font-weight: 600;
-    transition: 0.2s;
-    box-shadow: var(--shadow);
-    &:active {
-      translate: 0 2px;
-    }
-  }
-
-  svg {
-    margin-right: 5px;
-    height: 16px;
-    width: 16px;
-  }
-`;
-
 const InputField = styled.input`
   position: relative;
   width: 100%;
-  padding: 20px 10px 10px;
+  padding: 20px 10px 0;
   background: transparent;
   border: none;
   outline: none;
   color: var(--container-bg-color);
-  font-size: 1rem;
+  font-size: 1.2rem;
   letter-spacing: 0.1rem;
   z-index: 6;
 
   &:valid ~ span,
-  &:focus ~ span,
-  & ~ span[data-for='mediaFile'] {
+  &:focus ~ span {
     color: var(--main-color);
-    transform: translateY(-34px);
-    font-size: 0.9rem;
+    top: 0;
+    translate: 0 0%;
+    font-size: 1rem;
   }
   &:valid ~ i,
   &:focus ~ i {
@@ -454,17 +379,13 @@ const InputField = styled.input`
 const InputLabel = styled.span`
   position: absolute;
   left: 0;
-  padding: 20px 0px 10px;
-  font-size: 1rem;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: 1.2rem;
   color: var(--label-color);
   pointer-events: none;
   letter-spacing: 0.1rem;
   transition: 0.5s;
-  &[data-for='mediaFile'] {
-    color: var(--main-color);
-    transform: translateY(-34px);
-    font-size: 0.9rem;
-  }
 `;
 
 const SubmitButton = styled.button`
