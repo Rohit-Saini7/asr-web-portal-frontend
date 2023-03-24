@@ -5,8 +5,13 @@ import { Navigate } from 'react-router-dom';
 
 import PendingModal from '../components/PendingModal';
 import PreviewModal from '../components/PreviewModal';
-import PreviewButtons from '../components/PreviewButtons';
+import PreviewButtons, {
+  Button,
+  ButtonGroup,
+} from '../components/PreviewButtons';
 import ErrorModal from '../components/ErrorModal';
+import AddAssociatesModal from '../components/AddAssociatesModal';
+import { AssociatesIcon } from '../components/Icons';
 
 const Preview = () => {
   const [isPending, setIsPending] = useState({
@@ -14,13 +19,24 @@ const Preview = () => {
     status: false,
   });
   const [previewData, setPreviewData] = useState({ dataType: '', data: '' });
+  const [addAssociates, setAddAssociates] = useState({ id: '', status: false });
 
   const user = useSelector((state) => state.userState.user);
   const docs = useSelector((state) => state.userState.docs);
   const errorStatus = useSelector((state) => state.errorState.status);
 
+  const handleAddAssociates = (id) => {
+    setAddAssociates({ id: id, status: true });
+  };
+
   return (
     <React.Fragment>
+      {!!addAssociates.status && (
+        <AddAssociatesModal
+          addAssociates={addAssociates}
+          setAddAssociates={setAddAssociates}
+        />
+      )}
       {isPending.status && (
         <PendingModal isPending={isPending} setIsPending={setIsPending} />
       )}
@@ -43,6 +59,7 @@ const Preview = () => {
                 <th colSpan='1'>Language</th>
                 <th colSpan='2'>Time</th>
                 <th colSpan='5'>Preview/Download</th>
+                <th rowSpan='2'>Add Associates</th>
               </tr>
               <tr>
                 <th>Document</th>
@@ -66,6 +83,7 @@ const Preview = () => {
                 docs.map(
                   (
                     {
+                      id,
                       creationTime,
                       docName,
                       language,
@@ -90,6 +108,14 @@ const Preview = () => {
                         setIsPending={setIsPending}
                         willGenerate={willGenerate}
                       />
+                      <td>
+                        <ButtonGroup>
+                          <Button onClick={() => handleAddAssociates(id)}>
+                            <AssociatesIcon />
+                            <i></i>
+                          </Button>
+                        </ButtonGroup>
+                      </td>
                     </tr>
                   )
                 )
