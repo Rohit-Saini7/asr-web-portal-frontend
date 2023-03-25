@@ -2,18 +2,24 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+
 import { handleGoogleSignIn } from '../hooks/Auth';
 
 const Login = () => {
+  // ? states for redux
   const user = useSelector((state) => state.userState.user);
   const dispatch = useDispatch();
 
+  //? this useEffect takes case of google sign in
   useEffect(() => {
+    //! don't touch this
     /* global google */
+    //? it tells react that google is globally defined in index.html
     google.accounts.id.initialize({
       client_id: import.meta.env.VITE_GOOGLE_API,
       callback: (res) => handleGoogleSignIn(res, dispatch),
     });
+    //? this renders the google sign in button
     google.accounts.id.renderButton(document.getElementById('signInDiv'), {
       size: 'large',
     });
@@ -21,7 +27,10 @@ const Login = () => {
 
   return (
     <Container>
-      {!!user && !!Object.keys(user).length && <Navigate to='/home' />}
+      {
+        !!user && !!Object.keys(user).length && <Navigate to='/home' />
+        /* If there exist a user then redirect to Home Page */
+      }
       <InnerContainer>
         <LeftSection>
           <Heading>ASR Post Editor Tool</Heading>
@@ -142,8 +151,8 @@ const GoogleButton = styled.div`
   }
 `;
 
-/* 
- 
+//? this is code for Email and Password Login components
+/*  
   <InputWrapper>
     <InputField type='text' required='required' />
     <InputLabel>Email</InputLabel>

@@ -1,11 +1,13 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+
 import { addError, changeStatus } from '../redux/slice/errorSlice';
 
 const ErrorModal = () => {
+  //? Redux State
   const errorData = useSelector((state) => state.errorState.error);
   const dispatch = useDispatch();
+
   return (
     <Container>
       <InnerContainer>
@@ -98,9 +100,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   transition: 0.2s;
   box-shadow: var(--shadow);
-  &:hover {
-    translate: 0 -2px;
-  }
+  &:hover,
   &:focus {
     translate: 0 -2px;
   }

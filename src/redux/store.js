@@ -12,3 +12,7 @@ const store = configureStore({
     }),
 });
 export default store;
+
+/* 
+? Redux Toolkit - https://redux-toolkit.js.org/introduction/getting-started 
+*/

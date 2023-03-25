@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  error: null,
-  status: false,
+  error: null, //? any error will be stored here.
+  status: false, //? if error then status is true.
 };
 
 export const errorSlice = createSlice({
@@ -18,6 +18,7 @@ export const errorSlice = createSlice({
   },
 });
 
+// ? methods for manipulating error state.
 export const { addError, changeStatus } = errorSlice.actions;
 
 export default errorSlice.reducer;

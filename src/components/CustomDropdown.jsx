@@ -10,6 +10,8 @@ const CustomDropdown = ({
   langRef,
 }) => {
   const dropdownRef = useRef();
+
+  //? this useEffect handle click outside dropdown when dropdown is active
   useEffect(() => {
     const onBodyClick = (event) => {
       if (dropdownRef.current && dropdownRef.current.contains(event.target)) {
@@ -25,11 +27,13 @@ const CustomDropdown = ({
     };
   }, []);
 
+  //? opens dropdown
   const handleClick = () => {
     let dropdown = document.querySelector('.' + wrapperClass);
     dropdown.classList.toggle('active');
   };
 
+  //? on selection of dropdown item
   const handleSelect = (e) => {
     document.querySelector('.' + inputClass).classList.add('valid');
     langRef.current.value = e.target.innerHTML;

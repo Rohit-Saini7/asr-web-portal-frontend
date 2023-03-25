@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  user: null,
-  docs: [],
+  user: null, // ? user state is saved here.
+  docs: [], // ? user documents are saved here
 };
 
 export const userSlice = createSlice({
@@ -21,6 +21,7 @@ export const userSlice = createSlice({
   },
 });
 
+// ? methods for manipulating user and docs state.
 export const { addUser, addDocs, setDocs } = userSlice.actions;
 
 export default userSlice.reducer;

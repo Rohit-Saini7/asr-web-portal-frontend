@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { DownArrowIcon, UploadIcon } from './Icons';
 
 const MediaFileInput = ({ handleFileChange, tabSelected, fileRef }) => {
+  //? Refs and local States
   const labelRef = useRef();
   const dropdownRef = useRef();
   const [options, setOptions] = useState([
@@ -10,6 +11,8 @@ const MediaFileInput = ({ handleFileChange, tabSelected, fileRef }) => {
     'Select a Previously Uploaded File',
     'Add URL of a Video',
   ]);
+
+  //? this useEffect handle click outside dropdown when dropdown is active
   useEffect(() => {
     const onBodyClick = (event) => {
       if (dropdownRef.current && dropdownRef.current.contains(event.target)) {
@@ -24,6 +27,7 @@ const MediaFileInput = ({ handleFileChange, tabSelected, fileRef }) => {
     };
   }, []);
 
+  //? change input label according to tab selected
   useEffect(() => {
     let FirstOptionValue =
       tabSelected === 'transcript' || tabSelected === 'V2V'
@@ -35,6 +39,7 @@ const MediaFileInput = ({ handleFileChange, tabSelected, fileRef }) => {
     setOptions([FirstOptionValue, ...options.slice(1)]);
   }, [tabSelected]);
 
+  //? change label according to what selected from label dropdown
   const handleSelect = (e) => {
     document.querySelector('.LabelInput').classList.add('valid');
     labelRef.current.value = e.target.innerHTML;
@@ -43,6 +48,7 @@ const MediaFileInput = ({ handleFileChange, tabSelected, fileRef }) => {
 
   return (
     <FileInputWrapper>
+      {/* Label Dropdown */}
       <Dropdown ref={dropdownRef}>
         <NameInput
           type='text'
@@ -62,7 +68,7 @@ const MediaFileInput = ({ handleFileChange, tabSelected, fileRef }) => {
         </OptionWrapper>
         <DownArrowIcon />
       </Dropdown>
-
+      {/* File Input */}
       <FileInput
         type='file'
         name='mediaFile'
@@ -80,6 +86,7 @@ const MediaFileInput = ({ handleFileChange, tabSelected, fileRef }) => {
           <UploadIcon />
           Upload a file…
         </strong>
+        {/* Name of file which is uploaded */}
         <span id='file-name'></span>
       </FileInputLabel>
     </FileInputWrapper>

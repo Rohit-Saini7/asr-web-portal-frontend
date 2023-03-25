@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+//? Just a simple pending modal
 const PendingModal = ({ isPending, setIsPending }) => {
   return (
     <Container>
@@ -76,9 +77,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   transition: 0.2s;
   box-shadow: var(--shadow);
-  &:hover {
-    translate: 0 -2px;
-  }
+  &:hover,
   &:focus {
     translate: 0 -2px;
   }

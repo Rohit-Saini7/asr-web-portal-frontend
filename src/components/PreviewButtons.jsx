@@ -13,6 +13,10 @@ const PreviewButtons = ({
 }) => {
   const dispatch = useDispatch();
 
+  /* 
+  ? Simple logic if file generated is TTS then only TTS column have buttons rest will be "-".
+  * I know code can be refactored but don't have enough time to do so.
+   */
   return (
     <React.Fragment>
       {willGenerate === 'transcript' ? (

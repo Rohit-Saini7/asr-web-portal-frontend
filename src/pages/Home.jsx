@@ -2,19 +2,19 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { collection } from 'firebase/firestore';
-
-import CustomDropdown from '../components/CustomDropdown';
-import { UploadIcon } from '../components/Icons';
-import ProgressModal from '../components/ProgressModal';
-import HomeTabs from '../components/HomeTabs';
-import { handleFileUpload } from '../hooks/FileUpload';
-import { db } from '../Firebase';
 import { Navigate } from 'react-router-dom';
-import ErrorModal from '../components/ErrorModal';
-import MultiSelect, { ShowSelectedDict } from '../components/MultiSelect';
-import { dict } from '../assets/dict';
-import MediaFileInput from '../components/MediaFileInput';
 
+import { db } from '../Firebase';
+import { dict } from '../assets/dict';
+import HomeTabs from '../components/HomeTabs';
+import ErrorModal from '../components/ErrorModal';
+import { handleFileUpload } from '../hooks/FileUpload';
+import ProgressModal from '../components/ProgressModal';
+import CustomDropdown from '../components/CustomDropdown';
+import MediaFileInput from '../components/MediaFileInput';
+import MultiSelect, { ShowSelectedDict } from '../components/MultiSelect';
+
+// ? All Language Options for Dropdown
 const LanguageOptions = [
   'English',
   'Assamese',
@@ -31,6 +31,7 @@ const LanguageOptions = [
 ];
 
 const Home = () => {
+  //? refs for all input fields.
   const fileRef = useRef();
   const docNameRef = useRef();
   const sourceLangRef = useRef();
@@ -39,13 +40,16 @@ const Home = () => {
   const errorRef = useRef();
   const submitButtonRef = useRef();
 
+  // ? states for redux
   const user = useSelector((state) => state.userState.user);
   const errorStatus = useSelector((state) => state.errorState.status);
-
   const dispatch = useDispatch();
-  let cancelToken;
 
+  // ? all local States
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [tabSelected, setTabSelected] = useState('transcript');
+  const [dictsList, setDictsList] = useState(dict);
+  const [selectedDicts, setSelectedDicts] = useState([]);
   const [progressData, setProgressData] = useState({
     done: 0,
     total: 0,
@@ -53,22 +57,25 @@ const Home = () => {
     rate: 0,
     estimated: 0,
   });
-  const [tabSelected, setTabSelected] = useState('transcript');
 
-  const [dictsList, setDictsList] = useState(dict);
-  const [selectedDicts, setSelectedDicts] = useState([]);
+  let cancelToken;
 
+  //? if media file changes then change the name in file label.
   const handleFileChange = (e) => {
     if (!!e.target.files)
       document.getElementById('file-name').innerHTML = e.target.files[0].name;
   };
 
+  //? something
   const handleSubmit = () => {
+    //? Reference for where to store the doc in DB
     const collectionRef = collection(db, 'usersList', user.email, 'docs');
 
+    //? check if File and Doc Name exist
     if (!!fileRef.current.files[0] && !!docNameRef.current.value) {
+      //? check if transcript tab is selected
       if (tabSelected === 'transcript') {
-        setIsModalOpen(true);
+        setIsModalOpen(true); //? set Progress Modal to open
         handleFileUpload(
           fileRef,
           docNameRef.current.value,
@@ -81,13 +88,15 @@ const Home = () => {
           setIsModalOpen,
           tabSelected
         );
+        //? check if there exist source and target language.
       } else if (
         !!sourceLangRef.current.value &&
         !!targetLangRef.current.value &&
         !(sourceLangRef.current.value === targetLangRef.current.value)
       ) {
+        //? check if TTS tab is selected
         if (tabSelected === 'TTS') {
-          setIsModalOpen(true);
+          setIsModalOpen(true); //? set Progress Modal to open
           handleFileUpload(
             fileRef,
             docNameRef.current.value,
@@ -101,9 +110,11 @@ const Home = () => {
             tabSelected
           );
         } else {
+          //? check if there exist at least one Dictionary
           if (!!selectedDicts.length) {
+            //? check if translation tab is selected.
             if (tabSelected === 'translation') {
-              setIsModalOpen(true);
+              setIsModalOpen(true); //? set Progress Modal to open
               handleFileUpload(
                 fileRef,
                 docNameRef.current.value,
@@ -117,8 +128,9 @@ const Home = () => {
                 tabSelected,
                 selectedDicts
               );
+              //? check if V2V tab is selected.
             } else if (tabSelected === 'V2V') {
-              setIsModalOpen(true);
+              setIsModalOpen(true); //? set Progress Modal to open
               handleFileUpload(
                 fileRef,
                 docNameRef.current.value,
@@ -155,10 +167,17 @@ const Home = () => {
 
   return (
     <React.Fragment>
-      {!user && <Navigate to='/' />}
-      {errorStatus && <ErrorModal />}
+      {
+        !user && <Navigate to='/' />
+        /* If user not loggedIn redirect to Login Page */
+      }
+      {
+        errorStatus && <ErrorModal />
+        /* If there is error then show error Modal (except form errors) */
+      }
       <Container>
         <Heading>ASR Post Editor Tool</Heading>
+        {/* Instructions Copied from Udann project need to be updated */}
         <Instructions aria-label='Instructions:'>
           <li>File name should be greater than 5 characters.</li>
           <li>Audio or Video name shouldn&#39;t contain any white spaces.</li>
@@ -173,20 +192,25 @@ const Home = () => {
             .
           </li>
         </Instructions>
+        {/* Any error from Form will be shown here. */}
         <ErrorMessage ref={errorRef}></ErrorMessage>
         <InnerContainer>
+          {/* Secondary NavBar */}
           <HomeTabs tabSelected={tabSelected} setTabSelected={setTabSelected} />
           <FormWrapper>
+            {/* File Input. */}
             <MediaFileInput
               handleFileChange={handleFileChange}
               tabSelected={tabSelected}
               fileRef={fileRef}
             />
+            {/* Input for Document Name. */}
             <InputWrapper visible={true}>
               <InputField type='text' required='required' ref={docNameRef} />
               <InputLabel>Output File Name</InputLabel>
               <i></i>
             </InputWrapper>
+            {/* Dropdown for Source Language */}
             <InputWrapper
               visible={!(tabSelected === 'transcript') ? true : false}
             >
@@ -198,6 +222,7 @@ const Home = () => {
                 langRef={sourceLangRef}
               />
             </InputWrapper>
+            {/* Dropdown for Target Language */}
             <InputWrapper
               visible={!(tabSelected === 'transcript') ? true : false}
             >
@@ -209,6 +234,7 @@ const Home = () => {
                 langRef={targetLangRef}
               />
             </InputWrapper>
+            {/* Select dictionaries from this multiselect dropdown. */}
             <InputWrapper
               visible={
                 tabSelected === 'translation' || tabSelected === 'V2V'
@@ -227,6 +253,7 @@ const Home = () => {
                 setSelectedDicts={setSelectedDicts}
               />
             </InputWrapper>
+            {/* All Selected Dictionaries Will be shown here.*/}
             <InputWrapper
               visible={
                 tabSelected === 'translation' || tabSelected === 'V2V'
@@ -240,7 +267,6 @@ const Home = () => {
                 setDictsList={setDictsList}
               />
             </InputWrapper>
-
             <SubmitButton onClick={handleSubmit} ref={submitButtonRef}>
               Convert
             </SubmitButton>
@@ -405,7 +431,8 @@ const SubmitButton = styled.button`
   transition: 0.2s;
   box-shadow: var(--shadow);
   grid-column: 1/-1;
-  &:hover {
+  &:hover,
+  &:focus {
     translate: 0 -2px;
   }
   &:active {

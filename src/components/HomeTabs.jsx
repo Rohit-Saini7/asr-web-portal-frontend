@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
+//? Secondary Navbar
 const HomeTabs = ({ setTabSelected }) => {
+  //? handle click on any nav item
   const handleClick = (e) => {
     document.querySelectorAll('.tabs').forEach((item) => {
       item.classList.remove('active');

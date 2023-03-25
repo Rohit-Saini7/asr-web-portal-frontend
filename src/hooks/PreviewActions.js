@@ -9,14 +9,18 @@ export const handlePreview = (
   setIsPending,
   dispatch
 ) => {
+  //? backend API url
   const URL = `${import.meta.env.VITE_API_URL}/${callType}/${token}`;
 
+  //? check if file is generated
   axios({
     method: 'get',
     url: URL,
   })
     .then(function (response) {
       if (response.data === 'SUCCESS') {
+        //? TTS generates .mp3 file so logic is little different
+        //? if not TTS then convert response to XML
         if (callType !== 'TTS') {
           axios({
             method: 'get',
@@ -38,6 +42,7 @@ export const handlePreview = (
               dispatch(addError(err));
               dispatch(changeStatus(true));
             });
+          //? if TTS the convert response into mp3 for preview
         } else {
           axios({
             method: 'get',
@@ -53,6 +58,7 @@ export const handlePreview = (
               dispatch(changeStatus(true));
             });
         }
+        //? if server is failed to generate file
       } else if (response.data === 'FAILURE') {
         const err = {
           name: 'File Generation Error',
@@ -61,6 +67,7 @@ export const handlePreview = (
         };
         dispatch(addError(err));
         dispatch(changeStatus(true));
+        //? if server is still working on file generation
       } else {
         setIsPending(() => ({ status: true, name: callType }));
         setTimeout(() => {
@@ -81,8 +88,10 @@ export const handleDownload = (
   setIsPending,
   dispatch
 ) => {
+  //? backend API url
   const URL = `${import.meta.env.VITE_API_URL}/${callType}/${token}`;
 
+  //? check if file is generated
   axios({
     method: 'get',
     url: URL,
@@ -98,15 +107,18 @@ export const handleDownload = (
             const fileURL = window.URL.createObjectURL(res.data);
             let alink = document.createElement('a');
             alink.href = fileURL;
+            //? if not TTS then convert response to XML and save as .xml file
             if (callType !== 'TTS')
               alink.download = `${callType}_${docName}.xml`;
             else alink.download = `${callType}_${docName}.mp3`;
+            //? if TTS the convert response into mp3 and save as .mp3 file
             alink.click();
           })
           .catch(function (err) {
             dispatch(addError(err));
             dispatch(changeStatus(true));
           });
+        //? if server is failed to generate file
       } else if (response.data === 'FAILURE') {
         const err = {
           name: 'File Generation Error',
@@ -115,6 +127,7 @@ export const handleDownload = (
         };
         dispatch(addError(err));
         dispatch(changeStatus(true));
+        //? if server is still working on file generation
       } else {
         setIsPending(() => ({ status: true, name: callType }));
         setTimeout(() => {

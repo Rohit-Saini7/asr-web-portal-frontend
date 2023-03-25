@@ -21,41 +21,43 @@
    npm install
    ```
 
-4. Run on localhost.
+4. add `.env` file and environment variables.
+
+5. Run on localhost.
 
    ```
    npm run dev
    ```
 
-5. Create a new Branch.
+6. Create a new Branch.
 
    ```
    git checkout -b <new-branch>
    ```
 
-6. Make Changes.
+7. Make Changes.
 
    ```
    Make Changes...
    ```
 
-7. Stage and Commit your code.
+8. Stage and Commit your code.
 
    ```
    git add .
    git commit -m "<Some Message to understand what you have done.>"
    ```
 
-8. Push your code.
+9. Push your code.
 
    ```
    git push --set-upstream origin <new-branch>
    ```
 
-9. Compare and raise pull request.
+10. Compare and raise pull request.
   <p align="center">
 <img  src="./public/images/readme-images/push-step-1.png" alt="Fork Step-1" style="border-radius: 10px" />
 <img src="./public/images/readme-images/push-step-2.png" alt="Fork Step-2" style="border-radius: 10px" />
 </p>
 
-10. Thats It, thanks for contributing ❤️
+11. Thats It, thanks for contributing ❤️

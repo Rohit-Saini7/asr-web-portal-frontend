@@ -3,16 +3,18 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { CheckIcon, EqualIcon, GaugeHighIcon, HourglassIcon } from './Icons';
 
+//? Just a simple progress modal
+
 const ProgressModal = ({ progressData, setIsModalOpen }) => {
   return (
     <Container>
       <InnerContainer>
         {progressData.progress === 100 ? (
           <React.Fragment>
-            <Heading>Upload Succesful</Heading>
+            <Heading>Upload Successful</Heading>
             <SubHeading>
               You will be notified with mail when transcript is generated
-              succesfully.
+              successfully.
             </SubHeading>
             <Link to='/preview'>
               <CloseButton onClick={() => setIsModalOpen(false)}>
@@ -34,9 +36,9 @@ const ProgressModal = ({ progressData, setIsModalOpen }) => {
               </DataItem>
               <DataItem title='Upload Speed'>
                 <GaugeHighIcon />
-                {progressData.rate} MBPS
+                {progressData.rate} MB/s
               </DataItem>
-              <DataItem title='Remaning Time'>
+              <DataItem title='Remaining Time'>
                 <HourglassIcon />
                 {progressData.estimated} Sec
               </DataItem>
@@ -103,7 +105,8 @@ const CloseButton = styled.button`
   cursor: pointer;
   transition: 0.2s;
   box-shadow: var(--shadow);
-  &:hover {
+  &:hover,
+  &:focus {
     translate: 0 -2px;
   }
   &:active {

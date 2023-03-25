@@ -1,3 +1,4 @@
+//? All Dictionaries List
 export const dict = [
   {
     name: 'Administrative',

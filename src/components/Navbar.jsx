@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { addUser, setDocs } from '../redux/slice/userSlice';
 
+import { addUser, setDocs } from '../redux/slice/userSlice';
 import { HomeIcon, LinkIcon, LogOutIcon, PreviewIcon } from './Icons';
 import ThemeSwitch from './ThemeSwitch';
 
+//? Just a simple navbar.
+//TODO change Mobile styling of navbar.
 const Navbar = () => {
   const dispatch = useDispatch();
   const handleLogOut = () => {
