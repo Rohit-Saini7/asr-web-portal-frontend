@@ -1,6 +1,10 @@
-import React from 'react';
 import { useRouteError } from 'react-router-dom';
 import styled from 'styled-components';
+
+/* 
+? A simple error page to tell user what is going on.
+*/
+
 const ErrorPage = () => {
   const error = useRouteError();
   return (

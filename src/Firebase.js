@@ -1,7 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-
+/* 
+? Personal Firebase Account is used here for development.
+*/
 const firebaseConfig = {
   apiKey: 'AIzaSyDpDpm7xHn7xE4IidYLeXy0CzZzg_n5Aoc',
   authDomain: 'asr-webportal.firebaseapp.com',

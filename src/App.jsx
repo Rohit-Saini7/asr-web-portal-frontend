@@ -8,8 +8,9 @@ import Login from './pages/Login';
 import Preview from './pages/Preview';
 
 /*
-  TODO: 1. dropdown for using a previously uploaded/generated file
-  TODO: 2. Deployment on AWS.
+? App with Routes v6 - https://reactrouter.com/en/main/start/tutorial 
+? All Page are added to app here only.
+! don't forget to add .env file for smoothing app working.
 */
 
 export default function App() {

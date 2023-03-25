@@ -3,17 +3,18 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-import PendingModal from '../components/PendingModal';
-import PreviewModal from '../components/PreviewModal';
 import PreviewButtons, {
   Button,
   ButtonGroup,
 } from '../components/PreviewButtons';
 import ErrorModal from '../components/ErrorModal';
-import AddAssociatesModal from '../components/AddAssociatesModal';
 import { AssociatesIcon } from '../components/Icons';
+import PendingModal from '../components/PendingModal';
+import PreviewModal from '../components/PreviewModal';
+import AddAssociatesModal from '../components/AddAssociatesModal';
 
 const Preview = () => {
+  //? local states
   const [isPending, setIsPending] = useState({
     name: 'transcript',
     status: false,
@@ -21,31 +22,37 @@ const Preview = () => {
   const [previewData, setPreviewData] = useState({ dataType: '', data: '' });
   const [addAssociates, setAddAssociates] = useState({ id: '', status: false });
 
+  //? Redux States
   const user = useSelector((state) => state.userState.user);
   const docs = useSelector((state) => state.userState.docs);
   const errorStatus = useSelector((state) => state.errorState.status);
 
-  const handleAddAssociates = (id) => {
-    setAddAssociates({ id: id, status: true });
-  };
-
   return (
     <React.Fragment>
-      {!!addAssociates.status && (
-        <AddAssociatesModal
-          addAssociates={addAssociates}
-          setAddAssociates={setAddAssociates}
-        />
-      )}
-      {isPending.status && (
-        <PendingModal isPending={isPending} setIsPending={setIsPending} />
-      )}
-      {!!previewData.data && (
-        <PreviewModal
-          previewData={previewData}
-          setPreviewData={setPreviewData}
-        />
-      )}
+      {
+        /* If result is not generated */
+        isPending.status && (
+          <PendingModal isPending={isPending} setIsPending={setIsPending} />
+        )
+      }
+      {
+        /* if result is generated and clicked on preview button */
+        !!previewData.data && (
+          <PreviewModal
+            previewData={previewData}
+            setPreviewData={setPreviewData}
+          />
+        )
+      }
+      {
+        /* on click Add Associates button */
+        !!addAssociates.status && (
+          <AddAssociatesModal
+            addAssociates={addAssociates}
+            setAddAssociates={setAddAssociates}
+          />
+        )
+      }
       {errorStatus && <ErrorModal />}
       <Container>
         {!user && <Navigate to='/' />}
@@ -77,7 +84,7 @@ const Preview = () => {
             <tbody>
               {!docs.length ? (
                 <tr>
-                  <td>No Data Found</td>
+                  <td colSpan='12'>No Data Found</td>
                 </tr>
               ) : (
                 docs.map(
@@ -110,7 +117,11 @@ const Preview = () => {
                       />
                       <td>
                         <ButtonGroup>
-                          <Button onClick={() => handleAddAssociates(id)}>
+                          <Button
+                            onClick={(id) =>
+                              setAddAssociates({ id: id, status: true })
+                            }
+                          >
                             <AssociatesIcon />
                             <i></i>
                           </Button>
