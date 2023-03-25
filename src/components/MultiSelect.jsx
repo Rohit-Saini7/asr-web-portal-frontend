@@ -13,6 +13,8 @@ const MultiSelect = ({
   setSelectedDicts,
 }) => {
   const dropdownRef = useRef();
+
+  //? this useEffect handle click outside dropdown when dropdown is active
   useEffect(() => {
     const onBodyClick = (event) => {
       if (dropdownRef.current && dropdownRef.current.contains(event.target)) {
@@ -28,6 +30,7 @@ const MultiSelect = ({
     };
   }, []);
 
+  //? this useEffect changes the number of selected Dictionaries
   useEffect(() => {
     if (!!selectedDicts.length) {
       dictRef.current.value = `${selectedDicts.length} Dictionaries selected`;
@@ -36,11 +39,13 @@ const MultiSelect = ({
     }
   }, [selectedDicts]);
 
+  //? opens dropdown
   const handleClick = () => {
     let dropdown = document.querySelector('.' + wrapperClass);
     dropdown.classList.toggle('active');
   };
 
+  //? on selection of dictionary
   const handleSelect = (e) => {
     document.querySelector('.' + inputClass).classList.add('valid');
 
@@ -204,6 +209,7 @@ const Option = styled.div`
   }
 `;
 
+//? this component handle how to show selected Dictionaries
 export const ShowSelectedDict = ({
   selectedDicts,
   setSelectedDicts,

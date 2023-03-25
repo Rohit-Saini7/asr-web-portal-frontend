@@ -5,11 +5,14 @@ import styled from 'styled-components';
 import { db } from '../Firebase';
 
 const AddAssociatesModal = ({ addAssociates, setAddAssociates }) => {
+  //? get the doc from redux store which needed to be shared with associates
   const Doc = useSelector((state) => state.userState.docs).find(
     (doc) => addAssociates.id === doc.id
   );
 
   const emailRef = useRef();
+
+  //? add doc to respective associate's data
   const handleSubmit = async () => {
     await addDoc(
       collection(db, 'usersList', emailRef.current.value, 'docs'),
@@ -17,6 +20,7 @@ const AddAssociatesModal = ({ addAssociates, setAddAssociates }) => {
     );
     setAddAssociates({ id: '', status: false });
   };
+
   return (
     <Container>
       <InnerContainer>

@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
+//! Don't change this file unless you know what you are doing
+
 const ThemeSwitch = () => {
   const checkboxRef = useRef();
-
+  //? sets the apps current theme according to users browser settings
   useEffect(() => {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.documentElement.className = 'dark';
@@ -14,6 +16,7 @@ const ThemeSwitch = () => {
     }
   }, []);
 
+  //? Handle Change theme
   const handleThemeChange = () => {
     let currentTheme = document.documentElement.className;
     if (currentTheme === 'dark') {

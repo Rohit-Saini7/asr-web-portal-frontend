@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { addDoc, serverTimestamp } from 'firebase/firestore';
 import moment from 'moment';
-import { addError, changeStatus } from '../redux/slice/errorSlice';
+import { addDoc, serverTimestamp } from 'firebase/firestore';
+
 import { addDocs } from '../redux/slice/userSlice';
+import { addError, changeStatus } from '../redux/slice/errorSlice';
 
 export const handleFileUpload = async (
   file,
@@ -22,6 +23,7 @@ export const handleFileUpload = async (
     cancelToken.cancel('Operation canceled due to new request.');
   }
 
+  //? setting headers according to different request type
   switch (tabSelected) {
     case 'translation':
       headersForTab = {
@@ -42,11 +44,13 @@ export const handleFileUpload = async (
       };
       break;
   }
+
   const formData = new FormData();
   formData.append('file', file.current.files[0]);
   cancelToken = axios.CancelToken.source();
 
   try {
+    //?  sending data to backend
     await axios({
       method: 'post',
       url: `${import.meta.env.VITE_API_URL}/${tabSelected}`,
@@ -54,6 +58,7 @@ export const handleFileUpload = async (
       data: formData,
       headers: headersForTab,
       onUploadProgress: (p) => {
+        //? for upload progress
         setProgressData({
           done: parseInt(p.loaded / 1048576),
           total: parseInt(p.total / 1048576),
@@ -77,6 +82,7 @@ export const handleFileUpload = async (
         willGenerate: tabSelected,
         timestamp: serverTimestamp(),
       };
+      //? saving data to Firestore DB
       await addDoc(collectionRef, data);
       dispatch(addDocs(data));
     });

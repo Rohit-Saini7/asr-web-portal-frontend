@@ -1,3 +1,5 @@
+//! All Icons are here
+
 export {
   AssociatesIcon,
   CheckIcon,

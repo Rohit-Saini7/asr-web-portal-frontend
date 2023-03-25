@@ -2,6 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import AceEditor from 'react-ace';
 
+/*
+  ? Just a simple Preview Modal
+ ? ace editor is used for text preview - https://securingsincity.github.io/react-ace/
+*/
+
 const PreviewModal = ({ previewData, setPreviewData }) => {
   return (
     <Container>
@@ -83,9 +88,7 @@ const CloseButton = styled.button`
   cursor: pointer;
   transition: 0.2s;
   box-shadow: var(--shadow);
-  &:hover {
-    translate: 0 -2px;
-  }
+  &:hover,
   &:focus {
     translate: 0 -2px;
   }
