@@ -10,7 +10,7 @@ import Preview from './pages/Preview';
 /*
 ? App with Routes v6 - https://reactrouter.com/en/main/start/tutorial 
 ? All Page are added to app here only.
-! don't forget to add .env file for smoothing app working.
+! don't forget to add .env file and environment variables.
 */
 
 export default function App() {
